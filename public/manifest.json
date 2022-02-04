@@ -1,6 +1,6 @@
 {
-  "name": "Transitive Bullshit",
-  "short_name": "Transitive BS",
+  "name": "James Tsang",
+  "short_name": "JT",
   "icons": [
     {
       "src": "/favicon-16x16.png",
@@ -33,7 +33,7 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#F898B9",
+  "theme_color": "#2376b7",
   "background_color": "#ffffff",
   "display": "standalone"
 }
