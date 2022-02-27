@@ -70,6 +70,19 @@
   color: #2795e9;
 }
 
+.rss:hover svg {
+  fill: #2795e9;
+}
+
+.rss svg {
+  position: relative;
+  top: 1px;
+}
+
+.rssTitle {
+  margin-left: 3px;
+}
+
 .settings,
 .social {
   user-select: none;
