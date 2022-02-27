@@ -55,9 +55,19 @@
   align-items: center;
 }
 
-.copyright {
+.footnote {
   font-size: 80%;
   padding: 0.5em;
+  display: flex;
+  align-items: center;
+}
+
+.delimiter {
+  margin: 0 8px;
+}
+
+.rss:hover {
+  color: #2795e9;
 }
 
 .settings,
@@ -126,7 +136,7 @@
   .footer .social {
     order: 2;
   }
-  .footer .copyright {
+  .footer .footnote {
     order: 3;
   }
 }

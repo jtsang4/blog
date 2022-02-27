@@ -31,7 +31,13 @@ export const FooterImpl: React.FC = () => {
 
   return (
     <footer className={styles.footer}>
-      <div className={styles.copyright}>Copyright 2022 {config.author}</div>
+      <div className={styles.footnote}>
+        <div>Copyright 2022 {config.author}</div>
+        <span className={styles.delimiter}>|</span>
+        <a className={styles.rss} title='RSS' href={config.rss} target='_blank'>
+          RSS
+        </a>
+      </div>
 
       <div className={styles.settings}>
         {hasMounted && (
