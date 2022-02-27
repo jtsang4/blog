@@ -39,6 +39,7 @@ export const pageUrlAdditions = cleanPageUrlMap(
 // general site config
 export const name: string = getSiteConfig('name')
 export const author: string = getSiteConfig('author')
+export const rss: string = getSiteConfig('rss')
 export const domain: string = getSiteConfig('domain')
 export const description: string = getSiteConfig('description', 'Notion Blog')
 
