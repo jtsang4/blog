@@ -1,5 +1,5 @@
 ---
-title: 'Articles'
-paginate_by: 10
-template: 'index.html'
+title: Articles
+paginate_by: 1
+sort_by: date
 ---

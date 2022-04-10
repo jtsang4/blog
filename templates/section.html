@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block debug %}
+{{ paginator.number_pagers ~ " " ~ paginator.last ~ " " ~ paginator.current_index }}
+{% endblock debug %}
+
+{% block articles %}
+{% for i in range(end=10) %}
+<article class="article">
+  <h2 class="article-title">
+    <a class="clickable">拒绝算法推荐，用 RSS 构建属于自己的信息流</a>
+  </h2>
+  <div class="article-created-time">Created On: Feb 18, 2022 08:45 PM</div>
+  <div class="article-content">
+    算法推荐带来了什么，带走了什么
+    马克思说“人是社会关系的总和”，我们想获取更高质量的输入，就需要从不同渠道去与高水平的人建立关系，从不同渠道去获取高质量的信息。
+    在当前的 Web2.0
+    时代，每个人都可以在不同的地方发声，我们获取信息的渠道变得多种多样，例如公众号、博客、论坛、视频网站、问答社区等，为了降低获取信息的成本、提升信息的质量，一些技术手段也被应用在了信息获取上，比如算法推荐，它让搜索引擎更加强大，服务推送更加贴合用户。但在带来了一些好处的同时，它也带走了一些东西，比如下面的典型场景...
+  </div>
+  <a class="clickable show-more-btn">Read More</a>
+</article>
+{% endfor %}
+<ul class="paginator">
+  {% set current_index_minus2 = paginator.current_index - 2 %}
+  {% set current_index_minus1 = paginator.current_index - 1 %}
+  {% set current_index_plus1 = paginator.current_index + 1 %}
+  {% set current_index_plus2 = paginator.current_index + 2 %}
+  {% if paginator.previous %}
+  <li>
+    <a class="clickable page-number page-previous" href="{{ paginator.previous }}" target="_self">« Previous</a>
+  </li>
+  {% endif %}
+  {% if current_index_minus2 >= 3 %}
+  <li>
+    <a class="clickable page-number" href="{{ paginator.first }}" target="_self">1</a>
+  </li>
+  <li>
+    <a class="clickable page-number cursor-default">...</a>
+  </li>
+  <li>
+    <a class="clickable page-number" href="{{ paginator.base_url ~ current_index_minus2 }}"
+      target="_self">{{current_index_minus2 }}</a>
+  </li>
+  <li>
+    <a class="clickable page-number" href="{{ paginator.base_url ~ current_index_minus1 }}" target="_self">{{
+      current_index_minus1
+      }}</a>
+  </li>
+  {% elif current_index_minus2 == 2 %}
+  <li>
+    <a class="clickable page-number" href="{{ paginator.first }}" target="_self">1</a>
+  </li>
+  <li>
+    <a class="clickable page-number" href="{{ paginator.base_url ~ current_index_minus2 }}" target="_self">{{
+      current_index_minus2
+      }}</a>
+  </li>
+  <li>
+    <a class="clickable page-number" href="{{ paginator.base_url ~ current_index_minus1 }}" target="_self">{{
+      current_index_minus1
+      }}</a>
+  </li>
+  {% else %}
+  {% if current_index_minus2 > 0 %}
+  <li>
+    <a class="clickable page-number" href="{{ paginator.base_url ~ current_index_minus2 }}" target="_self">{{
+      current_index_minus2
+      }}</a>
+  </li>
+  {% endif %}
+  {% if current_index_minus1 > 0 %}
+  <li>
+    <a class="clickable page-number" href="{{ paginator.base_url ~ current_index_minus1 }}" target="_self">{{
+      current_index_minus1
+      }}</a>
+  </li>
+  {% endif %}
+  {% endif %}
+  <li>
+    <a class="clickable page-number page-number-active">{{ paginator.current_index }}</a>
+  </li>
+  {% if current_index_plus2 <= paginator.number_pagers - 2 %} <li>
+    <a class="clickable page-number" href="{{ paginator.base_url ~ current_index_plus1 }}" target="_self">{{
+      current_index_plus1 }}</a>
+    </li>
+    <li>
+      <a class="clickable page-number" href="{{ paginator.base_url ~ current_index_plus2 }}" target="_self">{{
+        current_index_plus2
+        }}</a>
+    </li>
+    <li>
+      <a class="clickable page-number cursor-default">...</a>
+    </li>
+    <li>
+      <a class="clickable page-number" href="{{ paginator.last }}" target="_self">{{ paginator.number_pagers }}</a>
+    </li>
+    {% elif current_index_plus2 == paginator.number_pagers - 1 %}
+    <li>
+      <a class="clickable page-number" href="{{ paginator.base_url ~ current_index_plus1 }}" target="_self">{{
+        current_index_plus1
+        }}</a>
+    </li>
+    <li>
+      <a class="clickable page-number" href="{{ paginator.base_url ~ current_index_plus2 }}" target="_self">{{
+        current_index_plus2
+        }}</a>
+    </li>
+    <li>
+      <a class="clickable page-number" href="{{ paginator.last }}" target="_self">{{ paginator.number_pagers }}</a>
+    </li>
+    {% else %}
+    {% if current_index_plus1 <= paginator.number_pagers %} <li>
+      <a class="clickable page-number" href="{{ paginator.base_url ~ current_index_plus1 }}" target="_self">{{
+        current_index_plus1
+        }}</a>
+      </li>
+      {% endif %}
+      {% if current_index_plus2 <= paginator.number_pagers %} <li>
+        <a class="clickable page-number" href="{{ paginator.base_url ~ current_index_plus2 }}" target="_self">{{
+          current_index_plus2}}</a>
+        </li>
+        {% endif %}
+        {% endif %}
+        {% if paginator.next %}
+        <li>
+          <a class="clickable page-number page-next" href="{{ paginator.next }}" target="_self">Next »</a>
+        </li>
+        {% endif %}
+</ul>
+{% endblock articles %}

@@ -52,9 +52,16 @@ p {
   color: var(--link-text-hover-color);
 }
 
+.cursor-default {
+  cursor: default;
+}
+
 /* style content */
 body {
   background-color: var(--background-color);
+  font-family: -apple-system, Times New Roman, BlinkMacSystemFont, Segoe UI,
+    Helvetica, Apple Color Emoji, Arial, sans-serif, Segoe UI Emoji,
+    Segoe UI Symbol;
 }
 
 #container {
@@ -144,6 +151,37 @@ body {
   border-color: var(--active-border-color);
 }
 
+.paginator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.page-number {
+  display: inline-block;
+  border: 1px solid var(--border-color);
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.page-number:hover {
+  background-color: var(--active-border-color);
+  color: #fff;
+}
+
+.page-number.page-number-active {
+  background-color: var(--active-border-color);
+  color: #fff;
+  cursor: default;
+}
+
+.page-previous {
+}
+
+.page-next {
+}
+
 #content {
   display: grid;
   grid-template-columns: 1fr 300px;
@@ -198,6 +236,7 @@ body {
   gap: 8px;
   font-size: 14px;
 }
+
 .aside-tag {
   display: inline-block;
 }

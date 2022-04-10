@@ -14,3 +14,6 @@ highlight_code = true
 
 [extra]
 # Put all your custom variables here
+
+[slugify]
+paths = "safe"
