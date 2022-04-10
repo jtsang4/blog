@@ -29,17 +29,34 @@ h2 {
   font-weight: bold;
 }
 
+p {
+  margin: 0;
+}
+
+/* variables */
+:root {
+  --background-color: #fffff2;
+  --link-text-color: rgba(0, 0, 0, 0.85);
+  --link-text-hover-color: rgba(0, 0, 0, 1);
+  --border-color: #ebebeb;
+  --active-border-color: #131124;
+}
+
 /* general style */
 .clickable {
-  color: rgba(0, 0, 0, 0.85);
+  color: var(--link-text-color);
   cursor: pointer;
 }
 
 .clickable:hover {
-  color: rgba(0, 0, 0, 1);
+  color: var(--link-text-hover-color);
 }
 
 /* style content */
+body {
+  background-color: var(--background-color);
+}
+
 #container {
   width: 1080px;
   min-height: 100vh;
@@ -57,8 +74,8 @@ h2 {
 #nav {
   display: flex;
   justify-content: space-between;
-  border-top: 1px solid #ebebeb;
-  border-bottom: 1px solid #ebebeb;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
   padding: 16px 0;
   font-size: 14px;
 }
@@ -87,13 +104,15 @@ h2 {
 }
 
 .article {
-  margin-bottom: 24px;
-  padding-bottom: 16px;
+  position: relative;
+  margin-bottom: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .article:last-child:not(:first-child) {
-  margin-bottom: 0;
-  padding-bottom: 0;
+  /* margin-bottom: 0; */
+  /* border-bottom-style: none; */
 }
 
 .article-title {
@@ -107,6 +126,22 @@ h2 {
 }
 
 .article-content {
+  white-space: pre-line;
+}
+
+.show-more-btn {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  display: block;
+  padding: 8px 16px;
+  background-color: var(--background-color);
+  border: 2px solid var(--border-color);
+  transform: translate(-50%, 33.33%);
+}
+
+.show-more-btn:hover {
+  border-color: var(--active-border-color);
 }
 
 #content {
@@ -116,7 +151,7 @@ h2 {
 }
 
 #aside {
-  border-left: 1px solid #ebebeb;
+  border-left: 1px solid var(--border-color);
   padding: 16px;
 }
 
@@ -147,22 +182,30 @@ h2 {
   margin-left: 8px;
 }
 
-#categories,
+#categories {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.aside-category {
+}
+
 #tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   font-size: 14px;
 }
-
-.aside-category,
 .aside-tag {
   display: inline-block;
 }
 
-.footer {
-  border-top: 1px solid #ebebeb;
-  border-bottom: 1px solid #ebebeb;
+#footer {
+  margin-bottom: 40px;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
   padding: 16px 0;
   color: rgba(0, 0, 0, 0.85);
   font-size: 14px;
