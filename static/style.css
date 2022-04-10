@@ -1,0 +1,169 @@
+/* normalize */
+body {
+  margin: 0;
+  font-size: 16px;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+a,
+a:hover,
+a:active,
+a:focus,
+a:visited {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+a:focus-visible {
+  outline: none;
+}
+
+h2 {
+  margin: 16px 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* general style */
+.clickable {
+  color: rgba(0, 0, 0, 0.85);
+  cursor: pointer;
+}
+
+.clickable:hover {
+  color: rgba(0, 0, 0, 1);
+}
+
+/* style content */
+#container {
+  width: 1080px;
+  min-height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#header {
+  padding: 40px 0;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+#nav {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #ebebeb;
+  border-bottom: 1px solid #ebebeb;
+  padding: 16px 0;
+  font-size: 14px;
+}
+
+#nav-menus {
+  display: flex;
+  gap: 24px;
+}
+
+.nav-menu {
+  cursor: pointer;
+}
+
+#nav-quick-access {
+  display: flex;
+  gap: 16px;
+}
+
+#nav-quick-access > li {
+  line-height: 1;
+  cursor: pointer;
+}
+
+#articles {
+  padding: 32px 16px 32px 0;
+}
+
+.article {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+}
+
+.article:last-child:not(:first-child) {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.article-title {
+  margin: 0 0 16px 0;
+  color: rgba(0, 0, 0, 0.95);
+}
+
+.article-created-time {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.article-content {
+}
+
+#content {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  flex-grow: 1;
+}
+
+#aside {
+  border-left: 1px solid #ebebeb;
+  padding: 16px;
+}
+
+.aside-section {
+  margin-bottom: 40px;
+}
+
+.aside-section:last-child {
+  margin-bottom: 16px;
+}
+
+.aside-section-title {
+  margin: 16px 0;
+  font-size: 16px;
+}
+
+#search {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-input {
+  flex-grow: 1;
+}
+
+.search-btn {
+  margin-left: 8px;
+}
+
+#categories,
+#tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.aside-category,
+.aside-tag {
+  display: inline-block;
+}
+
+.footer {
+  border-top: 1px solid #ebebeb;
+  border-bottom: 1px solid #ebebeb;
+  padding: 16px 0;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+}
