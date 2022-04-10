@@ -1,9 +1,5 @@
 {% extends "base.html" %}
 
-{% block debug %}
-{{ paginator.number_pagers ~ " " ~ paginator.last ~ " " ~ paginator.current_index }}
-{% endblock debug %}
-
 {% block articles %}
 {% for i in range(end=10) %}
 <article class="article">
