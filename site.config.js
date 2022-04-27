@@ -22,7 +22,7 @@ module.exports = {
   // linkedin: '',
 
   // RSS
-  rss: 'https://rss.zwt.one/zwt/feed',
+  rss: 'https://zwt.one/feed',
 
   // default notion icon and cover images for site-wide consistency (optional)
   // page-specific values will override these site-wide defaults
