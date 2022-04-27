@@ -34,7 +34,7 @@ export const FooterImpl: React.FC = () => {
       <div className={styles.footnote}>
         <div>Copyright 2022 {config.author}</div>
         <span className={styles.delimiter}>|</span>
-        <a className={styles.rss} title='RSS' href={config.rss} target='_blank' rel="noreferrer noopener">
+        <a className={styles.rss} title='RSS' href="/feed" target='_blank' rel="noreferrer noopener">
           <svg
             viewBox='0 0 1024 1024'
             version='1.1'

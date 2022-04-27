@@ -81,6 +81,8 @@
 
 .rssTitle {
   margin-left: 3px;
+  position: relative;
+  top: 1px;
 }
 
 .settings,
@@ -132,6 +134,19 @@
   width: 100%;
   margin-top: 2em;
   border-top: 1px solid var(--fg-color-0);
+}
+
+.utterances {
+  margin-top: 2em;
+  width: 100%;
+}
+
+@media only screen and (min-width: 1300px) {
+  .utterances {
+    width: calc(100% + 105px);
+    position: relative;
+    left: -60px;
+  }
 }
 
 @media only screen and (max-width: 566px) {
