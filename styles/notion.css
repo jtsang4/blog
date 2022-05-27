@@ -12,6 +12,11 @@
   --notion-header-height: 54px;
 }
 
+.notion b,
+.notion-title {
+  font-weight: bold !important;
+}
+
 .notion-page {
   padding-bottom: calc(max(5vh, 32px)) !important;
   line-height: 1.65;
