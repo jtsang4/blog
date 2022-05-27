@@ -35,7 +35,7 @@ p {
 
 /* variables */
 :root {
-  --background-color: #fffff2;
+  --background-color: #fffbf0;
   --link-text-color: rgba(0, 0, 0, 0.85);
   --link-text-hover-color: rgba(0, 0, 0, 1);
   --border-color: #ebebeb;
@@ -57,11 +57,17 @@ p {
 }
 
 /* style content */
+
+@font-face {
+  font-family: 'LXGWBright-Regular';
+  src: url('/fonts/LXGWBright-Regular.woff2');
+}
+
 body {
   background-color: var(--background-color);
-  font-family: -apple-system, Times New Roman, BlinkMacSystemFont, Segoe UI,
-    Helvetica, Apple Color Emoji, Arial, sans-serif, Segoe UI Emoji,
-    Segoe UI Symbol;
+  font-family: LXGWBright-Regular, system-ui, -apple-system, Times New Roman,
+    BlinkMacSystemFont, Segoe UI, Helvetica, Apple Color Emoji, Arial,
+    sans-serif, Segoe UI Emoji, Segoe UI Symbol;
 }
 
 #container {
@@ -76,6 +82,7 @@ body {
   padding: 40px 0;
   text-align: center;
   font-size: 1.5rem;
+  font-weight: bold;
 }
 
 #nav {
@@ -94,6 +101,7 @@ body {
 
 .nav-menu {
   cursor: pointer;
+  font-weight: bold;
 }
 
 #nav-quick-access {
