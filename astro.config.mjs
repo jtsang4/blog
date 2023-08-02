@@ -39,6 +39,6 @@ export default defineConfig({
     },
   },
   experimental: {
-    asserts: true,
+    assets: true,
   },
 });
