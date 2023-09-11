@@ -13,20 +13,20 @@ const content = marked.parse(text)
 <div class="callout">
   <Icon class="icon" name="openmoji:light-bulb" />
   <div class="content" set:html={content} />
-
-  <style>
-    .callout {
-      @apply w-full mt-3 mb-8 py-4 pr-4 pl-3 border border-solid border-[rgba(55,53,47,.09)] bg-[hsla(210,5%,93%,.3)] grid grid-flow-col justify-start;
-    }
-    .icon {
-      @apply w-6 h-6 mx-1;
-    }
-    .content {
-      @apply ml-2;
-    }
-
-    .content :global(p) {
-      margin: 0;
-    }
-  </style>
 </div>
+
+<style>
+  .callout {
+    @apply w-full mt-3 mb-8 py-4 pr-4 pl-3 border border-solid border-[rgba(55,53,47,.09)] bg-[hsla(210,5%,93%,.3)] grid grid-flow-col justify-start;
+  }
+  .icon {
+    @apply w-6 h-6 mx-1;
+  }
+  .content {
+    @apply ml-2;
+  }
+
+  .content :global(p) {
+    margin: 0;
+  }
+</style>
