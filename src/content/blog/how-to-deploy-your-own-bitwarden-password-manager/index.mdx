@@ -11,7 +11,9 @@ tags:
 description: 在使用许多网站、应用时，我们都需要用帐号密码来登录。帐号可能是手机号、邮箱或用户名，密码为了防止被盗以后所有帐号都被盗，一般也不建议只使用一个密码，需要在不同网站用不同的密码。随着注册的网站越来越多，管理这些帐号密码就成了问题，因此前几年开始出现了一些密码管理器，它们在你登录网站或应用时会提示你要不要记住密码，在下次填写时会提示或者帮你补全之前记录过的帐号密码。一些常见的密码管理器有 Chrome 浏览器的 Google 账户、安卓系统的“帐号与同步”。更加专业的密码管理器有 1password, lastpass, bitwarden 等，它们有浏览器端、桌面端和移动端的客户端，可以全方位地为我们提供密码管理服务。
 ---
 
-# 如何部署自持的 bitwarden 密码管理器
+import Callout from "@components/Callout.astro"
+
+# Table of Contents
 
 # 什么是密码管理器
 
@@ -21,9 +23,7 @@ description: 在使用许多网站、应用时，我们都需要用帐号密码�
 
 一些常见的密码管理器有 Chrome 浏览器的 Google 账户、安卓系统的“帐号与同步”。更加专业的密码管理器有 [1password](https://1password.com/), [lastpass](https://www.lastpass.com/), [bitwarden](https://bitwarden.com/) 等，它们有浏览器端、桌面端和移动端的客户端，可以全方位地为我们提供密码管理服务。
 
-<aside style="margin-bottom: 32px;">
-💡 注意：建议银行、支付类的账户不要使用密码管理器来管理
-</aside>
+<Callout text="注意：建议银行、支付类的账户不要使用密码管理器来管理" />
 
 # 为什么要自己部署密码管理器
 
@@ -62,7 +62,7 @@ description: 在使用许多网站、应用时，我们都需要用帐号密码�
 
 一、增加一条域名解析记录，指向服务器 IP
 
-假如买的域名为 `[abc.xyz](http://abc.xyz)` ，可以增加一条 [`password.abc.xyz`](http://password.abc.xyz) 的二级域名解析记录，指向服务器的 IP，这样访问 `password.abc.xyz` 就可以访问到我们的服务器
+假如买的域名为 `abc.xyz` ，可以增加一条 `password.abc.xyz` 的二级域名解析记录，指向服务器的 IP，这样访问 `password.abc.xyz` 就可以访问到我们的服务器
 
 二、配置启动服务的 docker-compose.yml
 
@@ -210,7 +210,7 @@ volumes:
 
 五、启动服务
 
-以上配置工作都完成以后，进入到两个配置文件所在的目录，然后运行 `docker compose up -d` 命令，就可以启动服务并连接数据库，这时候我们再访问自己设置的域名，比如例子中使用的 “https://password.abc.xyz”，就可以看到一个类似这样的界面了：
+以上配置工作都完成以后，进入到两个配置文件所在的目录，然后运行 `docker compose up -d` 命令，就可以启动服务并连接数据库，这时候我们再访问自己设置的域名，比如例子中使用的 "https://password.abc.xyz" ，就可以看到一个类似这样的界面了：
 
 ![Untitled](./Untitled.png)
 
@@ -249,10 +249,7 @@ docker compose down
 
 按上述命令停止并移除服务后，删除服务器中的相关目录和文件，例如上面例子中的 `~/password` 目录。
 
-<aside>
-💡 以上内容在 vaultwarden 的 [Wiki](https://github.com/dani-garcia/vaultwarden/wiki) 文档里大多都有提到，如何还有疑惑可以查看 vaultwarden 的 [Wiki](https://github.com/dani-garcia/vaultwarden/wiki)。
-
-</aside>
+<Callout text="以上内容在 vaultwarden 的 [Wiki](https://github.com/dani-garcia/vaultwarden/wiki) 文档里大多都有提到，如何还有疑惑可以查看 vaultwarden 的 [Wiki](https://github.com/dani-garcia/vaultwarden/wiki)。" />
 
 # 如何使用
 
@@ -288,12 +285,12 @@ docker compose down
 
 如果之前是其它密码管理器的用户，bitwarden 还支持从其它密码管理器导入。
 
-首先访问我们之前配置的域名，例如例子中的 `[https://password.abc.xyz](https://password.abc.xyz)` ，登录自己的账户后，进入到”工具 - 导入密码”功能，就可以将其它密码管理工具导出的密码导入到自建的 bitwarden 中了：
+首先访问我们之前配置的域名，例如例子中的 `https://password.abc.xyz` ，登录自己的账户后，进入到”工具 - 导入密码”功能，就可以将其它密码管理工具导出的密码导入到自建的 bitwarden 中了：
 
 ![Untitled](./Untitled-4.png)
 
 ## 后台管理
 
-如果之前在 docker-compose.yml 中配置了管理员密码，那么访问 `/admin` 页面就可以进入后台管理页，进行一些后台管理操作，例如例子中的域名可以访问 `[https://password.abc.xyz/admin](https://password.abc.xyz/admin)` ，即可见到如下页面：
+如果之前在 docker-compose.yml 中配置了管理员密码，那么访问 `/admin` 页面就可以进入后台管理页，进行一些后台管理操作，例如例子中的域名可以访问 `https://password.abc.xyz/admin` ，即可见到如下页面：
 
 ![Untitled](./Untitled-5.png)

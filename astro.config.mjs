@@ -1,22 +1,23 @@
-import { defineConfig } from "astro/config";
-import tailwind from "@astrojs/tailwind";
-import react from "@astrojs/react";
-import remarkToc from "remark-toc";
-import remarkCollapse from "remark-collapse";
-import sitemap from "@astrojs/sitemap";
+import { defineConfig, squooshImageService } from "astro/config"
+import tailwind from "@astrojs/tailwind"
+import react from "@astrojs/react"
+import remarkToc from "remark-toc"
+import remarkCollapse from "remark-collapse"
+import sitemap from "@astrojs/sitemap"
+import mdx from "@astrojs/mdx"
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://jtsang.me/",
   integrations: [
     tailwind({
-      config: {
-        applyBaseStyles: false,
-      },
+      applyBaseStyles: false,
     }),
     react(),
     sitemap(),
+    mdx(),
   ],
+  scopedStyleStrategy: "where",
   markdown: {
     remarkPlugins: [
       remarkToc,
@@ -33,12 +34,12 @@ export default defineConfig({
     },
     extendDefaultPlugins: true,
   },
+  image: {
+    service: squooshImageService(),
+  },
   vite: {
     optimizeDeps: {
       exclude: ["@resvg/resvg-js"],
     },
   },
-  experimental: {
-    assets: true,
-  },
-});
+})
