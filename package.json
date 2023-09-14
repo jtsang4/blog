@@ -4,15 +4,15 @@
   "scripts": {
     "dev": "bunx --bun astro dev",
     "start": "bunx --bun astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "sync": "astro sync",
-    "astro": "astro",
-    "format:check": "prettier --plugin-search-dir=. --check .",
-    "format": "prettier --plugin-search-dir=. --write .",
+    "build": "bunx --bun astro build",
+    "preview": "bunx --bun astro preview",
+    "sync": "bunx --bun astro sync",
+    "astro": "bunx --bun astro",
+    "format:check": "bunx --bun prettier --plugin-search-dir=. --check .",
+    "format": "bunx --bun prettier --plugin-search-dir=. --write .",
     "cz": "cz",
     "prepare": "husky install",
-    "lint": "eslint ."
+    "lint": "bunx --bun eslint ."
   },
   "dependencies": {
     "@astrojs/mdx": "^1.0.3",
@@ -20,6 +20,7 @@
     "@resvg/resvg-js": "^2.4.1",
     "astro": "^3.0.12",
     "astro-icon": "^0.8.1",
+    "bun-types": "^1.0.1",
     "fuse.js": "^6.6.2",
     "github-slugger": "^2.0.0",
     "marked": "^9.0.0",

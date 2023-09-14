@@ -1,21 +1,21 @@
-import type { SocialObjects } from "./types";
+import type { SocialObjects } from "./types"
 
 export const SITE = {
-  website: "https://astro-paper.pages.dev/",
-  author: "Sat Naing",
+  website: "https://jtsang.me/",
+  author: "James Tsang",
   desc: "A minimal, responsive and SEO-friendly Astro blog theme.",
   title: "James Tsang's Blog",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
   postPerPage: 3,
-};
+}
 
 export const LOGO_IMAGE = {
   enable: false,
   svg: true,
   width: 216,
   height: 46,
-};
+}
 
 export const SOCIALS: SocialObjects = [
   {
@@ -138,4 +138,4 @@ export const SOCIALS: SocialObjects = [
     linkTitle: `${SITE.title} on Mastodon`,
     active: false,
   },
-];
+]

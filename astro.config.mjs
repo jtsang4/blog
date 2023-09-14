@@ -10,12 +10,12 @@ import mdx from "@astrojs/mdx"
 export default defineConfig({
   site: "https://jtsang.me/",
   integrations: [
+    mdx(),
     tailwind({
       applyBaseStyles: false,
     }),
     react(),
     sitemap(),
-    mdx(),
   ],
   scopedStyleStrategy: "where",
   markdown: {

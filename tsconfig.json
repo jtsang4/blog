@@ -5,6 +5,7 @@
     "jsx": "react-jsx",
     "paths": {
       "@*": ["./src/*"]
-    }
+    },
+    "types": ["bun-types"]
   }
 }
