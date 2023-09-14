@@ -1,5 +1,6 @@
 ---
 import { SITE } from "@config"
+import Callout from "@components/Callout.astro"
 import "../styles/base.css"
 
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION
@@ -78,5 +79,13 @@ const socialImageURL = new URL(
   </head>
   <body>
     <slot />
+    <!-- # Related to https://github.com/withastro/astro/issues/7761 -->
+    <div class="hide"><Callout text="''" /></div>
   </body>
 </html>
+
+<style>
+  .hide {
+    display: none;
+  }
+</style>
