@@ -42,4 +42,8 @@ export default defineConfig({
       exclude: ["@resvg/resvg-js"],
     },
   },
+  redirects: {
+    "/如何部署自持的-bitwarden-密码管理器":
+      "/posts/how-to-deploy-your-own-bitwarden-password-manager",
+  },
 })
