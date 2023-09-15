@@ -7,7 +7,7 @@ export const SITE = {
   title: "James Tsang's Blog",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
-  postPerPage: 3,
+  postPerPage: 5,
 }
 
 export const LOGO_IMAGE = {
