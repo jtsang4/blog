@@ -2,17 +2,17 @@
   "name": "blog",
   "version": "2.1.0",
   "scripts": {
-    "dev": "bunx --bun astro dev",
-    "start": "bunx --bun astro dev",
-    "build": "bunx --bun astro build",
-    "preview": "bunx --bun astro preview",
-    "sync": "bunx --bun astro sync",
-    "astro": "bunx --bun astro",
-    "format:check": "bunx --bun prettier --plugin-search-dir=. --check .",
-    "format": "bunx --bun prettier --plugin-search-dir=. --write .",
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "sync": "astro sync",
+    "astro": "astro",
+    "format:check": "prettier --plugin-search-dir=. --check .",
+    "format": "prettier --plugin-search-dir=. --write .",
     "cz": "cz",
     "prepare": "husky install",
-    "lint": "bunx --bun eslint ."
+    "lint": "eslint ."
   },
   "dependencies": {
     "@astrojs/mdx": "^1.0.3",
