@@ -26,8 +26,11 @@ export default function remarkCollapse(opts: Options) {
 
   if (!isFunction(summarizer)) throw new Error('options.summary must be function')
 
-  return function (node: Root) {
-    headingRange(node, opts.test, function (start, nodes, end) {
+  return function (root: Root) {
+    headingRange(root, opts.test, function (start, nodes, end) {
+      console.log("🚀 ~ file: remark-collapse.ts:33 ~ start:", start)
+      console.log("🚀 ~ file: remark-collapse.ts:33 ~ end:", end)
+      console.log("🚀 ~ file: remark-collapse.ts:33 ~ nodes:", nodes.map(node => node.type))
       return [
         start as any,
         {
@@ -51,7 +54,7 @@ export default function remarkCollapse(opts: Options) {
             }
           ]
         },
-        ...nodes,
+        ...nodes.filter(node => node.type === 'list'),
         {
           type: 'paragraph',
           children: [
@@ -61,7 +64,8 @@ export default function remarkCollapse(opts: Options) {
             }
           ]
         },
-        end
+        ...nodes.filter(node => node.type !== 'list'),
+        end,
       ]
     })
   }
