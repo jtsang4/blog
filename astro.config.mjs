@@ -1,8 +1,8 @@
 import { defineConfig, squooshImageService } from "astro/config"
 import tailwind from "@astrojs/tailwind"
 import react from "@astrojs/react"
-import remarkToc from "remark-toc"
-import remarkCollapse from "remark-collapse"
+import remarkToc from "./lib/remark-toc"
+import remarkCollapse from "./lib/remark-collapse"
 import sitemap from "@astrojs/sitemap"
 import mdx from "@astrojs/mdx"
 
