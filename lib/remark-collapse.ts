@@ -28,9 +28,6 @@ export default function remarkCollapse(opts: Options) {
 
   return function (root: Root) {
     headingRange(root, opts.test, function (start, nodes, end) {
-      console.log("🚀 ~ file: remark-collapse.ts:33 ~ start:", start)
-      console.log("🚀 ~ file: remark-collapse.ts:33 ~ end:", end)
-      console.log("🚀 ~ file: remark-collapse.ts:33 ~ nodes:", nodes.map(node => node.type))
       return [
         start as any,
         {
