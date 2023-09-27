@@ -79,8 +79,22 @@ const socialImageURL = new URL(
   </head>
   <body>
     <slot />
-    <!-- # Related to https://github.com/withastro/astro/issues/7761 -->
-    <div class="hide"><Callout text="''" /></div>
+    {
+      (
+        // Related to https://github.com/withastro/astro/issues/7761
+        <div class="hide">
+          <Callout text="." />
+        </div>
+      )
+    }
+    <link
+      href="https://cdn.jsdelivr.net/npm/artalk@2.6.3/dist/Artalk.css"
+      rel="stylesheet"
+    />
+    <script
+      async
+      defer
+      src="https://cdn.jsdelivr.net/npm/artalk@2.6.3/dist/Artalk.js"></script>
   </body>
 </html>
 

@@ -5,6 +5,8 @@ import Footer from "@components/Footer.astro"
 import Tag from "@components/Tag.astro"
 import Datetime from "@components/Datetime"
 import type { CollectionEntry } from "astro:content"
+import { Comments } from "@components/Comments"
+import { SITE } from "@config"
 
 export interface Props {
   post: CollectionEntry<"blog">
@@ -12,14 +14,21 @@ export interface Props {
 
 const { post } = Astro.props
 
-const { title, author, description, ogImage, pubDatetime, tags } = post.data
+const { title, author, description, ogImage, pubDatetime, tags, postSlug } =
+  post.data
 
 const { Content } = await post.render()
 
 const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin).href
+const pageTitle = `${title} - ${SITE.title}`
 ---
 
-<Layout title={title} author={author} description={description} ogImage={ogUrl}>
+<Layout
+  title={pageTitle}
+  author={author}
+  description={description}
+  ogImage={ogUrl}
+>
   <Header />
   <div class="mx-auto flex w-full max-w-3xl justify-start px-2">
     <button
@@ -39,6 +48,7 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin).href
     <Datetime datetime={pubDatetime} size="lg" className="my-2" />
     <article id="article" role="article" class="prose mx-auto mt-8 max-w-3xl">
       <Content />
+      <Comments pageKey={postSlug!} pageTitle={pageTitle} client:visible />
     </article>
 
     <ul class="tags-container">

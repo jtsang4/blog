@@ -7,7 +7,8 @@ export const SITE = {
   title: "James Tsang's Blog",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
-  postPerPage: 5,
+  postPerPage: 8,
+  recentPost: 5,
 }
 
 export const LOGO_IMAGE = {
@@ -41,12 +42,6 @@ export const SOCIALS: SocialObjects = [
     href: "https://github.com/satnaing/astro-paper",
     linkTitle: `${SITE.title} on LinkedIn`,
     active: false,
-  },
-  {
-    name: "Mail",
-    href: "mailto:info@jtsang.me",
-    linkTitle: `Send an email to ${SITE.title}`,
-    active: true,
   },
   {
     name: "Twitter",
@@ -137,5 +132,11 @@ export const SOCIALS: SocialObjects = [
     href: "https://github.com/satnaing/astro-paper",
     linkTitle: `${SITE.title} on Mastodon`,
     active: false,
+  },
+  {
+    name: "Mail",
+    href: "mailto:info@jtsang.me",
+    linkTitle: `Send an email to ${SITE.title}`,
+    active: true,
   },
 ]
