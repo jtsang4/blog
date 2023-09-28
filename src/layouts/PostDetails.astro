@@ -63,6 +63,34 @@ const pageTitle = `${title} - ${SITE.title}`
     </ul>
   </main>
   <Footer />
+  <script>
+    /**
+     * @params {HTMLCollectionOf<HTMLElement>} graphs
+     */
+    async function renderDiagrams(graphs) {
+      const { default: mermaid } = await import("mermaid")
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: localStorage.getItem("theme") === "dark" ? "dark" : "default",
+      })
+
+      for (const graph of graphs) {
+        const content = graph.getAttribute("data-content")
+        if (!content) continue
+        let svg = document.createElement("svg")
+        const id = (svg.id = "mermaid-" + Math.round(Math.random() * 100000))
+        graph.appendChild(svg)
+        mermaid.render(id, content).then(result => {
+          graph.innerHTML = result.svg
+        })
+      }
+    }
+
+    const graphs = document.getElementsByClassName("mermaid")
+    if (document.getElementsByClassName("mermaid").length > 0) {
+      renderDiagrams(graphs)
+    }
+  </script>
 </Layout>
 
 <style>
@@ -86,5 +114,12 @@ const pageTitle = `${title} - ${SITE.title}`
       var(--color-accent),
       var(--tw-text-opacity)
     ) !important;
+  }
+</style>
+
+<style is:global>
+  .mermaid > svg {
+    width: auto;
+    height: auto;
   }
 </style>

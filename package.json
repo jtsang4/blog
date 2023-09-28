@@ -26,6 +26,7 @@
     "marked": "^9.0.0",
     "mdast-util-heading-range": "^4.0.0",
     "mdast-util-to-string": "^4.0.0",
+    "mermaid": "^10.4.0",
     "remark-collapse": "^0.1.2",
     "remark-toc": "^9.0.0",
     "satori": "^0.10.2",
@@ -52,7 +53,8 @@
     "prettier-plugin-astro": "^0.12.0",
     "prettier-plugin-tailwindcss": "^0.4.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "ts-dedent": "^2.2.0"
   },
   "config": {
     "commitizen": {

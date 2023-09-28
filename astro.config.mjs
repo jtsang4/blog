@@ -3,6 +3,7 @@ import tailwind from "@astrojs/tailwind"
 import react from "@astrojs/react"
 import remarkToc from "./lib/remark-toc"
 import remarkCollapse from "./lib/remark-collapse"
+import { mermaid } from "./lib/remark-mermaid"
 import sitemap from "@astrojs/sitemap"
 import mdx from "@astrojs/mdx"
 
@@ -27,6 +28,7 @@ export default defineConfig({
           test: "Table of contents",
         },
       ],
+      mermaid,
     ],
     shikiConfig: {
       theme: "one-dark-pro",
