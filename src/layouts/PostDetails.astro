@@ -49,6 +49,7 @@ const pageTitle = `${title} - ${SITE.title}`
     <article id="article" role="article" class="prose mx-auto mt-8 max-w-3xl">
       <Content />
       <Comments
+        className="comments"
         pageKey={`/posts${
           postSlug?.startsWith("/") ? postSlug : `/${postSlug}`
         }`}
@@ -73,5 +74,17 @@ const pageTitle = `${title} - ${SITE.title}`
   }
   .tags-container {
     @apply my-8;
+  }
+
+  .comments :global(.atk-plug-btn) {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .comments :global(.atk-send-btn) {
+    background-color: rgba(
+      var(--color-accent),
+      var(--tw-text-opacity)
+    ) !important;
   }
 </style>

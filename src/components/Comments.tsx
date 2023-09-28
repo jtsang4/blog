@@ -1,6 +1,4 @@
 import type { CSSProperties } from "react"
-// import 'artalk/dist/Artalk.css'
-// import Artalk from 'artalk'
 import { useEffect } from "react"
 import { SITE } from "@config"
 
@@ -22,6 +20,8 @@ export const Comments = (props: Props) => {
       server: "https://comment.zwt.one",
       site: SITE.title,
     })
+    const theme = localStorage.getItem("theme") as string
+    ;(window as any).Artalk.setDarkMode(theme === "dark")
   }, [])
 
   return <div className={className} style={style} id="comments"></div>
