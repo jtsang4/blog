@@ -58,7 +58,7 @@ export default defineConfig({
     "/i-just-had-a-dream-and-it-was-the-most-terrifying-dream-ive-ever-had":
       "/posts/i-just-had-a-nightmare",
     "/总工程师-42-岁移民从工人做起活出精彩人生--观后感":
-      "/posts/42-year-old-immigrant",
+      "/posts/42-years-old-immigrant",
     "/我的表达之局限即我的世界之局限": "/posts/my-expression-is-my-limitation",
     "/因理智而悲观因意志而乐观": "/posts/optimistic-and-pessimistic",
     "/纪念多牧君": "/posts/remember-duo-mu-jun",

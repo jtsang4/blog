@@ -2,7 +2,7 @@
 author: James Tsang
 pubDatetime: 2022-03-27T21:34:32.737Z
 title: 总工程师 42 岁移民从工人做起，活出精彩人生 - 观后感
-postSlug: 42-year-old-immigrant
+postSlug: 42-years-old-immigrant
 featured: true
 ogImage: https://vip2.loli.io/2023/09/16/bk3uy79Gd5LHRcf.jpg
 tags:
@@ -13,7 +13,7 @@ description: 源视频：加拿大 移民 | 总工程师42岁移民从工人做�
 
 # Table of Contents
 
-> 源视频链接: \***\*[加拿大 移民 | 总工程师42岁移民从工人做起，活出精彩人生](https://www.youtube.com/watch?v=aAQelOQoVLY)\*\***
+> 源视频链接: **[加拿大 移民 | 总工程师42岁移民从工人做起，活出精彩人生](https://www.youtube.com/watch?v=aAQelOQoVLY)**
 
 本篇文章是看了这场访谈对话后的观后感，因为观看过程中产生了一些启发和感悟，同时也还存在一些没想清楚的问题，所以想借写这篇文章总结下感想，也一并把没想清楚的问题理清。
 

@@ -3,9 +3,9 @@ import type { SocialObjects } from "./types"
 export const SITE = {
   website: "https://jtsang.me/",
   author: "James Tsang",
-  desc: "A minimal, responsive and SEO-friendly Astro blog theme.",
+  desc: "James Tsang's thought, articles, and projects.",
   title: "James Tsang's Blog",
-  ogImage: "astropaper-og.jpg",
+  ogImage: "og.jpeg",
   lightAndDarkMode: true,
   postPerPage: 8,
   recentPost: 5,
