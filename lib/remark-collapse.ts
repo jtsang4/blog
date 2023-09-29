@@ -15,7 +15,7 @@ type Options = {
   summary: string | ((str: string) => string)
 }
 
-export default function remarkCollapse(opts: Options) {
+export function remarkCollapse(opts: Options) {
   if (opts == null || opts.test == null) throw new Error('options.test must be given')
 
   const summarizer = opts.summary == null
@@ -28,6 +28,8 @@ export default function remarkCollapse(opts: Options) {
 
   return function (root: Root) {
     headingRange(root, opts.test, function (start, nodes, end) {
+      const tocListNode = nodes[0]
+      const nodesWithoutToc = nodes.slice(1)
       return [
         start as any,
         {
@@ -51,7 +53,7 @@ export default function remarkCollapse(opts: Options) {
             }
           ]
         },
-        ...nodes.filter(node => node.type === 'list'),
+        tocListNode,
         {
           type: 'paragraph',
           children: [
@@ -61,7 +63,7 @@ export default function remarkCollapse(opts: Options) {
             }
           ]
         },
-        ...nodes.filter(node => node.type !== 'list'),
+        ...nodesWithoutToc,
         end,
       ]
     })

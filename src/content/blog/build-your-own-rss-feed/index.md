@@ -3,7 +3,7 @@ author: James Tsang
 pubDatetime: 2022-02-18T12:45:32.737Z
 title: 拒绝算法推荐，用 RSS 构建属于自己的信息流
 postSlug: build-your-own-rss-feed
-featured: true
+featured: false
 ogImage: https://vip2.loli.io/2023/09/16/zF36k29hdGItHWy.webp
 tags:
   - RSS

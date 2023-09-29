@@ -1,8 +1,9 @@
-import { defineConfig, squooshImageService } from "astro/config"
+// import { defineConfig, squooshImageService } from "astro/config"
+import { defineConfig } from "astro/config"
 import tailwind from "@astrojs/tailwind"
 import react from "@astrojs/react"
-import remarkToc from "./lib/remark-toc"
-import remarkCollapse from "./lib/remark-collapse"
+import { remarkToc } from "./lib/remark-toc"
+import { remarkCollapse } from "./lib/remark-collapse"
 import { mermaid } from "./lib/remark-mermaid"
 import sitemap from "@astrojs/sitemap"
 import mdx from "@astrojs/mdx"
@@ -35,9 +36,6 @@ export default defineConfig({
       wrap: true,
     },
     extendDefaultPlugins: true,
-  },
-  image: {
-    service: squooshImageService(),
   },
   vite: {
     optimizeDeps: {

@@ -20,7 +20,7 @@ import type { Root } from 'mdast'
  * @returns
  *   Transform.
  */
-export default function remarkToc(options: Options) {
+export function remarkToc(options: Options) {
   const settings = {
     ...options,
     heading: (options && options.heading) || '(table[ -]of[ -])?contents?|toc',

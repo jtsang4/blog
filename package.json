@@ -54,8 +54,12 @@
     "prettier-plugin-tailwindcss": "^0.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "sharp": "^0.32.6",
     "ts-dedent": "^2.2.0"
   },
+  "trustedDependencies": [
+    "sharp"
+  ],
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
