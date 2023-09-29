@@ -54,10 +54,10 @@ jobs:
           sed -i "s/$OLD_VERSION/${{ steps.get_version.outputs.version-without-v }}/" package.json
 
       - name: Build
-        run: pnpm run build
+        run: COMMENT_SERVER=${{ vars.COMMENT_SERVER }} UMAMI_URL=${{ vars.UMAMI_URL }} UMAMI_ID=${{ vars.UMAMI_ID }} pnpm run build
 
       - name: Package dist
-        run: mkdir release && zip -r release/jtsang-blog-${{ steps.get_version.outputs.version-without-v }}.zip ./dist/*
+        run: mkdir release && zip -r release/blog-${{ steps.get_version.outputs.version-without-v }}.zip ./dist/*
 
       - name: Commit files
         run: |
@@ -75,8 +75,8 @@ jobs:
         with:
           release_name: ${{ steps.get_version.outputs.version }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: release/jtsang-blog-${{ steps.get_version.outputs.version-without-v }}.zip
-          asset_name: jtsang-blog-${{ steps.get_version.outputs.version-without-v }}.zip
+          file: release/blog-${{ steps.get_version.outputs.version-without-v }}.zip
+          asset_name: blog-${{ steps.get_version.outputs.version-without-v }}.zip
           tag: ${{ github.ref }}
           overwrite: true
           body: ${{ steps.tag.outputs.message }}
