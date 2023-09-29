@@ -128,6 +128,12 @@ export const SOCIALS: SocialObjects = [
     active: false,
   },
   {
+    name: "TelegramChannel",
+    href: "https://t.me/jtsanglog",
+    linkTitle: `${SITE.title} on Telegram Channel`,
+    active: true,
+  },
+  {
     name: "Mastodon",
     href: "https://github.com/satnaing/astro-paper",
     linkTitle: `${SITE.title} on Mastodon`,
