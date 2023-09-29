@@ -1,0 +1,131 @@
+---
+import Layout from "@layouts/Layout.astro"
+import Header from "@components/Header.astro"
+import Footer from "@components/Footer.astro"
+import Tag from "@components/Tag.astro"
+import Datetime from "@components/Datetime"
+import type { CollectionEntry } from "astro:content"
+import { Comments } from "@components/Comments"
+import { SITE } from "@config"
+
+export interface Props {
+  post: CollectionEntry<"blog">
+}
+
+const { post } = Astro.props
+
+const { title, author, description, ogImage, pubDatetime, tags, postSlug } =
+  post.data
+
+const { Content } = await post.render()
+
+const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin).href
+const pageTitle = `${title} - ${SITE.title}`
+---
+
+<Layout
+  title={pageTitle}
+  author={author}
+  description={description}
+  ogImage={ogUrl}
+>
+  <Header />
+  <div class="mx-auto flex w-full max-w-3xl justify-start px-2">
+    <button
+      class="focus-outline mt-8 mb-2 flex hover:opacity-75"
+      onclick="history.back()"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"
+        ></path>
+      </svg>
+      <span>Go back</span>
+    </button>
+  </div>
+  <main id="main-content">
+    <h1 class="post-title">{title}</h1>
+    <Datetime datetime={pubDatetime} size="lg" className="my-2" />
+    <article id="article" role="article" class="prose mx-auto mt-8 max-w-3xl">
+      <Content />
+      {
+        import.meta.env.COMMENT_SERVER && (
+          <Comments
+            client:visible
+            className="comments"
+            pageKey={`/posts${
+              postSlug?.startsWith("/") ? postSlug : `/${postSlug}`
+            }`}
+            pageTitle={pageTitle}
+            commentServer={import.meta.env.COMMENT_SERVER}
+          />
+        )
+      }
+    </article>
+
+    <ul class="tags-container">
+      {tags.map(tag => <Tag name={tag} />)}
+    </ul>
+  </main>
+  <Footer />
+  <script>
+    /**
+     * source: https://github.com/JuanM04/portfolio/blob/983b0ed0eabdac37bf8b7912d3e8128a443192b9/src/pages/docs/%5B...documentSlug%5D.astro#L74-L103
+     * @params {HTMLCollectionOf<HTMLElement>} graphs
+     */
+    async function renderDiagrams(graphs) {
+      const { default: mermaid } = await import("mermaid")
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: localStorage.getItem("theme") === "dark" ? "dark" : "default",
+      })
+
+      for (const graph of graphs) {
+        const content = graph.getAttribute("data-content")
+        if (!content) continue
+        let svg = document.createElement("svg")
+        const id = (svg.id = "mermaid-" + Math.round(Math.random() * 100000))
+        graph.appendChild(svg)
+        mermaid.render(id, content).then(result => {
+          graph.innerHTML = result.svg
+        })
+      }
+    }
+
+    const graphs = document.getElementsByClassName("mermaid")
+    if (document.getElementsByClassName("mermaid").length > 0) {
+      renderDiagrams(graphs)
+    }
+  </script>
+</Layout>
+
+<style>
+  main {
+    @apply mx-auto w-full max-w-3xl px-4 pb-12;
+  }
+  .post-title {
+    @apply text-2xl font-semibold text-skin-accent;
+  }
+  .tags-container {
+    @apply my-8;
+  }
+
+  .comments :global(.atk-plug-btn) {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .comments :global(.atk-send-btn) {
+    background-color: rgba(
+      var(--color-accent),
+      var(--tw-text-opacity)
+    ) !important;
+  }
+</style>
+
+<style is:global>
+  .mermaid > svg {
+    width: auto;
+    height: auto;
+  }
+</style>

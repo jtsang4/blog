@@ -1,0 +1,82 @@
+name: Release
+
+on:
+  push:
+    tags: [v\d+\.\d+\.\d+]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      # - name: Get pnpm store directory
+      #   shell: bash
+      #   run: |
+      #     echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      # - uses: actions/cache@v3
+      #   name: Setup pnpm cache
+      #   with:
+      #     path: ${{ env.STORE_PATH }}
+      #     key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Get version
+        id: get_version
+        uses: battila7/get-version-action@v2
+
+      - name: Get tag message
+        id: tag
+        run: |
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+          echo "message=$(git tag -l --format='%(contents:subject)' ${{ steps.get_version.outputs.version }})" >> $GITHUB_OUTPUT
+
+      - name: Change version
+        run: |
+          OLD_VERSION=$(grep '"version":' package.json | awk -F\" '{print $4}')
+          sed -i "s/$OLD_VERSION/${{ steps.get_version.outputs.version-without-v }}/" package.json
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Package dist
+        run: mkdir release && zip -j -r release/jtsang-blog-${{ steps.get_version.outputs.version-without-v }}.zip ./dist/*
+
+      - name: Commit files
+        run: |
+          git config --global user.name 'jtsang4'
+          git config --global user.email 'info@jtsang.me'
+          git commit -am 'chore: upgrade to ${{ steps.get_version.outputs.version-without-v }}'
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          release_name: ${{ steps.get_version.outputs.version }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: release/jtsang-blog-${{ steps.get_version.outputs.version-without-v }}.zip
+          asset_name: jtsang-blog-${{ steps.get_version.outputs.version-without-v }}.zip
+          tag: ${{ github.ref }}
+          overwrite: true
+          body: ${{ steps.tag.outputs.message }}
