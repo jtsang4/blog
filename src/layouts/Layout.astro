@@ -101,10 +101,15 @@ const socialImageURL = new URL(
     />
     <script async src="https://cdn.jsdelivr.net/npm/artalk@2.6.3/dist/Artalk.js"
     ></script>
-    <script
-      async
-      src="https://umami.jtsang.me/script.js"
-      data-website-id="7dedf9cb-8025-4415-8ed7-23c1bca2eacb"></script>
+    {
+      import.meta.env.UMAMI_URL && (
+        <script
+          async
+          src={`${import.meta.env.UMAMI_URL}/script.js`}
+          data-website-id={import.meta.env.UMAMI_ID}
+        />
+      )
+    }
   </body>
 </html>
 

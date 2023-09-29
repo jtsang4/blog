@@ -7,17 +7,18 @@ type Props = {
   style?: CSSProperties
   pageKey: string
   pageTitle: string
+  commentServer: string
 }
 
 export const Comments = (props: Props) => {
-  const { className, style, pageKey, pageTitle } = props
+  const { className, style, pageKey, pageTitle, commentServer } = props
 
   useEffect(() => {
     ;(window as any).Artalk.init({
       el: "#comments",
       pageKey,
       pageTitle,
-      server: "https://comment.zwt.one",
+      server: commentServer,
       site: SITE.title,
     })
     const theme = localStorage.getItem("theme") as string

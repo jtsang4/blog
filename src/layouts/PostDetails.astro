@@ -48,14 +48,19 @@ const pageTitle = `${title} - ${SITE.title}`
     <Datetime datetime={pubDatetime} size="lg" className="my-2" />
     <article id="article" role="article" class="prose mx-auto mt-8 max-w-3xl">
       <Content />
-      <Comments
-        className="comments"
-        pageKey={`/posts${
-          postSlug?.startsWith("/") ? postSlug : `/${postSlug}`
-        }`}
-        pageTitle={pageTitle}
-        client:visible
-      />
+      {
+        import.meta.env.COMMENT_SERVER && (
+          <Comments
+            client:visible
+            className="comments"
+            pageKey={`/posts${
+              postSlug?.startsWith("/") ? postSlug : `/${postSlug}`
+            }`}
+            pageTitle={pageTitle}
+            commentServer={import.meta.env.COMMENT_SERVER}
+          />
+        )
+      }
     </article>
 
     <ul class="tags-container">
