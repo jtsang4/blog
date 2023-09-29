@@ -57,7 +57,7 @@ jobs:
         run: pnpm run build
 
       - name: Package dist
-        run: mkdir release && zip -j -r release/jtsang-blog-${{ steps.get_version.outputs.version-without-v }}.zip ./dist/*
+        run: mkdir release && zip -r release/jtsang-blog-${{ steps.get_version.outputs.version-without-v }}.zip ./dist/*
 
       - name: Commit files
         run: |
