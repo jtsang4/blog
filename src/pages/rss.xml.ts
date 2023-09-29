@@ -9,11 +9,17 @@ export async function GET() {
     title: SITE.title,
     description: SITE.desc,
     site: SITE.website,
-    items: posts.map(({ data }) => ({
-      link: `posts/${slugify(data)}`,
-      title: data.title,
-      description: data.description,
-      pubDate: new Date(data.pubDatetime),
-    })),
+    items: posts
+      .sort((prev, next) => {
+        const prevDate = new Date(prev.data.pubDatetime)
+        const nextDate = new Date(next.data.pubDatetime)
+        return nextDate.getTime() - prevDate.getTime()
+      })
+      .map(({ data }) => ({
+        link: `posts/${slugify(data)}`,
+        title: data.title,
+        description: data.description,
+        pubDate: new Date(data.pubDatetime),
+      })),
   })
 }
