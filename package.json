@@ -1,6 +1,6 @@
 {
   "name": "blog",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "scripts": {
     "dev": "bunx --bun astro dev",
     "start": "bunx --bun astro dev",
@@ -55,7 +55,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sharp": "^0.32.6",
-    "ts-dedent": "^2.2.0"
+    "ts-dedent": "^2.2.1"
   },
   "trustedDependencies": [
     "sharp"
