@@ -44,7 +44,7 @@ vi /etc/ssh/sshd_config
 
 找到如下几项后进行配置:
 
-```
+```bash
 PubkeyAuthentication yes # 配置可以用公钥对应的密钥登录
 AuthorizedKeysFile .ssh/authorized_keys .ssh/authorized_keys2 # 配置授权公钥的位置
 PasswordAuthentication no # 配置不能使用密码登录

@@ -1,5 +1,5 @@
 // import { defineConfig, squooshImageService } from "astro/config"
-import { defineConfig } from "astro/config"
+import { defineConfig, squooshImageService } from "astro/config"
 import tailwind from "@astrojs/tailwind"
 import react from "@astrojs/react"
 import { remarkToc } from "./lib/remark-toc"
@@ -11,6 +11,9 @@ import mdx from "@astrojs/mdx"
 // https://astro.build/config
 export default defineConfig({
   site: "https://jtsang.me/",
+  image: {
+    service: squooshImageService(),
+  },
   integrations: [
     mdx(),
     tailwind({
