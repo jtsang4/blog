@@ -1,25 +1,26 @@
-import satori, { SatoriOptions } from "satori";
-import { SITE } from "@config";
-import { writeFile } from "node:fs/promises";
-import { Resvg } from "@resvg/resvg-js";
+import satori from "satori"
+import type { SatoriOptions } from "satori"
+import { SITE } from "@config"
+import { writeFile } from "node:fs/promises"
+import { Resvg } from "@resvg/resvg-js"
 
 const fetchFonts = async () => {
   // Regular Font
   const fontFileRegular = await fetch(
     "https://www.1001fonts.com/download/font/ibm-plex-mono.regular.ttf"
-  );
-  const fontRegular: ArrayBuffer = await fontFileRegular.arrayBuffer();
+  )
+  const fontRegular: ArrayBuffer = await fontFileRegular.arrayBuffer()
 
   // Bold Font
   const fontFileBold = await fetch(
     "https://www.1001fonts.com/download/font/ibm-plex-mono.bold.ttf"
-  );
-  const fontBold: ArrayBuffer = await fontFileBold.arrayBuffer();
+  )
+  const fontBold: ArrayBuffer = await fontFileBold.arrayBuffer()
 
-  return { fontRegular, fontBold };
-};
+  return { fontRegular, fontBold }
+}
 
-const { fontRegular, fontBold } = await fetchFonts();
+const { fontRegular, fontBold } = await fetchFonts()
 
 const ogImage = (text: string) => {
   return (
@@ -112,8 +113,8 @@ const ogImage = (text: string) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 const options: SatoriOptions = {
   width: 1200,
@@ -133,23 +134,23 @@ const options: SatoriOptions = {
       style: "normal",
     },
   ],
-};
+}
 
 const generateOgImage = async (mytext = SITE.title) => {
-  const svg = await satori(ogImage(mytext), options);
+  const svg = await satori(ogImage(mytext), options)
 
   // render png in production mode
   if (import.meta.env.MODE === "production") {
-    const resvg = new Resvg(svg);
-    const pngData = resvg.render();
-    const pngBuffer = pngData.asPng();
+    const resvg = new Resvg(svg)
+    const pngData = resvg.render()
+    const pngBuffer = pngData.asPng()
 
-    console.info("Output PNG Image  :", `${mytext}.png`);
+    console.info("Output PNG Image  :", `${mytext}.png`)
 
-    await writeFile(`./dist/${mytext}.png`, pngBuffer);
+    await writeFile(`./dist/${mytext}.png`, pngBuffer)
   }
 
-  return svg;
-};
+  return svg
+}
 
-export default generateOgImage;
+export default generateOgImage
