@@ -1,4 +1,5 @@
 ---
+import { ViewTransitions } from "astro:transitions"
 import { SITE } from "@config"
 import Callout from "@components/Callout.astro"
 import "../styles/base.css"
@@ -85,6 +86,7 @@ const socialImageURL = new URL(
     }
 
     <script is:inline src="/toggle-theme.js"></script>
+    <ViewTransitions />
   </head>
   <body>
     <slot />
@@ -111,11 +113,9 @@ const socialImageURL = new URL(
         />
       )
     }
-  </body>
+  </body><style>
+    .hide {
+      display: none;
+    }
+  </style>
 </html>
-
-<style>
-  .hide {
-    display: none;
-  }
-</style>
