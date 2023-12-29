@@ -14,7 +14,7 @@ import { SOCIALS, SITE } from "@config"
 const posts = await getCollection("blog")
 
 const sortedPosts = getSortedPosts(posts)
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured)
+// const featuredPosts = sortedPosts.filter(({ data }) => data.featured)
 
 const socialCount = SOCIALS.filter(social => social.active).length
 ---
@@ -57,7 +57,7 @@ const socialCount = SOCIALS.filter(social => social.active).length
 
     <Hr />
 
-    {
+    <!-- {
       featuredPosts.length > 0 && (
         <>
           <section id="featured">
@@ -75,7 +75,7 @@ const socialCount = SOCIALS.filter(social => social.active).length
           <Hr />
         </>
       )
-    }
+    } -->
 
     <section id="recent-posts">
       <h2>Recent Posts</h2>

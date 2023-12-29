@@ -7,8 +7,8 @@ export const SITE = {
   title: "James Tsang's Blog",
   ogImage: "og.jpeg",
   lightAndDarkMode: true,
-  postPerPage: 8,
-  recentPost: 5,
+  postPerPage: 15,
+  recentPost: 15,
 }
 
 export const LOGO_IMAGE = {
