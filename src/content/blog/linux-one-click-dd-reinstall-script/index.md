@@ -11,13 +11,13 @@ tags:
 description: Linux 一键 DD 重装脚本
 ---
 
-# Table of Contents
+## Table of Contents
 
 > 脚本来源: [https://github.com/liyanglan/KVM-install](https://github.com/liyanglan/KVM-install)
 
 Debian/Ubuntu/CentOS 网络安装/网络重装/纯净安装 一键脚本
 
-# 背景
+## 背景
 
 适用于由GRUB引导的CentOS,Ubuntu,Debian系统.
 
@@ -39,7 +39,7 @@ Debian/Ubuntu/CentOS 网络安装/网络重装/纯净安装 一键脚本
 
 全自动安装CentOS时默认提供VNC功能,可使用VNC Viewer查看进度, VNC端口为1或者5901,可自行尝试连接.(成功后VNC功能会消失.) 目前CentOS系统只支持任意版本重装为 CentOS 6.x 及以下版本.
 
-# 准备工作
+## 准备工作
 
 特别注意:OpenVZ构架不适用.
 
@@ -71,13 +71,13 @@ apt-get update
 yum update
 ```
 
-# 下载
+## 下载
 
 ```bash
 wget https://raw.githubusercontent.com/jtsang4/KVM-install/master/InstallNET.sh
 ```
 
-# 使用方法
+## 使用方法
 
 ```bash
 Usage:
@@ -100,107 +100,107 @@ Usage:
 # 以下示例中,将X.X.X.X替换为自己的网络参数.
 ```
 
-# 快速示例
+## 快速示例
 
-### **centos 6:**
+#### **centos 6:**
 
 ```bash
 bash InstallNET.sh -c 6.9 -v 64 -a --mirror 'http://mirror.centos.org/centos'
 ```
 
-### **debian 7:**
+#### **debian 7:**
 
 ```bash
 bash InstallNET.sh -d 7 -v 64 -a
 ```
 
-### **debian 8:**
+#### **debian 8:**
 
 ```bash
 bash InstallNET.sh -d 8 -v 64 -a
 ```
 
-### **debian 9:**
+#### **debian 9:**
 
 ```bash
 bash InstallNET.sh -d 9 -v 64 -a
 ```
 
-### **debian 10:**
+#### **debian 10:**
 
 ```bash
 bash InstallNET.sh -d 10 -v 64 -a
 ```
 
-### **debian 11:**
+#### **debian 11:**
 
 ```bash
 bash InstallNET.sh -d 11 -v 64 -a
 ```
 
-### **ubuntu 14.04:**
+#### **ubuntu 14.04:**
 
 ```bash
 bash InstallNET.sh -u 14.04 -v 64 -a
 ```
 
-### **ubuntu 16.04:**
+#### **ubuntu 16.04:**
 
 ```bash
 bash InstallNET.sh -u 16.04 -v 64 -a
 ```
 
-### **ubuntu 18.04:**
+#### **ubuntu 18.04:**
 
 ```bash
 bash InstallNET.sh -u 18.04 -v 64 -a
 ```
 
-### **ubuntu 20.04:**
+#### **ubuntu 20.04:**
 
 ```bash
 bash InstallNET.sh -u 20.04 -v 64 -a
 ```
 
-### **甲骨文ARM:**
+#### **甲骨文ARM:**
 
 ```bash
 bash InstallNET.sh -d 10 -v arm64 -a
 ```
 
-### **CentOS系统用萌咖dd脚本出现Not Found grub.的解决方法**
+#### **CentOS系统用萌咖dd脚本出现Not Found grub.的解决方法**
 
 ```bash
 grub2-mkconfig -o /boot/grub2/grub.cfg
 ```
 
-### **VPS或者独立服务器有多个网卡.**
+#### **VPS或者独立服务器有多个网卡.**
 
-### **例:安装debian9，网卡名称enp0s5和enp0s6,enp0s6可用.**
+#### **例:安装debian9，网卡名称enp0s5和enp0s6,enp0s6可用.**
 
 ```bash
 bash InstallNET.sh -d 9 -v 64 -a -i enp0s6
 ```
 
-### **VPS安装debian9并且自定义源.**
+#### **VPS安装debian9并且自定义源.**
 
 ```bash
 bash InstallNET.sh -d 9 -v 64 -a --mirror 'http://archive.ubuntu.com/ubuntu'
 ```
 
-### **VPS安装debian9无法识别IP地址并且自定义源.**
+#### **VPS安装debian9无法识别IP地址并且自定义源.**
 
 ```bash
 bash InstallNET.sh -d 9 -v 64 -a --ip-addr x.x.x.x --ip-gate x.x.x.x --ip-mask x.x.x.x  --mirror 'http://archive.ubuntu.com/ubuntu'
 ```
 
-### **VPS DD方式安装windwos 7.**
+#### **VPS DD方式安装windwos 7.**
 
 ```bash
 bash InstallNET.sh --ip-addr x.x.x.x --ip-gate x.x.x.x --ip-mask x.x.x.x -dd 'https://moeclub.org/get-win7embx86-auto'
 ```
 
-# \***\*一些提示\*\***
+## \***\*一些提示\*\***
 
 特别注意:
 
@@ -232,6 +232,6 @@ bash InstallNET.sh --ip-addr x.x.x.x --ip-gate x.x.x.x --ip-mask x.x.x.x -dd 'ht
 
 连接提示中的IP地址:端口进行连接.(端口一般为1或者5901)
 
-# 国内软件源
+## 国内软件源
 
 [阿里巴巴开源镜像站-OPSX镜像站-阿里云开发者社区](https://developer.aliyun.com/mirror/)

@@ -12,11 +12,11 @@ description: 为服务器的安全起见，最好将服务器配置成仅能用�
 
 import Callout from "@components/Callout.astro"
 
-# Table of Contents
+## Table of Contents
 
 为服务器的安全起见，最好将服务器配置成仅能用密钥登录，并关闭密码登录。本文介绍如何生成密钥然后配置到服务器里作为 ssh 连接的凭证。
 
-# 生成密钥
+## 生成密钥
 
 ```bash
 ssh-keygen
@@ -34,7 +34,7 @@ ssh-keygen
 
 执行 `cat test.pub` 即可看到公钥的内容。
 
-# SSH 登录配置
+## SSH 登录配置
 
 使用密码远程登录服务器后，即可对 SSH 登录方式进行配置：
 
@@ -59,7 +59,7 @@ ClientAliveCountMax 10
 
 配置完成后，将上面公钥中的内容写入到 `~/.ssh/authorized_keys` 文件中，所有配置就完成了。
 
-# 重启 SSH 服务
+## 重启 SSH 服务
 
 ```bash
 service ssh restart

@@ -11,11 +11,11 @@ tags:
 description: Linux TCP 加速一键安装 常见/最新内核脚本 锐速/BBRPLUS/BBR2
 ---
 
-# Table of Contents
+## Table of Contents
 
 > _本文转载自：_[https://github.com/ylx2016/Linux-NetSpeed](https://github.com/ylx2016/Linux-NetSpeed)_，如文中内容有错误请到原文查看原始版(最新版)_
 
-# 预先准备
+## 预先准备
 
 **Centos:**
 
@@ -29,7 +29,7 @@ yum install ca-certificates wget -y && update-ca-trust force-enable
 apt-get install ca-certificates wget -y && update-ca-certificates
 ```
 
-# 卸载内核版本
+## 卸载内核版本
 
 ```bash
 wget -N --no-check-certificate "https://raw.githubusercontent.com/ylx2016/Linux-NetSpeed/master/tcp.sh" && chmod +x tcp.sh && ./tcp.sh
@@ -41,7 +41,7 @@ wget -N --no-check-certificate "https://raw.githubusercontent.com/ylx2016/Linux-
 wget -O tcp.sh "https://git.io/coolspeeda" && chmod +x tcp.sh && ./tcp.sh
 ```
 
-# 不卸载内核版本
+## 不卸载内核版本
 
 ```bash
 wget -N --no-check-certificate "https://raw.githubusercontent.com/ylx2016/Linux-NetSpeed/master/tcpx.sh" && chmod +x tcpx.sh && ./tcpx.sh
@@ -53,7 +53,7 @@ wget -N --no-check-certificate "https://raw.githubusercontent.com/ylx2016/Linux-
 wget -O tcpx.sh "https://git.io/JYxKU" && chmod +x tcpx.sh && ./tcpx.sh
 ```
 
-# 其它相关
+## 其它相关
 
 ```bash
 # 关联action自动编译内核

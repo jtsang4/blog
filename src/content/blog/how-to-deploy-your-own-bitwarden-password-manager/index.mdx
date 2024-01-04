@@ -13,9 +13,9 @@ description: 为确保账户密码的安全和稳定管理，除了使用常见�
 
 import Callout from "@components/Callout.astro"
 
-# Table of Contents
+## Table of Contents
 
-# 什么是密码管理器
+## 什么是密码管理器
 
 在使用许多网站、应用时，我们都需要用帐号密码来登录。帐号可能是手机号、邮箱或用户名，密码为了防止被盗以后所有帐号都被盗，一般也不建议只使用一个密码，需要在不同网站用不同的密码。
 
@@ -25,7 +25,7 @@ import Callout from "@components/Callout.astro"
 
 <Callout text="注意：建议银行、支付类的账户不要使用密码管理器来管理" />
 
-# 为什么要自己部署密码管理器
+## 为什么要自己部署密码管理器
 
 既然已经有了各式各样的专业密码管理器，为什么我们这里要提到自己部署密码管理器呢？主要原因是为了密码服务的**安全和稳定**。如果我们不自己部署服务，而是直接使用现成的商业产品，试想以下情况：
 
@@ -35,19 +35,19 @@ import Callout from "@components/Callout.astro"
 
 所以为了得到一个安全稳定的密码管理服务，我们可以自己部署一个密码管理器供我们自己或家人朋友使用，自己部署的服务可能价格稍微贵一点，但可以解决账户密码管理中的核心问题（安全、稳定），同时也能动手玩一些有趣的东西。
 
-# 如何部署自己的密码管理服务
+## 如何部署自己的密码管理服务
 
 密码管理器由两部分组成，一个是数据和服务端，另一个是客户端，因此需要找一个数据和服务端可以由我们自己控制搭建，客户端现成可用的方案。
 
 开源社区是一个宝库，最好找一个开源、主流的方案，上面提到的 [bitwarden](https://bitwarden.com/) 就是一个非常棒的选择。
 
-## 为什么选择 bitwarden
+### 为什么选择 bitwarden
 
 - 数据和服务端可以自己控制和部署，有现成的客户端，并支持配置服务端地址
 - [bitwarden 完全开源](https://github.com/bitwarden)，即使这个团队或公司不在了，我们也还可以用它的源码构建自己的服务端、客户端
 - 开源社区有成熟的服务端实现([vaultwarden](https://github.com/dani-garcia/vaultwarden))可用 ，文档详尽、部署简单
 
-## 准备工作
+### 准备工作
 
 - 一台 512MB 内存以上的服务器(需要提前安装好 docker 和 docker-compose，方法见下方)
 - 一个域名
@@ -58,7 +58,7 @@ import Callout from "@components/Callout.astro"
 >
 > **安装 docker-compose**: [https://docs.docker.com/compose/cli-command/#install-on-linux](https://docs.docker.com/compose/cli-command/#install-on-linux) 执行 “install on linux” 部分的几个命令行
 
-## 配置和部署
+### 配置和部署
 
 一、增加一条域名解析记录，指向服务器 IP
 
@@ -214,7 +214,7 @@ volumes:
 
 ![Untitled](./Untitled.png)
 
-## 如何更新
+### 如何更新
 
 在服务器中运行如下命令：
 
@@ -224,7 +224,7 @@ docker pull vaultwarden/server:latest # 拉取最新镜像
 docker compose restart # 进入到 docker-compose.yml 的目录，执行此命令重启服务
 ```
 
-## 如何启动和停止
+### 如何启动和停止
 
 在服务器中运行如下命令：
 
@@ -245,19 +245,19 @@ docker compose rm
 docker compose down
 ```
 
-## 如何卸载
+### 如何卸载
 
 按上述命令停止并移除服务后，删除服务器中的相关目录和文件，例如上面例子中的 `~/password` 目录。
 
 <Callout text="以上内容在 vaultwarden 的 [Wiki](https://github.com/dani-garcia/vaultwarden/wiki) 文档里大多都有提到，如何还有疑惑可以查看 vaultwarden 的 [Wiki](https://github.com/dani-garcia/vaultwarden/wiki)。" />
 
-# 如何使用
+## 如何使用
 
-## 注册服务
+### 注册服务
 
 访问我们在上面配置的域名，见到上图中的界面后，点击“创建帐号”就可以在我们自己的数据库里注册一个帐号。
 
-## 客户端连接自持的服务端
+### 客户端连接自持的服务端
 
 一、下载客户端
 
@@ -275,13 +275,13 @@ docker compose down
 
 登录后就可以使用 bitwarden 进行密码管理了。
 
-## 为不同的网站生成不同的随机密码
+### 为不同的网站生成不同的随机密码
 
 借助 bitwarden 的 Generator 工具可以方便地以规则生成随机密码，这样在注册各种网站和应用时就可以使用完全不同的复杂密码也不用担心忘记：
 
 ![Untitled](./Untitled-3.png)
 
-## 从其它密码管理器里导入
+### 从其它密码管理器里导入
 
 如果之前是其它密码管理器的用户，bitwarden 还支持从其它密码管理器导入。
 
@@ -289,7 +289,7 @@ docker compose down
 
 ![Untitled](./Untitled-4.png)
 
-## 后台管理
+### 后台管理
 
 如果之前在 docker-compose.yml 中配置了管理员密码，那么访问 `/admin` 页面就可以进入后台管理页，进行一些后台管理操作，例如例子中的域名可以访问 `https://password.abc.xyz/admin` ，即可见到如下页面：
 
