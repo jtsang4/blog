@@ -14,7 +14,7 @@ export const Comments = (props: Props) => {
   const { className, style, pageKey, pageTitle, commentServer } = props
 
   useEffect(() => {
-    ;(window as any).Artalk.init({
+    const artalk = (window as any).Artalk.init({
       el: "#comments",
       pageKey,
       pageTitle,
@@ -22,7 +22,7 @@ export const Comments = (props: Props) => {
       site: SITE.title,
     })
     const theme = localStorage.getItem("theme") as string
-    ;(window as any).Artalk.setDarkMode(theme === "dark")
+    artalk.setDarkMode(theme === "dark")
   }, [])
 
   return <div className={className} style={style} id="comments"></div>
