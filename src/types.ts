@@ -1,3 +1,6 @@
+import type { ArtalkConfig } from "artalk"
+import type Artalk from "artalk"
+
 export type SocialObjects = {
   name: SocialMedia
   href: string
@@ -31,3 +34,11 @@ export type SocialMedia =
   | "Telegram"
   | "TelegramChannel"
   | "Mastodon"
+
+// interface Global variables
+declare global {
+  interface Window {
+    artalk: Artalk
+    getArtalkSingleton: Promise<(config: Partial<ArtalkConfig>) => Artalk>
+  }
+}

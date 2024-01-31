@@ -14,16 +14,20 @@ export const Comments = (props: Props) => {
   const { className, style, pageKey, pageTitle, commentServer } = props
 
   useEffect(() => {
-    const artalk = (window as any).Artalk.init({
-      el: "#comments",
-      pageKey,
-      pageTitle,
-      server: commentServer,
-      site: SITE.title,
-    })
-    const theme = localStorage.getItem("theme") as string
-    artalk.setDarkMode(theme === "dark")
+    const initComment = async () => {
+      const getArtalkSingleton = await window.getArtalkSingleton
+      const artalk = getArtalkSingleton({
+        el: "#comments",
+        pageKey,
+        pageTitle,
+        server: commentServer,
+        site: SITE.title,
+      })
+      const theme = localStorage.getItem("theme") as string
+      artalk.setDarkMode(theme === "dark")
+    }
+    initComment()
   }, [])
 
-  return <div className={className} style={style} id="comments"></div>
+  return <div className={className} style={style} id="comments" />
 }
