@@ -98,14 +98,7 @@ const socialImageURL = new URL(
         </div>
       )
     }
-    <!-- <link
-      href="https://cdn.jsdelivr.net/npm/artalk@2.7.3/dist/Artalk.css"
-      rel="stylesheet"
-    />
-    <script async src="https://cdn.jsdelivr.net/npm/artalk@2.7.3/dist/Artalk.js"
-    ></script> -->
     <script>
-      import("artalk/dist/Artalk.css")
       const loadArtalk = async () => {
         const { init } = await import("artalk")
         return (config: any) => {
