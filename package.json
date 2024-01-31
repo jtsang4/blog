@@ -1,6 +1,6 @@
 {
   "name": "blog",
-  "version": "2.4.0",
+  "version": "2.3.5",
   "scripts": {
     "dev": "bunx --bun astro dev",
     "start": "bunx --bun astro dev",
