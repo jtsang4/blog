@@ -39,6 +39,5 @@ export type SocialMedia =
 declare global {
   interface Window {
     artalk: Artalk
-    getArtalkSingleton: Promise<(config: Partial<ArtalkConfig>) => Artalk>
   }
 }

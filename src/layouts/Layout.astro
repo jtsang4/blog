@@ -98,17 +98,6 @@ const socialImageURL = new URL(
         </div>
       )
     }
-    <script>
-      const loadArtalk = async () => {
-        const { init } = await import("artalk")
-        return (config: any) => {
-          const artalk = init(config)
-          window.artalk = artalk
-          return artalk
-        }
-      }
-      window.getArtalkSingleton = loadArtalk()
-    </script>
     {
       import.meta.env.UMAMI_URL && (
         <script

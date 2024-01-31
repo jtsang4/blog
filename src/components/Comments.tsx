@@ -15,14 +15,16 @@ export const Comments = (props: Props) => {
 
   useEffect(() => {
     const initComment = async () => {
-      const getArtalkSingleton = await window.getArtalkSingleton
-      const artalk = getArtalkSingleton({
+      import("artalk/dist/Artalk.css")
+      const { init } = await import("artalk")
+      const artalk = init({
         el: "#comments",
         pageKey,
         pageTitle,
         server: commentServer,
         site: SITE.title,
       })
+      window.artalk = artalk
       const theme = localStorage.getItem("theme") as string
       artalk.setDarkMode(theme === "dark")
     }
