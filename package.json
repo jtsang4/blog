@@ -1,6 +1,6 @@
 {
   "name": "blog",
-  "version": "2.4.5",
+  "version": "2.4.6",
   "scripts": {
     "dev": "bunx --bun astro dev",
     "start": "bunx --bun astro dev",
@@ -17,7 +17,7 @@
   "dependencies": {
     "@astrojs/mdx": "2.0.1",
     "@astrojs/rss": "4.0.1",
-    "@resvg/resvg-js": "^2.4.5",
+    "@resvg/resvg-js": "^2.4.6",
     "artalk": "^2.7.3",
     "astro": "4.0.4",
     "astro-icon": "^0.8.1",
