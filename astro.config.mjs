@@ -1,6 +1,7 @@
 import { defineConfig, squooshImageService } from "astro/config"
 import tailwind from "@astrojs/tailwind"
 import react from "@astrojs/react"
+import icon from "astro-icon"
 import { remarkToc } from "./lib/remark-toc"
 import { remarkCollapse } from "./lib/remark-collapse"
 import { mermaid } from "./lib/remark-mermaid"
@@ -14,6 +15,7 @@ export default defineConfig({
     service: squooshImageService(),
   },
   integrations: [
+    icon(),
     mdx(),
     tailwind({
       applyBaseStyles: false,

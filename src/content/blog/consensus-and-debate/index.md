@@ -7,7 +7,7 @@ featured: false
 ogImage: https://cdn.sa.net/2024/03/19/hciwZs9AHL7lkMb.jpg
 tags:
   - WESRC
-description: 这次聊聊我一直以来的一个观点：**我们在和人相处时，大多数时候需要追求的不是一百分的答案，而是对齐与共识。**
+description: 这次聊聊我一直以来的一个观点：我们在和人相处时，大多数时候需要追求的不是一百分的答案，而是对齐与共识。
 ---
 
 ## Table of Contents
