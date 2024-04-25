@@ -1,0 +1,7 @@
+# .dockerignore
+node_modules
+.git
+.astro
+.gitignore
+*.md
+dist

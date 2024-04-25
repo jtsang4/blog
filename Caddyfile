@@ -1,0 +1,30 @@
+{
+    # 使用自动 HTTPS，需要 Caddy 能够访问 HTTP 与 HTTPS 的 80 和 443 端口
+    auto_https off
+}
+
+:8000 {  # 请将此处的域名替换为你自己的域名
+    root * /public/www  # 替换为你静态文件的真实路径
+
+    # 定义一个特殊的 handle 用于处理 /feed 路径
+    handle_path /feed {
+        root * /public/www
+        file_server {
+            index rss.xml
+        }
+    }
+
+    file_server
+    encode zstd gzip
+
+    # 可选：开启访问日志
+    log {
+        output discard
+    }
+
+    # 可选：设置头部，例如跨域策略
+    header {
+        # 示例: 允许所有来源的跨域请求
+        Access-Control-Allow-Origin *
+    }
+}
