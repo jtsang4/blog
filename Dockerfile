@@ -5,7 +5,7 @@ RUN corepack enable
 COPY . /app
 WORKDIR /app
 RUN pnpm install --frozen-lockfile
-RUN pnpm run build
+RUN NODE_OPTIONS="--max-old-space-size=4096" pnpm run build
 
 FROM caddy:2-alpine
 COPY --from=base /app/dist /public/www
