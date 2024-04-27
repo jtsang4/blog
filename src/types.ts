@@ -1,4 +1,3 @@
-import type { ArtalkConfig } from "artalk"
 import type Artalk from "artalk"
 
 export type SocialObjects = {

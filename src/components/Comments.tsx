@@ -1,6 +1,8 @@
 import type { CSSProperties } from "react"
 import { useEffect } from "react"
 import { SITE } from "@config"
+import { init } from "artalk"
+import "artalk/dist/Artalk.css"
 
 type Props = {
   className?: string
@@ -15,8 +17,6 @@ export const Comments = (props: Props) => {
 
   useEffect(() => {
     const initComment = async () => {
-      import("artalk/dist/Artalk.css")
-      const { init } = await import("artalk")
       const artalk = init({
         el: "#comments",
         pageKey,
