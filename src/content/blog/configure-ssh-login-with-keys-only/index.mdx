@@ -57,6 +57,8 @@ ClientAliveInterval 60
 ClientAliveCountMax 10
 ```
 
+另外特别注意小心在 sshd_config 中被 Include 进来的 `/etc/ssh/sshd_config.d/` 目录中的配置背刺，导致还是可以通过密码登录，比如阿里云的服务器都有这个问题。
+
 配置完成后，将上面公钥中的内容写入到 `~/.ssh/authorized_keys` 文件中，所有配置就完成了。
 
 ## 重启 SSH 服务
