@@ -68,12 +68,12 @@ const pageTitle = `${title} - ${SITE.title}`
     </ul>
   </main>
   <Footer />
-  <script>
+  <script lang="ts">
     /**
      * source: https://github.com/JuanM04/portfolio/blob/983b0ed0eabdac37bf8b7912d3e8128a443192b9/src/pages/docs/%5B...documentSlug%5D.astro#L74-L103
-     * @params {HTMLCollectionOf<HTMLElement>} graphs
+     * @param {HTMLCollectionOf<Element>} graphs - The collection of mermaid graph elements
      */
-    async function renderDiagrams(graphs: HTMLCollectionOf<Element>) {
+    async function renderDiagrams(graphs) {
       const { default: mermaid } = await import("mermaid")
       mermaid.initialize({
         startOnLoad: false,
@@ -82,7 +82,9 @@ const pageTitle = `${title} - ${SITE.title}`
 
       for (const graph of graphs) {
         const content = graph.getAttribute("data-content")
-        if (!content) continue
+        if (!content) {
+          continue
+        }
         let svg = document.createElement("svg")
         const id = (svg.id = "mermaid-" + Math.round(Math.random() * 100000))
         graph.appendChild(svg)
