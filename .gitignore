@@ -22,3 +22,4 @@ pnpm-debug.log*
 # ignore .astro directory
 .astro
 bun.lockb
+bun.lock
