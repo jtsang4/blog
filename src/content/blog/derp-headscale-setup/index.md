@@ -156,12 +156,15 @@ tailscale up --login-server=http://<IP>:8080 --accept-routes=true --accept-dns=f
 ## 常见问题
 
 Q: 组网的客户端无法与本地的 Clash/Shadowrocket 之类的代理共存怎么办
+
 A：目前没有比较优雅的解决办法，如果是 MacOS 客户端的话，可以用 Surge 来做代理规避这个问题。不过如果是组网内被连接的客户端，同时开启代理是不会影响组网入流量的，只会影响出流量，换句话说开启代理的时候当前客户端无法连接到另一个客户端。所以还有一个简单的办法是先连接组网内的另一个客户端，再开启代理，这时候连接不会中断。
 
 Q: 无法连接上另一个客户端，ping 也 ping 不同子网 IP
+
 A: 这种情况可以检查一下另一个 Tailscale 客户端有没有开启 "Allow incoming connections"，如果没有的话需要勾上。
 
 Q: 客户端报错连接不上了怎么办
+
 A: 如果是 MacOS 客户端，可以在 Console 中查看 Tailscale 的日支。如果发现是证书过期了，可以借助上面“获取 SSL 证书”中提到的方法进行续签。
 
 ## 学习参考文档
