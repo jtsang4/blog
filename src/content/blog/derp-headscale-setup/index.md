@@ -150,8 +150,10 @@ tailscale up --login-server=http://<IP>:8080 --accept-routes=true --accept-dns=f
 
 ## Headscale 常用命令行
 
+- 用户管理: headscale users list/create
 - 查看节点列表: `headscale nodes list`
 - 删除特定节点: `headscale nodes delete -i <ID>`
+- 调试配置文件: `headscale serve -c /etc/headscale/config.yaml`
 
 ## 常见问题
 
