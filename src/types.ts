@@ -37,6 +37,6 @@ export type SocialMedia =
 // interface Global variables
 declare global {
   interface Window {
-    artalk: Artalk
+    artalk?: Artalk
   }
 }

@@ -16,20 +16,28 @@ export const Comments = (props: Props) => {
   const { className, style, pageKey, pageTitle, commentServer } = props
 
   useEffect(() => {
-    const initComment = async () => {
-      const artalk = init({
-        el: "#comments",
-        pageKey,
-        pageTitle,
-        server: commentServer,
-        site: SITE.title,
-      })
-      window.artalk = artalk
-      const theme = localStorage.getItem("theme") as string
-      artalk.setDarkMode(theme === "dark")
+    const theme =
+      localStorage.getItem("theme") ??
+      document.documentElement.getAttribute("data-theme") ??
+      "light"
+
+    const artalk = init({
+      el: "#comments",
+      pageKey,
+      pageTitle,
+      server: commentServer,
+      site: SITE.title,
+      darkMode: theme === "dark",
+    })
+    window.artalk = artalk
+
+    return () => {
+      artalk.destroy()
+      if (window.artalk === artalk) {
+        window.artalk = undefined
+      }
     }
-    initComment()
-  }, [])
+  }, [pageKey, pageTitle, commentServer])
 
   return <div className={className} style={style} id="comments" />
 }

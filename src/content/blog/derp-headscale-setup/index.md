@@ -13,6 +13,8 @@ description: 最近好友送了我一台性能非常强劲的 Mac Mini，使用�
 
 ## Table of Contents
 
+> 更新：笔者目前最新的组网方案已经换成了 [Easytier](https://github.com/EasyTier/Easytier)，非常轻量好用，推荐给大家。
+
 最近好友送了我一台性能非常强劲的 Mac Mini，使用体验非常好，功耗也很低，适合长期运行作为小的家庭开发服务器，但出门以后就连接不上了，为了能够远程连接，又折腾了一下多设备组网。Tailscale 在多设备组网上比较好用，但因为 Tailscale 官方的 DERP 节点都在海外，中转连接以后延迟高、速度慢，所以干脆自己搭建了一个 DERP 节点搭配 Headscale 来使用，本文是折腾的记录。
 
 ## 获取 SSL 证书
