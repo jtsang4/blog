@@ -3,9 +3,9 @@
  * @typedef {import('mdast-util-toc').Options} Options
  */
 
-import { toc } from 'mdast-util-toc'
-import type { Options } from 'mdast-util-toc'
-import type { Root } from 'mdast'
+import type { Root } from "mdast"
+import type { Options } from "mdast-util-toc"
+import { toc } from "mdast-util-toc"
 
 /**
  * Generate a table of contents (TOC).
@@ -23,8 +23,8 @@ import type { Root } from 'mdast'
 export function remarkToc(options: Options) {
   const settings = {
     ...options,
-    heading: (options && options.heading) || '(table[ -]of[ -])?contents?|toc',
-    tight: options && typeof options.tight === 'boolean' ? options.tight : true
+    heading: options?.heading || "(table[ -]of[ -])?contents?|toc",
+    tight: typeof options?.tight === "boolean" ? options.tight : true,
   }
 
   /**
@@ -35,7 +35,7 @@ export function remarkToc(options: Options) {
    * @returns {undefined}
    *   Nothing.
    */
-  return function (tree: Root) {
+  return (tree: Root) => {
     const result = toc(tree, settings)
 
     if (
@@ -48,11 +48,11 @@ export function remarkToc(options: Options) {
       return
     }
 
-    const startIndex = result.index;
+    const startIndex = result.index
     tree.children = [
       ...tree.children.slice(0, startIndex),
       result.map,
-      ...tree.children.slice(startIndex)
+      ...tree.children.slice(startIndex),
     ]
   }
 }

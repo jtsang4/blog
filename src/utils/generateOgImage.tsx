@@ -1,8 +1,8 @@
-import satori from "satori"
-import type { SatoriOptions } from "satori"
-import { SITE } from "@config"
 import { writeFile } from "node:fs/promises"
+import { SITE } from "@config"
 import { Resvg } from "@resvg/resvg-js"
+import type { SatoriOptions } from "satori"
+import satori from "satori"
 
 const fetchFonts = async () => {
   // Regular Font

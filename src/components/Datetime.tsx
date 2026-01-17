@@ -1,7 +1,7 @@
 export interface Props {
-  datetime: string | Date;
-  size?: "sm" | "lg";
-  className?: string;
+  datetime: string | Date
+  size?: "sm" | "lg"
+  className?: string
 }
 
 export default function Datetime({ datetime, size = "sm", className }: Props) {
@@ -22,22 +22,22 @@ export default function Datetime({ datetime, size = "sm", className }: Props) {
         <FormattedDatetime datetime={datetime} />
       </span>
     </div>
-  );
+  )
 }
 
 const FormattedDatetime = ({ datetime }: { datetime: string | Date }) => {
-  const myDatetime = new Date(datetime);
+  const myDatetime = new Date(datetime)
 
   const date = myDatetime.toLocaleDateString([], {
     year: "numeric",
     month: "long",
     day: "numeric",
-  });
+  })
 
   const time = myDatetime.toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
-  });
+  })
 
   return (
     <>
@@ -46,5 +46,5 @@ const FormattedDatetime = ({ datetime }: { datetime: string | Date }) => {
       <span className="sr-only">&nbsp;at&nbsp;</span>
       {time}
     </>
-  );
-};
+  )
+}

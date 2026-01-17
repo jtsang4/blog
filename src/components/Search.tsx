@@ -1,8 +1,8 @@
+import Card from "@components/Card"
+import type { BlogFrontmatter } from "@content/_schemas"
+import slugify from "@utils/slugify"
 import Fuse from "fuse.js"
 import { useEffect, useRef, useState } from "react"
-import Card from "@components/Card"
-import slugify from "@utils/slugify"
-import type { BlogFrontmatter } from "@content/_schemas"
 
 export type SearchItem = {
   title: string
@@ -45,29 +45,29 @@ export default function SearchBar({ searchList }: Props) {
     if (searchStr) setInputVal(searchStr)
 
     // put focus cursor at the end of the string
-    setTimeout(function () {
-      inputRef.current!.selectionStart = inputRef.current!.selectionEnd =
-        searchStr?.length || 0
+    setTimeout(() => {
+      const input = inputRef.current
+      if (!input) return
+      input.selectionStart = input.selectionEnd = searchStr?.length || 0
     }, 50)
   }, [])
 
   useEffect(() => {
     // Add search result only if
     // input value is more than one character
-    let inputResult = inputVal.length > 1 ? fuse.search(inputVal) : []
+    const inputResult = inputVal.length > 1 ? fuse.search(inputVal) : []
     setSearchResults(inputResult)
 
     // Update search string in URL
     if (inputVal.length > 0) {
       const searchParams = new URLSearchParams(window.location.search)
       searchParams.set("q", inputVal)
-      const newRelativePathQuery =
-        window.location.pathname + "?" + searchParams.toString()
+      const newRelativePathQuery = `${window.location.pathname}?${searchParams.toString()}`
       history.pushState(null, "", newRelativePathQuery)
     } else {
       history.pushState(null, "", window.location.pathname)
     }
-  }, [inputVal])
+  }, [inputVal, fuse.search])
 
   return (
     <>
@@ -88,7 +88,6 @@ export default function SearchBar({ searchList }: Props) {
           value={inputVal}
           onChange={handleChange}
           autoComplete="off"
-          autoFocus
           ref={inputRef}
         />
       </label>
@@ -104,14 +103,13 @@ export default function SearchBar({ searchList }: Props) {
       )}
 
       <ul>
-        {searchResults &&
-          searchResults.map(({ item, refIndex }) => (
-            <Card
-              href={`/posts/${slugify(item.data)}`}
-              frontmatter={item.data}
-              key={`${refIndex}-${slugify(item.data)}`}
-            />
-          ))}
+        {searchResults?.map(({ item, refIndex }) => (
+          <Card
+            href={`/posts/${slugify(item.data)}`}
+            frontmatter={item.data}
+            key={`${refIndex}-${slugify(item.data)}`}
+          />
+        ))}
       </ul>
     </>
   )

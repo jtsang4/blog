@@ -1,7 +1,7 @@
-import type { CSSProperties } from "react"
-import { useEffect } from "react"
 import { SITE } from "@config"
 import { init } from "artalk"
+import type { CSSProperties } from "react"
+import { useEffect } from "react"
 import "artalk/dist/Artalk.css"
 
 type Props = {
