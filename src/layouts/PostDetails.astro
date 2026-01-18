@@ -4,10 +4,10 @@ import { Comments } from "@components/Comments"
 import Datetime from "@components/Datetime"
 import Footer from "@components/Footer.astro"
 import Header from "@components/Header.astro"
+import MermaidLoader from "@components/MermaidLoader"
 import Tag from "@components/Tag.astro"
 import { SITE } from "@config"
 import Layout from "@layouts/Layout.astro"
-import mermaidScript from "@scripts/mermaid.ts?url"
 
 export interface Props {
   post: CollectionEntry<"blog">
@@ -17,6 +17,8 @@ const { post } = Astro.props
 
 const { title, author, description, ogImage, pubDatetime, tags, postSlug } =
   post.data
+
+const hasMermaid = post.body?.includes("```mermaid") ?? false
 
 const { Content } = await post.render()
 
@@ -69,7 +71,7 @@ const pageTitle = `${title} - ${SITE.title}`
     </ul>
   </main>
   <Footer />
-  <script type="module" src={mermaidScript}></script>
+  {hasMermaid && <MermaidLoader client:load />}
 </Layout>
 
 <style>
