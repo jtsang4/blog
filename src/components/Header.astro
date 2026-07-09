@@ -43,7 +43,7 @@ const { activeNav } = Astro.props
             <div id="third-line"></div>
           </div>
         </button>
-        <ul id="menu-items" class="display-none sm:flex">
+        <ul id="menu-items" class="display-none">
           <li>
             <a href="/posts" class={activeNav === "posts" ? "active" : ""}>
               Posts
@@ -106,6 +106,8 @@ const { activeNav } = Astro.props
 </header>
 
 <style>
+  @reference "../styles/base.css";
+
   #skip-to-content {
     @apply absolute -top-full left-16 z-50 bg-skin-accent py-2 px-3 text-skin-inverted transition-all focus:top-4;
   }
@@ -129,7 +131,13 @@ const { activeNav } = Astro.props
     @apply flex w-full flex-col items-center bg-skin-fill sm:ml-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0;
   }
   nav ul {
-    @apply mt-4 grid w-44 grid-cols-2 grid-rows-4 gap-y-2 gap-x-2 sm:mt-0 sm:ml-0 sm:w-auto sm:gap-y-0 sm:gap-x-5;
+    @apply mt-4 w-44 grid-cols-2 grid-rows-4 gap-y-2 gap-x-2 sm:mt-0 sm:ml-0 sm:w-auto sm:gap-y-0 sm:gap-x-5;
+  }
+  nav ul.display-none {
+    @apply hidden sm:flex;
+  }
+  nav ul:not(.display-none) {
+    @apply grid;
   }
   nav ul li {
     @apply col-span-2 flex items-center justify-center;
@@ -168,7 +176,7 @@ const { activeNav } = Astro.props
     @apply h-5 w-6 flex-col items-end justify-between;
   }
   .icon-container div {
-    @apply h-0.5 bg-skin-inverted transition-all;
+    @apply h-0.5 bg-skin-base transition-all;
   }
   #first-line {
     @apply w-full;

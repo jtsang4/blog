@@ -1,5 +1,5 @@
 ---
-import type { CollectionEntry } from "astro:content"
+import { type CollectionEntry, render } from "astro:content"
 import { Comments } from "@components/Comments"
 import Datetime from "@components/Datetime"
 import Footer from "@components/Footer.astro"
@@ -20,7 +20,7 @@ const { title, author, description, ogImage, pubDatetime, tags, postSlug } =
 
 const hasMermaid = post.body?.includes("```mermaid") ?? false
 
-const { Content } = await post.render()
+const { Content } = await render(post)
 
 const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin).href
 const pageTitle = `${title} - ${SITE.title}`
@@ -75,6 +75,8 @@ const pageTitle = `${title} - ${SITE.title}`
 </Layout>
 
 <style>
+  @reference "../styles/base.css";
+
   main {
     @apply mx-auto w-full max-w-3xl px-4 pb-12;
   }
@@ -91,10 +93,7 @@ const pageTitle = `${title} - ${SITE.title}`
   }
 
   .comments :global(.atk-send-btn) {
-    background-color: rgba(
-      var(--color-accent),
-      var(--tw-text-opacity)
-    ) !important;
+    background-color: rgb(var(--color-accent)) !important;
   }
 </style>
 

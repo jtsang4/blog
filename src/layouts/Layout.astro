@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from "astro:transitions"
+import { ClientRouter } from "astro:transitions"
 import Callout from "@components/Callout.astro"
 import { SITE } from "@config"
 import "../styles/base.css"
@@ -100,7 +100,7 @@ const socialImageURL = new URL(
         y.parentNode.insertBefore(t, y)
       })(window, document, "clarity", "script", "n8xa0dyy57")
     </script>
-    <ViewTransitions />
+    <ClientRouter />
   </head>
   <body>
     <slot />
