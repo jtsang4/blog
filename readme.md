@@ -27,7 +27,7 @@ This repository contains the source code of my personal blog. It is built with A
 
 - **Framework**: [Astro](https://astro.build/) 5
 - **Language**: TypeScript
-- **UI components**: React (used in selected components/pages)
+- **UI components**: Astro components with small vanilla scripts (no UI framework runtime)
 - **Styling**: Tailwind CSS
 - **Markdown & content processing**:
   - Astro Content Collections

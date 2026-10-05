@@ -1,0 +1,166 @@
+---
+import PostList from "@components/PostList.astro"
+import type { Post } from "@utils/posts"
+
+export interface Props {
+  posts: Post[]
+  suggestions: string[]
+}
+
+const { posts, suggestions } = Astro.props
+
+// Every row is rendered here; the client only filters and reorders them
+const index = JSON.stringify(
+  posts.map(post => ({
+    href: post.href,
+    title: post.data.title,
+    description: post.data.description,
+    tags: post.data.tags,
+  }))
+).replace(/</g, "\\u003c")
+---
+
+<div class="search" data-search>
+  <label class="search-field">
+    <span class="visually-hidden">Search posts 搜索文章</span>
+    <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="10.5" cy="10.5" r="6.5"></circle>
+      <path d="m15.5 15.5 5 5"></path>
+    </svg>
+    <input
+      id="search-input"
+      class="search-input"
+      placeholder="输入关键词…  Type to search"
+      type="search"
+      name="q"
+      autocomplete="off"
+      spellcheck="false"
+      data-search-input
+    />
+    <kbd class="search-kbd caps">⌘K</kbd>
+  </label>
+
+  <div class="search-status caps" aria-live="polite">
+    <span data-search-count hidden></span>
+    <span class="search-suggest" data-search-suggest>
+      <span>Try 试试</span>
+      {
+        suggestions.map(tag => (
+          <button type="button" class="search-chip" data-search-chip={tag}>
+            {tag}
+          </button>
+        ))
+      }
+    </span>
+  </div>
+
+  <div class="search-results" data-search-results hidden>
+    <PostList posts={posts} />
+  </div>
+
+  <p class="search-empty" data-search-empty hidden>
+    没有找到相关的文章。
+    <span lang="en">Nothing here yet — try another word.</span>
+  </p>
+
+  <script
+    is:inline
+    type="application/json"
+    data-search-index
+    set:html={index}
+  />
+</div>
+
+<script>
+  import Fuse from "fuse.js"
+
+  type Entry = {
+    href: string
+    title: string
+    description: string
+    tags: string[]
+  }
+
+  const init = () => {
+    const root = document.querySelector<HTMLElement>("[data-search]")
+    if (!root) return
+    const $ = <T extends Element>(selector: string) =>
+      root.querySelector(selector) as T
+    const input = $<HTMLInputElement>("[data-search-input]")
+    const count = $<HTMLElement>("[data-search-count]")
+    const suggest = $<HTMLElement>("[data-search-suggest]")
+    const results = $<HTMLElement>("[data-search-results]")
+    const empty = $<HTMLElement>("[data-search-empty]")
+    const list = results.querySelector("ul") as HTMLUListElement
+    const rows = new Map(
+      [...list.querySelectorAll<HTMLElement>("[data-href]")].map(row => [
+        row.dataset.href,
+        row,
+      ])
+    )
+
+    const entries: Entry[] = JSON.parse(
+      $<HTMLScriptElement>("[data-search-index]").textContent ?? "[]"
+    )
+    const fuse = new Fuse(entries, {
+      keys: [
+        { name: "title", weight: 2 },
+        { name: "description", weight: 1 },
+        { name: "tags", weight: 1.5 },
+      ],
+      minMatchCharLength: 1,
+      ignoreLocation: true,
+      threshold: 0.4,
+    })
+
+    const update = () => {
+      const query = input.value.trim()
+      const matches = query ? fuse.search(query) : []
+
+      // Show matching rows in rank order; hide the rest
+      for (const row of rows.values()) row.hidden = true
+      for (const { item } of matches) {
+        const row = rows.get(item.href)
+        if (!row) continue
+        row.hidden = false
+        list.append(row)
+      }
+
+      results.hidden = matches.length === 0
+      empty.hidden = !query || matches.length > 0
+      suggest.hidden = Boolean(query)
+      count.hidden = !query
+      count.textContent = `${String(matches.length).padStart(2, "0")} ${
+        matches.length === 1 ? "result" : "results"
+      } for “${query}”`
+
+      const url = new URL(location.href)
+      if (query) url.searchParams.set("q", query)
+      else url.searchParams.delete("q")
+      history.replaceState(history.state, "", url)
+    }
+
+    input.addEventListener("input", update)
+    // The field is type=search; Enter shouldn't reload the page
+    input.addEventListener("keydown", event => {
+      if (event.key === "Enter") event.preventDefault()
+    })
+    suggest.addEventListener("click", event => {
+      const chip = (event.target as Element).closest<HTMLElement>(
+        "[data-search-chip]"
+      )
+      if (!chip) return
+      input.value = chip.dataset.searchChip ?? ""
+      input.focus()
+      update()
+    })
+
+    // Restore a query from the URL and park the caret at its end
+    input.value = new URLSearchParams(location.search).get("q") ?? ""
+    update()
+    input.focus()
+    input.setSelectionRange(input.value.length, input.value.length)
+  }
+
+  document.addEventListener("astro:page-load", init)
+</script>

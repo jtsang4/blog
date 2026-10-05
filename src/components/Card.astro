@@ -1,0 +1,51 @@
+---
+import { formatDate, formatNumber } from "@utils/format"
+
+export interface Props {
+  href: string
+  title: string
+  description: string
+  number: number
+  date: Date
+  tags: string[]
+  lang?: string
+  cover?: string
+  // Morph target for the article title; must be unique on the page
+  transitionName?: string
+}
+
+const {
+  href,
+  title,
+  description,
+  number,
+  date,
+  tags,
+  lang,
+  cover,
+  transitionName,
+} = Astro.props
+---
+
+<li class="entry" data-href={href}>
+  <a href={href} class="entry-link" data-cover={cover}>
+    <span class="entry-no caps">{formatNumber(number)}</span>
+    <span class="entry-main">
+      <span
+        class="entry-title"
+        lang={lang}
+        style={transitionName
+          ? `view-transition-name: ${transitionName}`
+          : undefined}
+      >
+        {title}
+      </span>
+      <span class="entry-desc" lang={lang}>{description}</span>
+    </span>
+    <span class="entry-tags caps">{tags.join(" / ")}</span>
+    <time class="entry-date caps" datetime={date.toISOString()}>
+      {formatDate(date, "short")}
+    </time>
+    <span class="entry-arrow" aria-hidden="true">↗</span>
+  </a>
+</li>

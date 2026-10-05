@@ -1,6 +1,5 @@
 import { unified } from "@astrojs/markdown-remark"
 import mdx from "@astrojs/mdx"
-import react from "@astrojs/react"
 import sitemap from "@astrojs/sitemap"
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "astro/config"
@@ -13,7 +12,7 @@ import { inkTheme, lampTheme } from "./lib/shiki-theme"
 // https://astro.build/config
 export default defineConfig({
   site: "https://jtsang.me/",
-  integrations: [siteFonts(), mdx(), react(), sitemap()],
+  integrations: [siteFonts(), mdx(), sitemap()],
   scopedStyleStrategy: "where",
   // ~16 KB gzipped; inlining removes the only render-blocking request
   build: { inlineStylesheets: "always" },
