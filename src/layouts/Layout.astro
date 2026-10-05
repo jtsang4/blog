@@ -4,6 +4,9 @@ import Callout from "@components/Callout.astro"
 import { SITE } from "@config"
 import "../styles/fonts/fonts.css"
 import "../styles/base.css"
+// Inlined rather than served from public/: a stale cached copy of a
+// separately requested script can fall out of step with the markup it drives
+import themeScript from "../scripts/theme.js?raw"
 
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION
 
@@ -89,7 +92,7 @@ const socialImageURL = new URL(
       )
     }
 
-    <script is:inline src="/toggle-theme.js"></script>
+    <script is:inline set:html={themeScript} />
     <script type="text/javascript">
       ;(function (c, l, a, r, i, t, y) {
         c[a] =

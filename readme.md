@@ -50,7 +50,7 @@ The main project structure (omitting unrelated files) looks like this:
 │   ├── favicon.png
 │   ├── og.jpeg
 │   ├── robots.txt
-│   └── toggle-theme.js
+│   └── favicon.svg
 ├── src/
 │   ├── assets/
 │   ├── components/
