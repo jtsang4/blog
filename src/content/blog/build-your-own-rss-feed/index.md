@@ -5,6 +5,7 @@ title: 拒绝算法推荐，用 RSS 构建属于自己的信息流
 postSlug: build-your-own-rss-feed
 featured: false
 ogImage: https://vip2.loli.io/2023/09/16/zF36k29hdGItHWy.webp
+cover: ./cover.webp
 tags:
   - RSS
   - Service

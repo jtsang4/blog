@@ -5,7 +5,7 @@ import { SITE } from "@config"
 import PostDetails from "@layouts/PostDetails.astro"
 import Posts from "@layouts/Posts.astro"
 import getPageNumbers from "@utils/getPageNumbers"
-import getSortedPosts from "@utils/getSortedPosts"
+import { getPosts } from "@utils/posts"
 import slugify from "@utils/slugify"
 
 export interface Props {
@@ -34,11 +34,9 @@ export async function getStaticPaths() {
 const { slug } = Astro.params
 const { post } = Astro.props
 
-const posts = await getCollection("blog")
+const posts = await getPosts()
 
-const sortedPosts = getSortedPosts(posts)
-
-const totalPages = getPageNumbers(sortedPosts.length)
+const totalPages = getPageNumbers(posts.length)
 
 const currentPage =
   slug && !Number.isNaN(Number(slug)) && totalPages.includes(Number(slug))
@@ -47,7 +45,7 @@ const currentPage =
 const lastPost = currentPage * SITE.postPerPage
 const startPost = lastPost - SITE.postPerPage
 
-const paginatedPosts = sortedPosts.slice(startPost, lastPost)
+const paginatedPosts = posts.slice(startPost, lastPost)
 ---
 
 {
@@ -58,6 +56,7 @@ const paginatedPosts = sortedPosts.slice(startPost, lastPost)
       posts={paginatedPosts}
       pageNum={currentPage}
       totalPages={totalPages.length}
+      total={posts.length}
     />
   )
 }

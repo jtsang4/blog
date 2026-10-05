@@ -5,6 +5,7 @@ title: I just had a dream, and it was the most terrifying dream I've ever had.
 postSlug: i-just-had-a-nightmare
 featured: false
 ogImage: https://vip2.loli.io/2023/09/16/T3qNFnRUCHZhLag.webp
+cover: ./cover.webp
 tags:
   - War
 description: I just had a dream, and it was the most terrifying dream I've ever had.

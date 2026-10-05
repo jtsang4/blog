@@ -1,151 +1,321 @@
 ---
-import { getCollection } from "astro:content"
-import Card from "@components/Card"
+import CoverPreview from "@components/CoverPreview.astro"
+import FeatureCard from "@components/FeatureCard.astro"
 import Footer from "@components/Footer.astro"
 import Header from "@components/Header.astro"
-import Hr from "@components/Hr.astro"
-import LinkButton from "@components/LinkButton.astro"
-import Socials from "@components/Socials.astro"
-import { SITE, SOCIALS } from "@config"
+import PostList from "@components/PostList.astro"
+import Seal from "@components/Seal.astro"
+import { SITE } from "@config"
 import Layout from "@layouts/Layout.astro"
-import getSortedPosts from "@utils/getSortedPosts"
-import slugify from "@utils/slugify"
+import { getPosts } from "@utils/posts"
 
-const posts = await getCollection("blog")
-
-const sortedPosts = getSortedPosts(posts)
-// const featuredPosts = sortedPosts.filter(({ data }) => data.featured)
-
-const socialCount = SOCIALS.filter(social => social.active).length
+const posts = await getPosts()
+const featured = posts.filter(({ data }) => data.featured)
+const latest = posts.slice(0, SITE.recentPost)
+const years = posts.map(post => post.year)
+const pad = (n: number) => String(n).padStart(2, "0")
 ---
 
 <Layout>
   <Header />
   <main id="main-content">
-    <section id="hero">
-      <h1>James Tsang</h1>
-      <a
-        target="_blank"
-        href="/feed"
-        class="rss-link ml-1"
-        aria-label="rss feed"
-        title="RSS Feed"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="rss-icon"
-          ><path
-            d="M19 20.001C19 11.729 12.271 5 4 5v2c7.168 0 13 5.832 13 13.001h2z"
-          ></path><path
-            d="M12 20.001h2C14 14.486 9.514 10 4 10v2c4.411 0 8 3.589 8 8.001z"
-          ></path><circle cx="6" cy="18" r="2"></circle>
-        </svg>
-      </a>
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <div class="hero-meta caps">
+        <span class="fade-up" style="--i:0">
+          <span class="wide-only">James Tsang — </span>手记 / Notes
+        </span>
+        <span class="fade-up" style="--i:1">
+          <span class="wide-only">{Math.min(...years)}—{Math.max(...years)} · </span>
+          {posts.length} entries
+        </span>
+      </div>
 
-      <p>
-        Hello, I’m James Tsang, a web developer, mainly worked in the field of
-        privacy and security.
-      </p>
-      <p>I'm also interested in large language models.</p>
-      {
-        // only display if at least one social link is enabled
-        socialCount > 0 && (
-          <div class="social-wrapper">
-            <div class="social-links">Social Links:</div>
-            <Socials />
-          </div>
-        )
-      }
-    </section>
+      <h1 id="hero-title" class="hero-title reveal-lines">
+        <span><span style="--i:0">写代码，</span></span>
+        <span>
+          <span style="--i:1"
+            >也写<br class="narrow-only" />生活<span class="hero-stop"
+              >。<Seal class="hero-seal stamp-in" /></span
+            ></span
+          >
+        </span>
+      </h1>
 
-    <Hr />
-
-    <!-- {
-      featuredPosts.length > 0 && (
-        <>
-          <section id="featured">
-            <h2>Featured</h2>
-            <ul>
-              {featuredPosts.map(({ data }) => (
-                <Card
-                  href={`/posts/${slugify(data)}`}
-                  frontmatter={data}
-                  secHeading={false}
-                />
-              ))}
-            </ul>
-          </section>
-          <Hr />
-        </>
-      )
-    } -->
-
-    <section id="recent-posts">
-      <h2>Recent Posts</h2>
-      <ul>
-        {
-          sortedPosts.map(
-            ({ data }, index) =>
-              index < SITE.recentPost && (
-                <Card
-                  href={`/posts/${slugify(data)}`}
-                  frontmatter={data}
-                  secHeading={false}
-                />
-              )
-          )
-        }
-      </ul>
-      <div class="all-posts-btn-wrapper">
-        <LinkButton href="/posts">
-          All Posts
-          <svg xmlns="http://www.w3.org/2000/svg"
-            ><path
-              d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"
-            ></path>
-          </svg>
-        </LinkButton>
+      <div class="hero-foot">
+        <p class="hero-en fade-up" lang="en" style="--i:3">
+          Notes on code,<br /><em>and on the life around it.</em>
+        </p>
+        <div class="hero-bio fade-up" style="--i:4">
+          <p>
+            你好，我是 James Tsang，一名 Web 开发者，主要在隐私与安全领域工作，也对大语言模型着迷。
+          </p>
+          <p lang="en">
+            A web developer working mostly on privacy and security, also
+            curious about large language models.
+          </p>
+        </div>
+        <a href="#selected" class="scroll-cue caps fade-up" style="--i:5">
+          <span>Scroll</span>
+          <span class="scroll-line" aria-hidden="true"></span>
+        </a>
       </div>
     </section>
-  </main>
 
+    {
+      featured.length > 0 && (
+        <section id="selected" class="section wrap" aria-labelledby="selected-title">
+          <header class="section-head">
+            <span class="caps caps-ink">01</span>
+            <h2 id="selected-title" class="section-title">
+              精选<em lang="en">Selected</em>
+            </h2>
+            <span class="caps">{pad(featured.length)} entries</span>
+          </header>
+          <div class="features">
+            {featured.map((post, index) => (
+              <FeatureCard post={post} index={index} />
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section id="latest" class="section wrap" aria-labelledby="latest-title">
+      <header class="section-head">
+        <span class="caps caps-ink">{featured.length > 0 ? "02" : "01"}</span>
+        <h2 id="latest-title" class="section-title">
+          最近<em lang="en">Latest</em>
+        </h2>
+        <span class="caps">{pad(latest.length)} of {posts.length}</span>
+      </header>
+      <div class="latest-list">
+        <PostList posts={latest} />
+      </div>
+      <a href="/posts" class="all-link">
+        <span class="caps">Archive 归档</span>
+        <span class="all-text">
+          查看全部 {posts.length} 篇<em lang="en">View all entries</em>
+        </span>
+        <span class="all-arrow" aria-hidden="true">→</span>
+      </a>
+    </section>
+  </main>
   <Footer />
+  <CoverPreview />
 </Layout>
 
 <style>
-  @reference "../styles/base.css";
+  .hero {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100svh - var(--header-h));
+    padding-top: clamp(1rem, 3vw, 2.5rem);
+    padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  }
+  .hero-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--ink);
+  }
+  .hero-title {
+    margin-block: auto;
+    padding-block: clamp(1.5rem, 5vh, 4rem);
+    font-size: clamp(3.25rem, 16vw, 14rem);
+    line-height: 1.04;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    text-spacing-trim: trim-start;
+    margin-left: -0.04em;
+  }
+  .hero-stop {
+    position: relative;
+    color: var(--accent);
+  }
+  /* Pressed beside the full stop like a signature; never affects wrapping */
+  .hero-title :global(.hero-seal) {
+    --seal-size: 0.42em;
+    --stamp-rotate: -7deg;
+    --stamp-delay: 0.85s;
+    position: absolute;
+    left: 62%;
+    top: 46%;
+    transform: rotate(var(--stamp-rotate));
+  }
+  .hero-foot {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gap);
+    row-gap: 1.75rem;
+    align-items: end;
+  }
+  .hero-en {
+    grid-column: 1 / span 5;
+    font-family: var(--font-text-en);
+    font-size: var(--step-2);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .hero-en em {
+    color: var(--muted);
+  }
+  .hero-bio {
+    grid-column: 7 / span 5;
+    font-size: var(--step--1);
+    line-height: 1.8;
+    color: var(--ink-2);
+    max-width: 30rem;
+  }
+  .hero-bio p + p {
+    margin-top: 0.6rem;
+    color: var(--muted);
+  }
+  .scroll-cue {
+    grid-column: 12;
+    justify-self: end;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    writing-mode: vertical-rl;
+  }
+  .scroll-line {
+    position: relative;
+    width: 1px;
+    height: 3.5rem;
+    background: var(--line);
+    overflow: hidden;
+  }
+  .scroll-line::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    transform: translateY(-100%);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-line::after {
+      animation: scroll-line 2.4s var(--ease-in-out) infinite 1.4s;
+    }
+  }
+  @keyframes scroll-line {
+    0% {
+      transform: translateY(-100%);
+    }
+    50% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(100%);
+    }
+  }
 
-  /* ===== Hero Section ===== */
-  #hero {
-    @apply pt-8 pb-6;
-  }
-  #hero h1 {
-    @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-5xl;
-  }
-  #hero .rss-link {
-    @apply mb-6;
-  }
-  #hero .rss-icon {
-    @apply mb-2 h-6 w-6 scale-110 fill-skin-accent sm:mb-3 sm:scale-125;
-  }
-  #hero p {
-    @apply my-2;
-  }
-  .social-wrapper {
-    @apply mt-4 flex flex-col sm:flex-row sm:items-center;
-  }
-  .social-links {
-    @apply mr-2 mb-1 whitespace-nowrap sm:mb-0;
+  .section {
+    padding-top: clamp(5rem, 12vw, 10rem);
   }
 
-  /* ===== Featured & Recent Posts Sections ===== */
-  #featured,
-  #recent-posts {
-    @apply pt-12 pb-6;
+  .features {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gap);
+    row-gap: clamp(3rem, 7vw, 6rem);
+    margin-top: clamp(2.5rem, 5vw, 4rem);
   }
-  #featured h2,
-  #recent-posts h2 {
-    @apply text-2xl font-semibold tracking-wide;
+  .features > :global(*) {
+    grid-column: 1 / -1;
   }
-  .all-posts-btn-wrapper {
-    @apply my-8 text-center;
+  @media (min-width: 48rem) {
+    /* A loose magazine spread that repeats every four features */
+    .features > :global(:nth-child(4n + 1)) {
+      grid-column: 1 / span 7;
+      --ratio: 4 / 3;
+    }
+    .features > :global(:nth-child(4n + 2)) {
+      grid-column: 9 / span 4;
+      margin-top: clamp(4rem, 18vw, 16rem);
+      --ratio: 3 / 4;
+    }
+    .features > :global(:nth-child(4n + 3)) {
+      grid-column: 2 / span 4;
+      --ratio: 3 / 4;
+    }
+    .features > :global(:nth-child(4n + 4)) {
+      grid-column: 7 / span 6;
+      margin-top: clamp(2rem, 8vw, 7rem);
+      --ratio: 16 / 10;
+    }
+  }
+
+  .latest-list {
+    margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .all-link {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: baseline;
+    gap: var(--gap);
+    margin-top: 2.5rem;
+    padding-block: 1.75rem;
+    border-block: 1px solid var(--ink);
+  }
+  .all-text {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: 1.1;
+    transition: transform 0.6s var(--ease-out);
+  }
+  .all-text em {
+    font-family: var(--font-text-en);
+    color: var(--muted);
+    margin-left: 0.4em;
+    font-size: 0.7em;
+  }
+  .all-arrow {
+    font-size: var(--step-3);
+    line-height: 1;
+    transition: transform 0.6s var(--ease-out);
+  }
+  .all-link:hover .all-text {
+    transform: translateX(0.75rem);
+  }
+  .all-link:hover .all-arrow {
+    transform: translateX(0.5rem);
+    color: var(--accent);
+  }
+
+  .narrow-only {
+    display: none;
+  }
+  @media (max-width: 47.99rem) {
+    .wide-only {
+      display: none;
+    }
+    .narrow-only {
+      display: inline;
+    }
+    /* Three short lines read bigger than two long ones on a phone */
+    .hero {
+      min-height: auto;
+    }
+    .hero-title {
+      padding-block: 3.5rem 3rem;
+      font-size: min(22vw, 7rem);
+      line-height: 1.08;
+    }
+    .hero-en,
+    .hero-bio {
+      grid-column: 1 / -1;
+    }
+    .scroll-cue {
+      display: none;
+    }
+    .all-link {
+      grid-template-columns: 1fr auto;
+    }
+    .all-link .caps {
+      grid-column: 1 / -1;
+    }
   }
 </style>

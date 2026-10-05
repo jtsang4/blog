@@ -5,6 +5,7 @@ title: 因理智而悲观，因意志而乐观
 postSlug: optimistic-and-pessimistic
 featured: false
 ogImage: https://vip2.loli.io/2023/09/16/nsKvu3chm2TSRkb.jpg
+cover: ./cover.jpeg
 tags:
   - Life
 description: I’m a pessimist because of intelligence, but an optimist because of will. - Antonio Gramsci in a Letter from Prison (December 1929) 这句话出自于安东尼奥·葛兰西，因为看到这句话引起了我的思考，所以我对他做了一个简单的了解：他是一个马克思主义思想家，也是意大利共产党的创始人和领导人，标题中这句话出自他被捕入狱后在监狱中的写作。

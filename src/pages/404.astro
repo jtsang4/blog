@@ -1,7 +1,7 @@
 ---
 import Footer from "@components/Footer.astro"
 import Header from "@components/Header.astro"
-import LinkButton from "@components/LinkButton.astro"
+import Seal from "@components/Seal.astro"
 import { SITE } from "@config"
 import Layout from "@layouts/Layout.astro"
 ---
@@ -9,17 +9,25 @@ import Layout from "@layouts/Layout.astro"
 <Layout title={`404 Not Found | ${SITE.title}`}>
   <Header />
 
-  <main id="main-content">
-    <div class="not-found-wrapper">
-      <h1 aria-label="404 Not Found">404</h1>
-      <span aria-hidden="true">¯\_(ツ)_/¯</span>
-      <p>Page Not Found</p>
-      <LinkButton
-        href="/"
-        className="my-6 underline decoration-dashed underline-offset-8 text-lg"
-      >
-        Go back home
-      </LinkButton>
+  <main id="main-content" class="wrap lost">
+    <div class="lost-meta caps">
+      <span>Error — 404</span>
+      <span>Page not found 页面不存在</span>
+    </div>
+    <h1 class="lost-title reveal-lines" aria-label="404 Not Found">
+      <span><span>4<Seal class="lost-seal stamp-in" />4</span></span>
+    </h1>
+    <div class="lost-foot">
+      <p class="lost-copy fade-up" style="--i:2">
+        这一页，好像也把自己搞丢了<span class="dot">。</span>
+        <em lang="en">This page seems to have lost itself.</em>
+      </p>
+      <div class="lost-links fade-up" style="--i:3">
+        <a href="/" class="caps caps-ink link">← Back home 回到首页</a>
+        <a href="/posts/just-lost-myself" class="caps caps-ink link"
+          >Read 《就把自己先搞丢》 →</a
+        >
+      </div>
     </div>
   </main>
 
@@ -27,18 +35,67 @@ import Layout from "@layouts/Layout.astro"
 </Layout>
 
 <style>
-  @reference "../styles/base.css";
-
-  #main-content {
-    @apply mx-auto flex max-w-3xl flex-1 items-center justify-center;
+  .lost {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100svh - var(--header-h));
+    padding-top: clamp(1.5rem, 4vw, 3rem);
   }
-  .not-found-wrapper {
-    @apply mb-14 flex flex-col items-center justify-center;
+  .lost-meta {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid var(--ink);
   }
-  .not-found-wrapper h1 {
-    @apply text-9xl font-bold text-skin-accent;
+  .lost-title {
+    margin-block: auto;
+    font-family: var(--font-text-en);
+    font-size: clamp(8rem, 36vw, 34rem);
+    font-weight: 300;
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+    text-align: center;
   }
-  .not-found-wrapper p {
-    @apply mt-4 text-2xl sm:text-3xl;
+  .lost-title > span > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* The seal stands in for the missing zero */
+  .lost-title :global(.lost-seal) {
+    --seal-size: 0.44em;
+    --stamp-rotate: -9deg;
+    --stamp-delay: 0.6s;
+    margin-inline: 0.2em 0.14em;
+    transform: rotate(var(--stamp-rotate));
+  }
+  .lost-foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 2rem;
+    padding-block: 2rem 1rem;
+  }
+  .lost-copy {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    line-height: 1.35;
+    max-width: 22em;
+  }
+  .lost-copy em {
+    display: block;
+    font-family: var(--font-text-en);
+    color: var(--muted);
+    font-size: 0.7em;
+    margin-top: 0.25rem;
+  }
+  .dot {
+    color: var(--accent);
+  }
+  .lost-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
   }
 </style>

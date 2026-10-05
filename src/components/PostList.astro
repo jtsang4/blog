@@ -1,0 +1,33 @@
+---
+import Card from "@components/Card"
+import { type Post, previewSrc } from "@utils/posts"
+
+export interface Props {
+  posts: Post[]
+  morph?: boolean
+}
+
+const { posts, morph = true } = Astro.props
+
+const rows = await Promise.all(
+  posts.map(async post => ({ post, cover: await previewSrc(post) }))
+)
+---
+
+<ul class="entries">
+  {
+    rows.map(({ post, cover }) => (
+      <Card
+        href={post.href}
+        title={post.data.title}
+        description={post.data.description}
+        number={post.number}
+        date={post.data.pubDatetime}
+        tags={post.data.tags}
+        lang={post.lang}
+        cover={cover}
+        transitionName={morph ? `title-${post.slug}` : undefined}
+      />
+    ))
+  }
+</ul>

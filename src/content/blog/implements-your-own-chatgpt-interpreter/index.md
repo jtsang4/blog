@@ -5,6 +5,7 @@ title: 如何实现自己的 ChatGPT Code Interpreter
 postSlug: implements-your-own-chatgpt-interpreter
 featured: false
 ogImage: https://vip2.loli.io/2023/09/29/7KvYTBjqf8QRhZw.webp
+cover: ./cover.webp
 tags:
   - AI
   - LLM

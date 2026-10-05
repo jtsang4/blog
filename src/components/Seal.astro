@@ -1,0 +1,14 @@
+---
+export interface Props {
+  size?: string
+  class?: string
+}
+
+const { size, class: className } = Astro.props
+---
+
+<span
+  class:list={["seal", className]}
+  style={size ? `--seal-size:${size}` : undefined}
+  aria-hidden="true">JT</span
+>

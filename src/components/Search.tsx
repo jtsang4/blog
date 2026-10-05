@@ -1,116 +1,137 @@
 import Card from "@components/Card"
-import type { BlogFrontmatter } from "@content/_schemas"
-import slugify from "@utils/slugify"
 import Fuse from "fuse.js"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 export type SearchItem = {
   title: string
   description: string
-  data: BlogFrontmatter
+  tags: string[]
+  href: string
+  number: number
+  date: string
+  lang: string
+  cover?: string
 }
 
 interface Props {
   searchList: SearchItem[]
+  suggestions: string[]
 }
 
-interface SearchResult {
-  item: SearchItem
-  refIndex: number
-}
-
-export default function SearchBar({ searchList }: Props) {
+export default function SearchBar({ searchList, suggestions }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [inputVal, setInputVal] = useState("")
-  const [searchResults, setSearchResults] = useState<SearchResult[] | null>(
-    null
+
+  const fuse = useMemo(
+    () =>
+      new Fuse(searchList, {
+        keys: [
+          { name: "title", weight: 2 },
+          { name: "description", weight: 1 },
+          { name: "tags", weight: 1.5 },
+        ],
+        minMatchCharLength: 1,
+        ignoreLocation: true,
+        threshold: 0.4,
+      }),
+    [searchList]
   )
 
-  const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
-    setInputVal(e.currentTarget.value)
-  }
-
-  const fuse = new Fuse(searchList, {
-    keys: ["title", "description"],
-    includeMatches: true,
-    minMatchCharLength: 2,
-    threshold: 0.5,
-  })
+  const query = inputVal.trim()
+  const results = useMemo(
+    () => (query.length > 0 ? fuse.search(query) : []),
+    [fuse, query]
+  )
 
   useEffect(() => {
-    // if URL has search query,
-    // insert that search query in input field
-    const searchUrl = new URLSearchParams(window.location.search)
-    const searchStr = searchUrl.get("q")
+    // Restore a query from the URL and park the caret at its end
+    const searchStr = new URLSearchParams(window.location.search).get("q")
     if (searchStr) setInputVal(searchStr)
-
-    // put focus cursor at the end of the string
-    setTimeout(() => {
-      const input = inputRef.current
-      if (!input) return
-      input.selectionStart = input.selectionEnd = searchStr?.length || 0
-    }, 50)
+    const input = inputRef.current
+    if (!input) return
+    input.focus()
+    requestAnimationFrame(() => {
+      input.selectionStart = input.selectionEnd = searchStr?.length ?? 0
+    })
   }, [])
 
   useEffect(() => {
-    // Add search result only if
-    // input value is more than one character
-    const inputResult = inputVal.length > 1 ? fuse.search(inputVal) : []
-    setSearchResults(inputResult)
-
-    // Update search string in URL
-    if (inputVal.length > 0) {
-      const searchParams = new URLSearchParams(window.location.search)
-      searchParams.set("q", inputVal)
-      const newRelativePathQuery = `${window.location.pathname}?${searchParams.toString()}`
-      history.pushState(null, "", newRelativePathQuery)
-    } else {
-      history.pushState(null, "", window.location.pathname)
-    }
-  }, [inputVal, fuse.search])
+    const url = new URL(window.location.href)
+    if (query) url.searchParams.set("q", query)
+    else url.searchParams.delete("q")
+    history.replaceState(history.state, "", url)
+  }, [query])
 
   return (
-    <>
-      <label className="relative block">
-        <span className="absolute inset-y-0 left-0 flex items-center pl-2 opacity-75">
-          <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M19.023 16.977a35.13 35.13 0 0 1-1.367-1.384c-.372-.378-.596-.653-.596-.653l-2.8-1.337A6.962 6.962 0 0 0 16 9c0-3.859-3.14-7-7-7S2 5.141 2 9s3.14 7 7 7c1.763 0 3.37-.66 4.603-1.739l1.337 2.8s.275.224.653.596c.387.363.896.854 1.384 1.367l1.358 1.392.604.646 2.121-2.121-.646-.604c-.379-.372-.885-.866-1.391-1.36zM9 14c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5z"></path>
-          </svg>
-        </span>
+    <div className="search">
+      <label className="search-field">
+        <span className="visually-hidden">Search posts 搜索文章</span>
+        <svg className="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="10.5" cy="10.5" r="6.5" />
+          <path d="m15.5 15.5 5 5" />
+        </svg>
         <input
-          className="block w-full rounded border border-skin-base/40
-        bg-skin-fill py-3 pl-10 pr-3 placeholder:text-skin-base/75
-        placeholder:italic
-        focus:border-skin-accent focus:outline-none"
-          placeholder="Search for anything..."
-          type="text"
+          id="search-input"
+          className="search-input"
+          placeholder="输入关键词…  Type to search"
+          type="search"
           name="search"
           value={inputVal}
-          onChange={handleChange}
+          onChange={e => setInputVal(e.currentTarget.value)}
           autoComplete="off"
+          spellCheck={false}
           ref={inputRef}
         />
+        <kbd className="search-kbd caps">⌘K</kbd>
       </label>
 
-      {inputVal.length > 1 && (
-        <div className="mt-8">
-          Found {searchResults?.length}
-          {searchResults?.length && searchResults?.length === 1
-            ? " result"
-            : " results"}{" "}
-          for '{inputVal}'
-        </div>
+      <div className="search-status caps" aria-live="polite">
+        {query ? (
+          <>
+            {String(results.length).padStart(2, "0")}{" "}
+            {results.length === 1 ? "result" : "results"} for “{query}”
+          </>
+        ) : (
+          <span className="search-suggest">
+            <span>Try 试试</span>
+            {suggestions.map(tag => (
+              <button
+                type="button"
+                key={tag}
+                className="search-chip"
+                onClick={() => setInputVal(tag)}
+              >
+                {tag}
+              </button>
+            ))}
+          </span>
+        )}
+      </div>
+
+      {results.length > 0 && (
+        <ul className="entries search-results">
+          {results.map(({ item }) => (
+            <Card
+              key={item.href}
+              href={item.href}
+              title={item.title}
+              description={item.description}
+              number={item.number}
+              date={new Date(item.date)}
+              tags={item.tags}
+              lang={item.lang}
+              cover={item.cover}
+            />
+          ))}
+        </ul>
       )}
 
-      <ul>
-        {searchResults?.map(({ item, refIndex }) => (
-          <Card
-            href={`/posts/${slugify(item.data)}`}
-            frontmatter={item.data}
-            key={`${refIndex}-${slugify(item.data)}`}
-          />
-        ))}
-      </ul>
-    </>
+      {query && results.length === 0 && (
+        <p className="search-empty">
+          没有找到相关的文章。
+          <span lang="en">Nothing here yet — try another word.</span>
+        </p>
+      )}
+    </div>
   )
 }

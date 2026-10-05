@@ -1,13 +1,17 @@
 ---
+import { Image } from "astro:assets"
 import { type CollectionEntry, render } from "astro:content"
 import { Comments } from "@components/Comments"
-import Datetime from "@components/Datetime"
 import Footer from "@components/Footer.astro"
 import Header from "@components/Header.astro"
 import MermaidLoader from "@components/MermaidLoader"
-import Tag from "@components/Tag.astro"
+import Seal from "@components/Seal.astro"
+import Toc from "@components/Toc.astro"
 import { SITE } from "@config"
 import Layout from "@layouts/Layout.astro"
+import { formatDate, formatNumber } from "@utils/format"
+import { getPosts } from "@utils/posts"
+import { slugifyStr } from "@utils/slugify"
 
 export interface Props {
   post: CollectionEntry<"blog">
@@ -18,12 +22,45 @@ const { post } = Astro.props
 const { title, author, description, ogImage, pubDatetime, tags, postSlug } =
   post.data
 
+const posts = await getPosts()
+const index = posts.findIndex(entry => entry.id === post.id)
+const entry = posts[index]
+const newer = posts[index - 1]
+const older = posts[index + 1]
+const isZh = entry.lang !== "en"
+
 const hasMermaid = post.body?.includes("```mermaid") ?? false
 
-const { Content } = await render(post)
+// Size the headline by how wide it sets (a CJK glyph ≈ two Latin letters),
+// so whole phrases fit a line instead of leaving orphans on phones
+const titleWidth = [...title].reduce(
+  (sum, char) => sum + (/\p{Script=Han}/u.test(char) ? 1 : 0.5),
+  0
+)
+const titleSize = titleWidth > 18 ? "long" : titleWidth > 9 ? "mid" : "short"
+
+const { Content, headings } = await render(post)
+const toc = headings.filter(heading => heading.depth <= 3)
 
 const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin).href
 const pageTitle = `${title} - ${SITE.title}`
+
+const meta = [
+  { en: "Published", zh: "发布", value: formatDate(pubDatetime) },
+  {
+    en: "Reading",
+    zh: "阅读",
+    value: isZh ? `约 ${entry.minutes} 分钟` : `${entry.minutes} min`,
+  },
+  {
+    en: "Length",
+    zh: "篇幅",
+    value: isZh
+      ? `${entry.words.toLocaleString("en")} 字`
+      : `${entry.words.toLocaleString("en")} words`,
+  },
+  { en: "Entry", zh: "编号", value: `№ ${formatNumber(entry.number)}` },
+]
 ---
 
 <Layout
@@ -32,27 +69,114 @@ const pageTitle = `${title} - ${SITE.title}`
   description={description}
   ogImage={ogUrl}
 >
-  <Header />
-  <div class="mx-auto flex w-full max-w-3xl justify-start px-2">
-    <button
-      class="focus-outline mt-8 mb-2 flex hover:opacity-75"
-      onclick="history.back()"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"
-        ></path>
-      </svg>
-      <span>Go back</span>
-    </button>
-  </div>
+  <Header progress />
   <main id="main-content">
-    <h1 class="post-title">{title}</h1>
-    <Datetime datetime={pubDatetime} size="lg" className="my-2" />
-    <article id="article" role="article" class="prose mx-auto mt-8 max-w-3xl">
-      <Content />
+    <article class="post" lang={entry.lang}>
+      <header class="post-head wrap">
+        <nav class="post-crumbs caps" aria-label="Breadcrumb" lang="en">
+          <a href="/posts" class="link">Writing</a>
+          {
+            tags.map(tag => (
+              <>
+                <span aria-hidden="true">/</span>
+                <a href={`/tags/${slugifyStr(tag)}`} class="link">
+                  {tag}
+                </a>
+              </>
+            ))
+          }
+        </nav>
+        <h1
+          class={`post-title is-${titleSize}`}
+          transition:name={`title-${entry.slug}`}
+        >
+          {title}
+        </h1>
+        <dl class="post-meta fade-up" lang="en">
+          {
+            meta.map(item => (
+              <div>
+                <dt class="caps">
+                  {item.en} <span lang="zh-CN">{item.zh}</span>
+                </dt>
+                <dd lang={entry.lang}>{item.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </header>
+
       {
-        import.meta.env.COMMENT_SERVER && (
+        post.data.cover && (
+          <figure class="post-cover wrap">
+            <div
+              class="cover is-color post-cover-frame"
+              transition:name={`cover-${entry.slug}`}
+            >
+              <Image
+                src={post.data.cover}
+                alt=""
+                widths={[640, 960, 1440, 2000]}
+                sizes="(min-width: 90rem) 86rem, 100vw"
+                format="webp"
+                loading="eager"
+                fetchpriority="high"
+              />
+            </div>
+          </figure>
+        )
+      }
+
+      <div class="post-body wrap">
+        {toc.length > 1 && <Toc headings={toc} />}
+        <div class="post-text">
+          <div id="article" class="prose">
+            <Content />
+          </div>
+
+          <footer class="post-end">
+            <div class="end-mark">
+              <Seal size="2.75rem" class="end-seal stamp-on-view" />
+              <span class="caps">全文完 · Fin</span>
+            </div>
+            <div class="end-row">
+              <ul class="end-tags" aria-label="Tags">
+                {
+                  tags.map(tag => (
+                    <li>
+                      <a href={`/tags/${slugifyStr(tag)}`} class="tag">
+                        <span aria-hidden="true">#</span>
+                        {tag}
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+              <button type="button" class="copy caps caps-ink" data-copy>
+                <span class="copy-idle">Copy link 复制链接</span>
+                <span class="copy-done" aria-hidden="true">Copied 已复制</span>
+              </button>
+              <span class="visually-hidden" aria-live="polite" data-copy-status
+              ></span>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </article>
+
+    {
+      import.meta.env.COMMENT_SERVER && (
+        <section class="wrap comments-wrap" aria-labelledby="comments-title">
+          <header class="comments-head">
+            <span class="caps caps-ink">Responses — 回应</span>
+            <h2 id="comments-title" class="comments-title">
+              评论<em lang="en">Comments</em>
+            </h2>
+            <p class="comments-note">
+              欢迎留下你的想法。
+              <span lang="en">Thoughts and corrections are welcome.</span>
+            </p>
+          </header>
           <Comments
             client:visible
             className="comments"
@@ -62,44 +186,353 @@ const pageTitle = `${title} - ${SITE.title}`
             pageTitle={pageTitle}
             commentServer={import.meta.env.COMMENT_SERVER}
           />
-        )
-      }
-    </article>
+        </section>
+      )
+    }
 
-    <ul class="tags-container">
-      {tags.map(tag => <Tag name={tag} />)}
-    </ul>
+    {
+      (newer || older) && (
+        <nav class="post-nav wrap" aria-label="More writing">
+          {[
+            { post: older, en: "Previous", zh: "上一篇", dir: "prev" },
+            { post: newer, en: "Next", zh: "下一篇", dir: "next" },
+          ].map(item =>
+            item.post ? (
+              <a href={item.post.href} class={`nav-card nav-${item.dir}`}>
+                <span class="caps">
+                  {item.dir === "prev" ? "← " : ""}
+                  {item.en} {item.zh}
+                  {item.dir === "next" ? " →" : ""}
+                </span>
+                <span class="nav-title" lang={item.post.lang}>
+                  {item.post.data.title}
+                </span>
+                <span class="caps">
+                  № {formatNumber(item.post.number)} ·{" "}
+                  {formatDate(item.post.data.pubDatetime)}
+                </span>
+              </a>
+            ) : (
+              <span class={`nav-card nav-${item.dir} nav-empty`} />
+            )
+          )}
+        </nav>
+      )
+    }
   </main>
   <Footer />
   {hasMermaid && <MermaidLoader client:load />}
 </Layout>
 
 <style>
-  @reference "../styles/base.css";
-
-  main {
-    @apply mx-auto w-full max-w-3xl px-4 pb-12;
+  .post-head {
+    padding-top: clamp(2rem, 6vw, 5rem);
+  }
+  .post-crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
   }
   .post-title {
-    @apply text-2xl font-semibold text-skin-accent;
+    max-width: 14em;
+    margin-top: clamp(1.5rem, 3vw, 2.5rem);
+    font-size: var(--step-5);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    text-spacing-trim: trim-start;
   }
-  .tags-container {
-    @apply my-8;
+  .post-title.is-mid {
+    font-size: clamp(2.375rem, 1.6rem + 3.6vw, 5.75rem);
+  }
+  .post-title.is-long {
+    font-size: clamp(2.125rem, 1.5rem + 2.8vw, 4.5rem);
+  }
+  .post:lang(en) .post-title {
+    max-width: 13em;
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+  }
+  .post-meta {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--gap);
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    padding-top: 1rem;
+    border-top: 1px solid var(--ink);
+  }
+  .post-meta dd {
+    margin-top: 0.35rem;
+    font-size: var(--step-0);
+    font-variant-numeric: tabular-nums;
+  }
+  .post-meta dt span {
+    margin-left: 0.25em;
   }
 
-  .comments :global(.atk-plug-btn) {
-    display: inline-flex;
+  .post-cover {
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+  .post-cover-frame {
+    aspect-ratio: 21 / 9;
+    border-radius: 2px;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .post-cover-frame :global(img) {
+        animation-name: cover-drift;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 100%;
+      }
+      @keyframes cover-drift {
+        to {
+          transform: scale(1.12) translateY(6%);
+        }
+      }
+    }
+  }
+
+  .post-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+  .post-text {
+    min-width: 0;
+    /* Matches the 34-character measure of .prose */
+    max-width: calc(var(--step-0) * 34);
+    width: 100%;
+    margin-inline: auto;
+  }
+  @media (min-width: 64rem) {
+    .post-body {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--gap);
+    }
+    .post-text {
+      grid-column: 4 / span 7;
+      margin-inline: 0;
+    }
+  }
+
+  .post-end {
+    margin-top: 4rem;
+  }
+  .end-mark {
+    display: flex;
     align-items: center;
+    gap: 1rem;
+  }
+  .end-mark :global(.end-seal) {
+    --stamp-rotate: -6deg;
+    transform: rotate(var(--stamp-rotate));
+  }
+  .end-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+  .end-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .tag {
+    display: inline-flex;
+    gap: 0.15em;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-family: var(--font-code);
+    font-size: var(--step--1);
+    transition:
+      border-color 0.2s,
+      color 0.2s,
+      background-color 0.2s;
+  }
+  .tag span {
+    color: var(--accent);
+  }
+  .tag:hover {
+    border-color: var(--ink);
+  }
+  .copy {
+    display: inline-grid;
+    cursor: pointer;
+    padding: 0.5rem 0;
+  }
+  .copy > span {
+    grid-area: 1 / 1;
+    transition:
+      opacity 0.3s,
+      transform 0.4s var(--ease-out);
+  }
+  .copy:hover {
+    color: var(--accent);
+  }
+  .copy-done {
+    opacity: 0;
+    transform: translateY(0.5rem);
+    color: var(--accent);
+  }
+  .copy.is-done .copy-idle {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+  .copy.is-done .copy-done {
+    opacity: 1;
+    transform: none;
   }
 
-  .comments :global(.atk-send-btn) {
-    background-color: rgb(var(--color-accent)) !important;
+  .post-nav {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin-top: clamp(5rem, 10vw, 8rem);
+    border-top: 1px solid var(--ink);
+  }
+  .nav-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-block: 2rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-title {
+    font-family: var(--font-display);
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+    font-size: var(--step-3);
+    line-height: 1.2;
+    font-weight: 500;
+    max-width: 12em;
+    transition:
+      color 0.3s,
+      transform 0.6s var(--ease-out);
+  }
+  .nav-card:hover .nav-title {
+    color: var(--accent);
+  }
+  .nav-prev:hover .nav-title {
+    transform: translateX(-0.5rem);
+  }
+  .nav-next:hover .nav-title {
+    transform: translateX(0.5rem);
+  }
+  .nav-empty {
+    display: none;
+  }
+  @media (min-width: 48rem) {
+    .post-nav {
+      grid-template-columns: 1fr 1fr;
+    }
+    .nav-card {
+      padding: 2.5rem 0;
+      border-bottom: 0;
+    }
+    .nav-next {
+      align-items: flex-end;
+      text-align: right;
+      padding-left: var(--gap);
+      border-left: 1px solid var(--line);
+    }
+    .nav-prev {
+      padding-right: var(--gap);
+    }
+    .nav-empty {
+      display: block;
+    }
+  }
+
+  /* Comments share the article's grid: heading in the margin, thread in
+     the text column */
+  .comments-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 2rem;
+    margin-top: clamp(5rem, 10vw, 8rem);
+  }
+  .comments-head {
+    padding-top: 1rem;
+    border-top: 1px solid var(--ink);
+  }
+  .comments-title {
+    margin-top: 1.25rem;
+    font-size: var(--step-3);
+    line-height: 1.1;
+  }
+  .comments-title em {
+    display: block;
+    font-family: var(--font-text-en);
+    font-weight: 400;
+    color: var(--muted);
+  }
+  .comments-note {
+    margin-top: 1rem;
+    max-width: 18rem;
+    font-size: var(--step--1);
+    line-height: 1.8;
+    color: var(--muted);
+  }
+  .comments-note span {
+    display: block;
+  }
+  .comments-wrap :global(.comments) {
+    min-width: 0;
+    max-width: calc(var(--step-0) * 34);
+    width: 100%;
+    margin-inline: auto;
+  }
+  @media (min-width: 64rem) {
+    .comments-wrap {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--gap);
+    }
+    .comments-head {
+      grid-column: 1 / span 3;
+      align-self: start;
+      position: sticky;
+      top: calc(var(--header-h) + 1.5rem);
+    }
+    .comments-wrap :global(.comments) {
+      grid-column: 4 / span 7;
+      margin-inline: 0;
+      padding-top: 1rem;
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .post-meta {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 1.25rem;
+    }
+    .post-cover-frame {
+      aspect-ratio: 4 / 3;
+    }
   }
 </style>
 
-<style is:global>
-  .mermaid > svg {
-    width: auto;
-    height: auto;
-  }
-</style>
+<script>
+  document.addEventListener("click", async event => {
+    const button = (event.target as Element).closest?.("[data-copy]")
+    if (!button) return
+    try {
+      await navigator.clipboard.writeText(location.href.split("#")[0])
+      const status = document.querySelector("[data-copy-status]")
+      if (status) status.textContent = "Link copied 链接已复制"
+      button.classList.add("is-done")
+      setTimeout(() => {
+        button.classList.remove("is-done")
+        if (status) status.textContent = ""
+      }, 2000)
+    } catch {
+      window.prompt("Copy link", location.href)
+    }
+  })
+</script>

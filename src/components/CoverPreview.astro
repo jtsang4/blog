@@ -1,0 +1,123 @@
+---
+// A single floating frame that trails the pointer over any [data-cover] link.
+// Uses delegation, so rows rendered later (search results) work too.
+---
+
+<div class="cover-preview" data-cover-preview aria-hidden="true">
+  <img alt="" decoding="async" />
+</div>
+
+<style>
+  .cover-preview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 60;
+    width: clamp(14rem, 22vw, 22rem);
+    aspect-ratio: 4 / 3;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: 3px;
+    box-shadow: var(--shadow);
+    clip-path: inset(50% 50% 50% 50%);
+    transition: clip-path 0.55s var(--ease-out);
+    will-change: transform, clip-path;
+  }
+  .cover-preview.is-visible {
+    clip-path: inset(0 0 0 0);
+  }
+  .cover-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.15);
+    transition: transform 0.9s var(--ease-out);
+  }
+  .cover-preview.is-visible img {
+    transform: scale(1);
+  }
+  @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+    .cover-preview {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const fine = window.matchMedia(
+    "(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)"
+  )
+
+  let target = { x: 0, y: 0 }
+  let pos = { x: 0, y: 0 }
+  let tilt = 0
+  let frame = 0
+  let active: Element | null = null
+
+  const frameEl = () =>
+    document.querySelector<HTMLElement>("[data-cover-preview]")
+
+  const loop = () => {
+    const el = frameEl()
+    if (!el) return
+    const dx = target.x - pos.x
+    pos.x += dx * 0.14
+    pos.y += (target.y - pos.y) * 0.14
+    // Lean into the direction of travel, like a card being dragged
+    tilt += (Math.max(-12, Math.min(12, dx * 0.08)) - tilt) * 0.12
+    const w = el.offsetWidth
+    const h = el.offsetHeight
+    el.style.transform = `translate3d(${pos.x - w / 2}px, ${pos.y - h - 24}px, 0) rotate(${tilt}deg)`
+    frame =
+      Math.abs(dx) > 0.1 || Math.abs(tilt) > 0.05 || active
+        ? requestAnimationFrame(loop)
+        : 0
+  }
+
+  const start = () => {
+    if (!frame) frame = requestAnimationFrame(loop)
+  }
+
+  const update = (found: Element | null | undefined) => {
+    const link = found ?? null
+    const el = frameEl()
+    if (!el) return
+
+    if (link !== active) {
+      active = link
+      const src = link?.getAttribute("data-cover")
+      if (link && src) {
+        const img = el.querySelector("img")
+        if (img && img.getAttribute("src") !== src) img.src = src
+        if (!el.classList.contains("is-visible")) {
+          pos = { ...target }
+        }
+        el.classList.add("is-visible")
+      } else {
+        el.classList.remove("is-visible")
+      }
+    }
+    start()
+  }
+
+  document.addEventListener("pointermove", event => {
+    if (!fine.matches) return
+    target = { x: event.clientX, y: event.clientY }
+    update((event.target as Element).closest?.("[data-cover]"))
+  })
+
+  // Rows slide under a resting pointer while scrolling; keep up with them
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!fine.matches || !active) return
+      const under = document.elementFromPoint(target.x, target.y)
+      update(under?.closest("[data-cover]"))
+    },
+    { passive: true }
+  )
+
+  document.addEventListener("astro:after-swap", () => {
+    active = null
+  })
+</script>

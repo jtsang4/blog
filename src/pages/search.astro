@@ -1,27 +1,43 @@
 ---
-import { getCollection } from "astro:content"
+import CoverPreview from "@components/CoverPreview.astro"
 import Footer from "@components/Footer.astro"
 import Header from "@components/Header.astro"
 import Search from "@components/Search"
 import { SITE } from "@config"
 import Layout from "@layouts/Layout.astro"
 import Main from "@layouts/Main.astro"
+import { getPosts, getTopics, previewSrc } from "@utils/posts"
 
-// Retrieve all articles
-const posts = await getCollection("blog", ({ data }) => !data.draft)
+const posts = await getPosts()
 
-// List of items to search in
-const searchList = posts.map(({ data }) => ({
-  title: data.title,
-  description: data.description,
-  data,
-}))
+// Only what the client needs to search and render a row
+const searchList = await Promise.all(
+  posts.map(async post => ({
+    title: post.data.title,
+    description: post.data.description,
+    tags: post.data.tags,
+    href: post.href,
+    number: post.number,
+    date: post.data.pubDatetime.toISOString(),
+    lang: post.lang,
+    cover: await previewSrc(post),
+  }))
+)
+const suggestions = getTopics(posts)
+  .slice(0, 6)
+  .map(topic => topic.name)
 ---
 
 <Layout title={`Search | ${SITE.title}`}>
   <Header activeNav="search" />
-  <Main pageTitle="Search" pageDesc="Search any article ...">
-    <Search client:load searchList={searchList} />
+  <Main
+    pageTitle="搜索"
+    pageTitleEn="Search"
+    eyebrow="Find — 检索"
+    meta={`${posts.length} entries indexed`}
+  >
+    <Search client:load searchList={searchList} suggestions={suggestions} />
   </Main>
   <Footer />
+  <CoverPreview />
 </Layout>

@@ -1,0 +1,336 @@
+/*
+ * Artalk, set in the site's voice: paper panels, serif conversation,
+ * mono metadata. Variables point at the page tokens so the widget follows
+ * the theme switch without waiting for Artalk's own dark-mode class.
+ */
+.artalk,
+.artalk.atk-dark-mode,
+.atk-layer-wrap,
+.atk-layer-wrap.atk-dark-mode {
+  --at-color-font: var(--ink);
+  --at-color-deep: var(--ink);
+  --at-color-sub: var(--ink-2);
+  --at-color-grey: var(--muted);
+  --at-color-meta: var(--muted);
+  --at-color-border: var(--line);
+  --at-color-light: var(--accent);
+  --at-color-main: var(--accent);
+  --at-color-bg: var(--paper);
+  --at-color-bg-transl: color-mix(in srgb, var(--paper) 94%, transparent);
+  --at-color-bg-grey: var(--paper-2);
+  --at-color-bg-grey-transl: color-mix(
+    in srgb,
+    var(--paper-2) 94%,
+    transparent
+  );
+  --at-color-bg-light: color-mix(in srgb, var(--accent) 10%, transparent);
+  --at-color-red: var(--accent);
+  --at-color-pink: var(--accent);
+  --at-color-gradient: linear-gradient(180deg, transparent, var(--paper));
+}
+
+.artalk {
+  font-family: var(--font-text);
+  color: var(--ink);
+}
+
+/* ===== Editor ===== */
+.artalk .atk-main-editor {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+.artalk .atk-main-editor:focus-within {
+  border-color: var(--ink);
+}
+.artalk .atk-main-editor .atk-header {
+  display: flex;
+  padding: 0;
+  border-bottom: 1px solid var(--line);
+}
+.artalk .atk-main-editor .atk-header input {
+  flex: 1;
+  min-width: 0;
+  height: 3rem;
+  padding: 0 1rem;
+  margin: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-code);
+  font-size: var(--step--1);
+  border: 0;
+  border-radius: 0;
+}
+.artalk .atk-main-editor .atk-header input + input {
+  border-left: 1px solid var(--line);
+}
+.artalk .atk-main-editor .atk-header input::placeholder,
+.artalk .atk-main-editor .atk-textarea::placeholder {
+  color: var(--faint);
+}
+.artalk .atk-main-editor .atk-textarea-wrap {
+  padding: 0;
+}
+.artalk .atk-main-editor .atk-textarea {
+  min-height: 8.5rem;
+  padding: 1rem;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--step-0);
+  line-height: 1.8;
+}
+.artalk .atk-main-editor .atk-bottom {
+  display: flex;
+  align-items: center;
+  padding: 0.6rem 0.6rem 0.6rem 0.9rem;
+  border-top: 1px solid var(--line);
+}
+.artalk .atk-plug-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.5rem;
+  border-radius: 4px;
+  color: var(--muted);
+  transition:
+    color 0.2s,
+    background-color 0.2s;
+}
+.artalk .atk-plug-btn:hover,
+.artalk .atk-plug-btn.active {
+  color: var(--ink);
+  background: var(--paper-2);
+}
+.artalk .atk-plug-btn svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+.artalk .atk-main-editor > .atk-bottom .atk-send-btn {
+  height: 2.5rem;
+  min-width: 7rem;
+  padding: 0 1.25rem;
+  border-radius: 999px;
+  background: var(--ink) !important;
+  color: var(--paper);
+  font-family: var(--font-code);
+  font-size: var(--step--2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition:
+    background-color 0.3s,
+    transform 0.4s var(--ease-out);
+}
+.artalk .atk-main-editor > .atk-bottom .atk-send-btn:hover {
+  background: var(--accent) !important;
+}
+.artalk .atk-main-editor > .atk-bottom .atk-send-btn:active {
+  transform: scale(0.97);
+}
+
+/* ===== List ===== */
+.artalk .atk-list-header {
+  margin-top: 2.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--ink);
+}
+.artalk .atk-list-header .atk-comment-count {
+  font-family: var(--font-code);
+  font-size: var(--step--2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.artalk .atk-list-header .atk-comment-count-num {
+  font-family: var(--font-text-en);
+  font-size: var(--step-2);
+  letter-spacing: 0;
+  color: var(--ink);
+  margin-right: 0.4rem;
+}
+.artalk .atk-dropdown {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.artalk .atk-list-body > .atk-list-comments-wrap > .atk-comment-wrap {
+  padding-block: 1.75rem;
+  border-bottom: 1px solid var(--line);
+}
+.artalk .atk-comment-wrap {
+  margin: 0;
+  padding: 0;
+}
+.artalk .atk-comment {
+  padding: 0;
+}
+.artalk .atk-avatar img {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--line);
+}
+.artalk .atk-comment > .atk-main {
+  margin-left: 3.5rem;
+}
+.artalk .atk-comment > .atk-main > .atk-header {
+  gap: 0.15rem 0.75rem;
+  margin-bottom: 0.4rem;
+}
+.artalk .atk-comment > .atk-main > .atk-header .atk-item {
+  margin: 0;
+}
+.artalk .atk-comment > .atk-main > .atk-header .atk-item.atk-nick,
+.artalk .atk-comment > .atk-main > .atk-header .atk-item.atk-nick a {
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--ink);
+}
+.artalk .atk-comment > .atk-main > .atk-header .atk-item.atk-nick a:hover {
+  color: var(--accent);
+}
+.artalk .atk-comment > .atk-main > .atk-header .atk-badge {
+  margin-left: 0.4rem;
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  background: var(--seal) !important;
+  color: var(--on-seal) !important;
+  font-family: var(--font-code);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+}
+.artalk .atk-date,
+.artalk .atk-ua-wrap,
+.artalk .atk-reply-at {
+  font-family: var(--font-code);
+  font-size: var(--step--2);
+  color: var(--muted);
+}
+/* Browser/OS stays available but recedes to a whisper */
+.artalk .atk-comment > .atk-main > .atk-header .atk-ua {
+  padding: 0;
+  background: none;
+  color: var(--faint);
+}
+.artalk .atk-comment > .atk-main > .atk-header .atk-ua:not(:last-child)::after {
+  content: " ·";
+}
+.artalk
+  .atk-comment
+  > .atk-main
+  > .atk-header
+  .atk-item.atk-reply-at
+  > .atk-nick {
+  font-size: inherit;
+  color: var(--accent);
+}
+.artalk .atk-content {
+  font-size: var(--step-0);
+  line-height: 1.85;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.artalk .atk-content p + p {
+  margin-top: 0.6em;
+}
+.artalk .atk-content a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  text-underline-offset: 0.2em;
+}
+.artalk .atk-content code {
+  font-family: var(--font-code);
+  font-size: 0.85em;
+  background: var(--paper-2);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+}
+.artalk .atk-content blockquote {
+  padding-left: 1em;
+  border-left: 2px solid var(--accent);
+  color: var(--ink-2);
+}
+.artalk .atk-actions {
+  margin-top: 0.5rem;
+  font-family: var(--font-code);
+  font-size: var(--step--2);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.artalk .atk-actions .atk-common-action-btn {
+  color: var(--muted);
+  transition: color 0.2s;
+}
+.artalk .atk-actions .atk-common-action-btn:hover {
+  color: var(--accent);
+}
+
+/* Threads: a hairline guides the eye down each conversation */
+.artalk .atk-comment-children {
+  margin-top: 1.25rem;
+  margin-left: 3.5rem;
+  padding-left: 1.25rem;
+  border-left: 1px solid var(--line);
+}
+.artalk .atk-comment-children .atk-comment-wrap + .atk-comment-wrap {
+  margin-top: 1.25rem;
+}
+.artalk .atk-comment-children .atk-avatar img {
+  width: 2rem;
+  height: 2rem;
+}
+.artalk .atk-comment-children .atk-comment > .atk-main {
+  margin-left: 2.85rem;
+}
+
+.artalk .atk-list-no-comment {
+  padding-block: 3rem;
+  font-family: var(--font-text);
+  font-size: var(--step-1);
+  color: var(--muted);
+}
+.artalk .atk-list-read-more-inner,
+.artalk .atk-pagination .atk-btn {
+  font-family: var(--font-code);
+  font-size: var(--step--2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+}
+.artalk .atk-list-footer .atk-copyright {
+  margin-top: 1.5rem;
+  font-family: var(--font-code);
+  font-size: var(--step--2);
+  letter-spacing: 0.06em;
+  color: var(--faint);
+}
+.artalk .atk-list-footer .atk-copyright a {
+  color: var(--muted);
+}
+
+@media (max-width: 40rem) {
+  .artalk .atk-main-editor .atk-header {
+    flex-wrap: wrap;
+  }
+  .artalk .atk-main-editor .atk-header input {
+    flex-basis: 50%;
+  }
+  .artalk .atk-main-editor .atk-header input.atk-link {
+    flex-basis: 100%;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+  .artalk .atk-comment > .atk-main {
+    margin-left: 3rem;
+  }
+  .artalk .atk-comment-children {
+    margin-left: 0.75rem;
+    padding-left: 0.9rem;
+  }
+}

@@ -5,6 +5,7 @@ title: Linux 一键 DD 重装脚本
 postSlug: linux-one-click-dd-reinstall-script
 featured: false
 ogImage: https://vip2.loli.io/2023/09/16/pC6whR1yMm7Yjer.webp
+cover: ./cover.webp
 tags:
   - Linux
   - CLI

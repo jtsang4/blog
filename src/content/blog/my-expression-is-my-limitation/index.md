@@ -5,6 +5,7 @@ title: 我的表达之局限，即我的世界之局限
 postSlug: my-expression-is-my-limitation
 featured: true
 ogImage: https://vip2.loli.io/2023/09/16/JdYLaSmq2htu3UP.jpg
+cover: ./cover.jpeg
 tags:
   - Life
 description: 掌握另一门语言就像拥有第二个灵魂。语言塑造思维和视野。文中的 TED 演讲解释了不同语言对世界观的影响。编程语言也如此，每种都有独特风格。要突破局限，扩展表达方式是关键。

@@ -1,24 +1,89 @@
 ---
-import { getCollection } from "astro:content"
 import Footer from "@components/Footer.astro"
 import Header from "@components/Header.astro"
-import Tag from "@components/Tag.astro"
 import { SITE } from "@config"
 import Layout from "@layouts/Layout.astro"
 import Main from "@layouts/Main.astro"
-import getUniqueTags from "@utils/getUniqueTags"
+import { getPosts, getTopics } from "@utils/posts"
 
-const posts = await getCollection("blog")
-
-const tags = getUniqueTags(posts)
+const posts = await getPosts()
+const topics = getTopics(posts)
 ---
 
 <Layout title={`Tags | ${SITE.title}`}>
   <Header activeNav="tags" />
-  <Main pageTitle="Tags" pageDesc="All the tags used in posts.">
-    <ul>
-      {tags.map(tag => <Tag name={tag} size="lg" />)}
+  <Main
+    pageTitle="主题"
+    pageTitleEn="Topics"
+    pageDesc="按主题浏览。Browse by topic — the small number is how many entries carry it."
+    eyebrow="Index — 索引"
+    meta={`${topics.length} topics · ${posts.length} entries`}
+  >
+    <ul class="topics">
+      {
+        topics.map((topic, index) => (
+          <li class="on-scroll">
+            <a href={`/tags/${topic.slug}`} class="topic">
+              <span class="topic-name">{topic.name}</span>
+              <sup class="topic-count caps">
+                {String(topic.count).padStart(2, "0")}
+              </sup>
+            </a>
+            {index < topics.length - 1 && (
+              <span class="topic-sep" aria-hidden="true">
+                /
+              </span>
+            )}
+          </li>
+        ))
+      }
     </ul>
   </Main>
   <Footer />
 </Layout>
+
+<style>
+  .topics {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.1em 0;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+    /* Capped by width so the longest topic still fits a phone */
+    font-size: min(var(--step-5), 11vw);
+    line-height: 1.15;
+  }
+  .topics li {
+    display: inline-flex;
+    align-items: baseline;
+  }
+  .topic {
+    display: inline-flex;
+    align-items: flex-start;
+    font-family: var(--font-text-en);
+    letter-spacing: -0.025em;
+    transition:
+      color 0.3s,
+      opacity 0.4s;
+  }
+  .topic-count {
+    margin-left: 0.25em;
+    margin-top: 0.4em;
+    font-size: 0.8rem;
+    color: var(--accent);
+  }
+  .topic-sep {
+    margin-inline: 0.3em;
+    color: var(--faint);
+    font-weight: 300;
+  }
+  @media (hover: hover) {
+    .topics:has(.topic:hover) .topic:not(:hover) {
+      opacity: 0.28;
+    }
+    .topic:hover {
+      color: var(--accent);
+    }
+  }
+</style>

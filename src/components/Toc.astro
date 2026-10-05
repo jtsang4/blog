@@ -1,0 +1,176 @@
+---
+import type { MarkdownHeading } from "astro"
+
+export interface Props {
+  headings: MarkdownHeading[]
+}
+
+const { headings } = Astro.props
+let section = 0
+const items = headings.map(heading => ({
+  ...heading,
+  number: heading.depth === 2 ? String(++section).padStart(2, "0") : "",
+}))
+---
+
+<aside class="toc" aria-labelledby="toc-title">
+  <details class="toc-details" open data-toc-details>
+    <summary class="toc-summary">
+      <span id="toc-title" class="caps caps-ink">Contents 目录</span>
+      <span class="toc-toggle caps" aria-hidden="true">+</span>
+    </summary>
+    <ol class="toc-list" data-toc>
+      {
+        items.map(item => (
+          <li class={`depth-${item.depth}`}>
+            <a href={`#${item.slug}`} data-toc-link={item.slug}>
+              {item.number && <span class="toc-no">{item.number}</span>}
+              <span class="toc-text">{item.text}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </details>
+</aside>
+
+<style>
+  .toc {
+    margin-bottom: 3rem;
+  }
+  .toc-details {
+    border-block: 1px solid var(--line);
+  }
+  .toc-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-block: 1rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .toc-summary::-webkit-details-marker {
+    display: none;
+  }
+  .toc-toggle {
+    font-size: 1rem;
+    transition: transform 0.4s var(--ease-out);
+  }
+  .toc-details[open] .toc-toggle {
+    transform: rotate(45deg);
+  }
+  .toc-list {
+    padding-bottom: 1rem;
+  }
+  .toc-list a {
+    font-family: var(--font-display);
+    position: relative;
+    display: flex;
+    gap: 0.75rem;
+    padding-block: 0.4rem;
+    font-size: var(--step--1);
+    line-height: 1.55;
+    color: var(--muted);
+    transition: color 0.25s;
+  }
+  .toc-list a:hover,
+  .toc-list a[aria-current="true"] {
+    color: var(--ink);
+  }
+  .toc-no {
+    flex: none;
+    width: 1.75rem;
+    font-family: var(--font-code);
+    font-size: var(--step--2);
+    line-height: 2;
+    color: var(--faint);
+    transition: color 0.25s;
+  }
+  .toc-list a[aria-current="true"] .toc-no {
+    color: var(--accent);
+  }
+  .depth-3 a {
+    padding-left: 2.5rem;
+    font-size: var(--step--2);
+  }
+
+  @media (min-width: 64rem) {
+    .toc {
+      grid-column: 1 / span 3;
+      grid-row: 1;
+      position: sticky;
+      top: calc(var(--header-h) + 1.5rem);
+      align-self: start;
+      max-height: calc(100dvh - var(--header-h) - 3rem);
+      overflow-y: auto;
+      margin-bottom: 0;
+      scrollbar-width: none;
+    }
+    .toc-details {
+      border-bottom: 0;
+    }
+    .toc-summary {
+      pointer-events: none;
+    }
+    .toc-toggle {
+      display: none;
+    }
+    .toc-list a::before {
+      content: "";
+      position: absolute;
+      left: -1rem;
+      top: 0.4rem;
+      bottom: 0.4rem;
+      width: 2px;
+      background: var(--accent);
+      transform: scaleY(0);
+      transition: transform 0.4s var(--ease-out);
+    }
+    .toc-list a[aria-current="true"]::before {
+      transform: scaleY(1);
+    }
+  }
+</style>
+
+<script>
+  let observer: IntersectionObserver | undefined
+
+  const init = () => {
+    observer?.disconnect()
+    const details = document.querySelector<HTMLDetailsElement>(
+      "[data-toc-details]"
+    )
+    if (!details) return
+
+    // Collapsed by default on small screens, always open in the sidebar
+    const wide = window.matchMedia("(min-width: 64rem)")
+    details.open = wide.matches
+
+    const links = [
+      ...document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]"),
+    ]
+    const targets = links
+      .map(link => document.getElementById(link.dataset.tocLink ?? ""))
+      .filter((el): el is HTMLElement => el !== null)
+
+    const update = () => {
+      // The current section is the last heading that has scrolled past the top
+      const passed = targets.filter(
+        el => el.getBoundingClientRect().top < window.innerHeight * 0.3
+      )
+      const current = passed.at(-1)?.id
+      for (const link of links) {
+        link.setAttribute("aria-current", String(link.dataset.tocLink === current))
+      }
+    }
+
+    // Headings crossing the upper band are the only moments that matter
+    observer = new IntersectionObserver(update, {
+      rootMargin: "0px 0px -70% 0px",
+    })
+    for (const target of targets) observer.observe(target)
+    update()
+  }
+
+  document.addEventListener("astro:page-load", init)
+</script>

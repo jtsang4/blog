@@ -4,36 +4,36 @@ import react from "@astrojs/react"
 import sitemap from "@astrojs/sitemap"
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "astro/config"
-import icon from "astro-icon"
-import { remarkCollapse } from "./lib/remark-collapse"
+import { siteFonts } from "./lib/fonts"
+import { rehypeLazyImages } from "./lib/rehype-lazy-images"
 import { mermaid } from "./lib/remark-mermaid"
-import { remarkToc } from "./lib/remark-toc"
+import { remarkStripToc } from "./lib/remark-strip-toc"
+import { inkTheme, lampTheme } from "./lib/shiki-theme"
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://jtsang.me/",
-  integrations: [icon(), mdx(), react(), sitemap()],
+  integrations: [siteFonts(), mdx(), react(), sitemap()],
   scopedStyleStrategy: "where",
+  // ~16 KB gzipped; inlining removes the only render-blocking request
+  build: { inlineStylesheets: "always" },
   markdown: {
     processor: unified({
-      remarkPlugins: [
-        remarkToc,
-        [
-          remarkCollapse,
-          {
-            test: "Table of contents",
-          },
-        ],
-        mermaid,
-      ],
+      remarkPlugins: [remarkStripToc, mermaid],
+      rehypePlugins: [rehypeLazyImages],
     }),
     shikiConfig: {
-      theme: "one-dark-pro",
+      themes: { light: inkTheme, dark: lampTheme },
+      defaultColor: false,
       wrap: true,
     },
   },
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      // Inlined fonts would land in the render-blocking stylesheet
+      assetsInlineLimit: file => (file.endsWith(".woff2") ? false : undefined),
+    },
     optimizeDeps: {
       exclude: ["@resvg/resvg-js"],
     },

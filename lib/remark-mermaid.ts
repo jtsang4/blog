@@ -22,7 +22,7 @@ export const mermaid: RemarkPlugin<[]> = () => (tree: Node) => {
     node.type = "html"
     node.value = dedent`
       <div class="mermaid" data-content="${escapeHtml(node.value)}">
-        <p>Loading graph...</p>
+        <p>Drawing diagram… 正在绘制</p>
       </div>
     `
   })

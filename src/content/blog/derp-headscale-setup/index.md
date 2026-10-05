@@ -5,6 +5,7 @@ title: 搭建 DERP 中转节点与 Headscale，实现多设备组网
 postSlug: derp-headscale-setup
 featured: false
 ogImage: https://cdn.sa.net/2025/02/09/Y8NRz13fduSqoO5.webp
+cover: ./cover.webp
 tags:
   - DigitalProducts
   - Network

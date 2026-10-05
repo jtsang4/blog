@@ -30,6 +30,14 @@
 - Husky runs `lint-staged` on pre-commit; keep changes clean and focused.
 - PRs should include a short description, verification steps, and screenshots for UI/content changes when relevant.
 
+## Design System Notes
+- Tokens (paper/ink/vermilion palette, fluid type scale, motion easings) live at the top of `src/styles/base.css`; components reference them via CSS variables, so light/dark come for free.
+- Fonts are subset at dev/build time by `lib/fonts.ts` (an Astro integration) from the `@fontsource-variable/*` packages into `src/styles/fonts/` (gitignored). It scans `src/` for the characters actually used, so new posts pick up their glyphs on the next build.
+- `--font-display` (titles, headings, UI copy) is always the web face, a single weight-500 instance; `--font-text` (body) prefers the platform serif (Songti SC / Noto Serif CJK) and only downloads the web face as a fallback. Keep display CJK at weight 500.
+- Posts can set `cover: ./image.ext` in frontmatter; covers are optimized by Astro and shown grayscale in lists, full colour on hover and in the article.
+- Code highlighting uses the custom AA-contrast themes in `lib/shiki-theme.ts`; Mermaid diagrams are themed from the same tokens in `MermaidLoader.tsx`; Artalk is themed in `src/styles/artalk.css`.
+- Avoid a generic `.label` class name (it collides with Mermaid's markup); the mono metadata utility is `.caps`.
+
 ## Configuration & Content Tips
 - Copy `.env.example` to `.env` if you add runtime configuration.
 - Site-wide behavior (routes, markdown plugins, RSS, redirects) is centralized in `astro.config.mjs`.

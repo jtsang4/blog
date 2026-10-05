@@ -5,6 +5,7 @@ title: 关于共识与争论
 postSlug: consensus-and-debate
 featured: false
 ogImage: https://cdn.sa.net/2024/03/19/hciwZs9AHL7lkMb.jpg
+cover: ./consensus-and-debate.jpg
 tags:
   - WESRC
 description: 这次聊聊我一直以来的一个观点：我们在和人相处时，大多数时候需要追求的不是一百分的答案，而是对齐与共识。

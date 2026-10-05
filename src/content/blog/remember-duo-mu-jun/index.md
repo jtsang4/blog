@@ -3,8 +3,9 @@ author: James Tsang
 pubDatetime: 2022-06-16T19:35:32.737Z
 title: 纪念多牧君
 postSlug: remember-duo-mu-jun
-featured: true
+featured: false
 ogImage: https://vip2.loli.io/2023/09/16/lwE9In42DRVLuOx.jpg
+cover: ./cover.jpeg
 tags:
   - Life
 description: 2022 年 6 月 16 日，我得知了这个让人震惊的噩耗，多牧就这样突然离开了我们。了解到多牧擅长日语，加上想到鲁迅的《记念刘和珍君》，我想称多牧为多牧君并写下这篇文章以做纪念，这可能于多牧君已不再有意义，但我还是想说点什么。

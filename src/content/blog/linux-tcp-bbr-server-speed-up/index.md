@@ -5,6 +5,7 @@ title: Linux TCP 加速一键安装 常见/最新内核脚本 锐速/BBRPLUS/BBR
 postSlug: linux-tcp-bbr-server-speed-up
 featured: false
 ogImage: https://vip2.loli.io/2023/09/16/fQI5MkbdGtiABVS.webp
+cover: ./cover.webp
 tags:
   - Linux
   - CLI

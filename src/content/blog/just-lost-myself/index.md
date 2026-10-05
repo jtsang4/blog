@@ -3,8 +3,9 @@ author: James Tsang
 pubDatetime: 2025-11-29T21:10:00.737Z
 title: 就把自己先搞丢
 postSlug: just-lost-myself
-featured: false
+featured: true
 ogImage: https://cdn.sa.net/2025/11/30/j5LmsQVJBcZRt6O.jpg
+cover: ./cover.jpg
 tags:
   - Life
 description: 有一句话叫“谁的青春不迷茫”。我发现我的青春期倒不迷茫：想畅快地玩就畅快地玩，想把事情做好就把事情做好。但到了如今的后青春时代（也不知道现在还能不能算青春），却开始有些迷茫。这一切源于这周我意识到一个问题：我好像一直很忙，工作确实很多，但仔细想想，除了工作之外，我似乎也说不清自己在忙什么，更说不清到底什么是重要的。

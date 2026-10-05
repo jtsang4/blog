@@ -1,228 +1,447 @@
 ---
-import { LOGO_IMAGE, SITE } from "@config"
-import logoPNG from "../assets/logo.png"
-import logoSVG from "../assets/logo.svg"
-import Hr from "./Hr.astro"
-import LinkButton from "./LinkButton.astro"
+import { SOCIAL_LABELS, SOCIALS } from "@config"
+import Seal from "./Seal.astro"
 
 export interface Props {
   activeNav?: "posts" | "tags" | "about" | "search"
+  progress?: boolean
 }
 
-const { activeNav } = Astro.props
+const { activeNav, progress = false } = Astro.props
+
+const links = [
+  { href: "/posts", key: "posts", en: "Writing", zh: "文章" },
+  { href: "/tags", key: "tags", en: "Topics", zh: "主题" },
+] as const
 ---
 
-<header>
-  <a id="skip-to-content" href="#main-content">Skip to content</a>
-  <div class="nav-container">
-    <div class="top-nav-wrap">
-      <a href="/" class="logo">
-        {
-          LOGO_IMAGE.enable ? (
-            <img
-              src={LOGO_IMAGE.svg ? logoSVG : logoPNG}
-              alt="Logo"
-              width={LOGO_IMAGE.width}
-              height={LOGO_IMAGE.height}
-            />
-          ) : (
-            SITE.title
-          )
-        }
+<a id="skip-to-content" href="#main-content">Skip to content 跳到正文</a>
+<header class="site-header" data-header transition:animate="none">
+  <div class="wrap header-inner">
+    <a href="/" class="brand">
+      <Seal size="1.75rem" />
+      <span class="brand-name">James Tsang</span>
+    </a>
+
+    <nav class="nav" aria-label="Primary">
+      {
+        links.map(link => (
+          <a
+            href={link.href}
+            class="nav-link caps"
+            aria-current={activeNav === link.key ? "page" : undefined}
+          >
+            <span class="roll">
+              <span>{link.en}</span>
+              <span aria-hidden="true">{link.zh}</span>
+            </span>
+          </a>
+        ))
+      }
+      <a
+        href="/search"
+        class="nav-link caps"
+        aria-current={activeNav === "search" ? "page" : undefined}
+        aria-keyshortcuts="Meta+K Control+K /"
+      >
+        <span class="roll">
+          <span>Search</span>
+          <span aria-hidden="true">搜索</span>
+        </span>
+        <kbd class="kbd" aria-hidden="true">⌘K</kbd>
       </a>
-      <nav id="nav-menu">
-        <button
-          class="hamburger-menu focus-outline"
-          aria-label="Open Menu"
-          aria-expanded="false"
-          aria-controls="menu-items"
-        >
-          <div class="icon-container flex">
-            <div id="first-line"></div>
-            <div id="second-line"></div>
-            <div id="third-line"></div>
-          </div>
-        </button>
-        <ul id="menu-items" class="display-none">
-          <li>
-            <a href="/posts" class={activeNav === "posts" ? "active" : ""}>
-              Posts
-            </a>
-          </li>
-          <li>
-            <a href="/tags" class={activeNav === "tags" ? "active" : ""}>
-              Tags
-            </a>
-          </li>
-          <!-- TODO: add about page back -->
-          <!-- <li>
-            <a href="/about" class={activeNav === "about" ? "active" : ""}>
-              About
-            </a>
-          </li> -->
-          <li>
-            <LinkButton
-              href="/search"
-              className={`focus-outline p-3 sm:p-1 ${
-                activeNav === "search" ? "active" : ""
-              }`}
-              ariaLabel="search"
-              title="Search"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="scale-125 sm:scale-100"
-                ><path
-                  d="M19.023 16.977a35.13 35.13 0 0 1-1.367-1.384c-.372-.378-.596-.653-.596-.653l-2.8-1.337A6.962 6.962 0 0 0 16 9c0-3.859-3.14-7-7-7S2 5.141 2 9s3.14 7 7 7c1.763 0 3.37-.66 4.603-1.739l1.337 2.8s.275.224.653.596c.387.363.896.854 1.384 1.367l1.358 1.392.604.646 2.121-2.121-.646-.604c-.379-.372-.885-.866-1.391-1.36zM9 14c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5z"
-                ></path>
-              </svg>
-            </LinkButton>
-          </li>
-          <li>
-            {
-              SITE.lightAndDarkMode && (
-                <button
-                  id="theme-btn"
-                  class="focus-outline"
-                  title="Toggles light & dark"
-                  aria-label="auto"
-                  aria-live="polite"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" id="moon-svg">
-                    <path d="M20.742 13.045a8.088 8.088 0 0 1-2.077.271c-2.135 0-4.14-.83-5.646-2.336a8.025 8.025 0 0 1-2.064-7.723A1 1 0 0 0 9.73 2.034a10.014 10.014 0 0 0-4.489 2.582c-3.898 3.898-3.898 10.243 0 14.143a9.937 9.937 0 0 0 7.072 2.93 9.93 9.93 0 0 0 7.07-2.929 10.007 10.007 0 0 0 2.583-4.491 1.001 1.001 0 0 0-1.224-1.224zm-2.772 4.301a7.947 7.947 0 0 1-5.656 2.343 7.953 7.953 0 0 1-5.658-2.344c-3.118-3.119-3.118-8.195 0-11.314a7.923 7.923 0 0 1 2.06-1.483 10.027 10.027 0 0 0 2.89 7.848 9.972 9.972 0 0 0 7.848 2.891 8.036 8.036 0 0 1-1.484 2.059z" />
-                  </svg>
-                  <svg xmlns="http://www.w3.org/2000/svg" id="sun-svg">
-                    <path d="M6.993 12c0 2.761 2.246 5.007 5.007 5.007s5.007-2.246 5.007-5.007S14.761 6.993 12 6.993 6.993 9.239 6.993 12zM12 8.993c1.658 0 3.007 1.349 3.007 3.007S13.658 15.007 12 15.007 8.993 13.658 8.993 12 10.342 8.993 12 8.993zM10.998 19h2v3h-2zm0-17h2v3h-2zm-9 9h3v2h-3zm17 0h3v2h-3zM4.219 18.363l2.12-2.122 1.415 1.414-2.12 2.122zM16.24 6.344l2.122-2.122 1.414 1.414-2.122 2.122zM6.342 7.759 4.22 5.637l1.415-1.414 2.12 2.122zm13.434 10.605-1.414 1.414-2.122-2.122 1.414-1.414z" />
-                  </svg>
-                </button>
-              )
-            }
-          </li>
-        </ul>
-      </nav>
-    </div>
+      <button
+        type="button"
+        class="icon-btn"
+        data-theme-toggle
+        aria-label="Dark mode 深色模式"
+        title="Toggle theme"
+      >
+        <svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <mask id="moon-mask">
+            <rect width="24" height="24" fill="white"></rect>
+            <circle class="moon-bite" cx="24" cy="4" r="7" fill="black"
+            ></circle>
+          </mask>
+          <circle class="sun-core" cx="12" cy="12" r="5" mask="url(#moon-mask)"
+          ></circle>
+          <g class="sun-rays">
+            <path
+              d="M12 1.5v2.2M12 20.3v2.2M22.5 12h-2.2M3.7 12H1.5M19.4 4.6l-1.6 1.6M6.2 17.8l-1.6 1.6M19.4 19.4l-1.6-1.6M6.2 6.2 4.6 4.6"
+            ></path>
+          </g>
+        </svg>
+      </button>
+      <button
+        type="button"
+        class="menu-btn caps caps-ink"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        data-menu-toggle
+      >
+        <span class="menu-open">Menu</span>
+        <span class="menu-close">Close</span>
+      </button>
+    </nav>
   </div>
-  <Hr />
+  {progress && <div class="progress" data-progress aria-hidden="true" />}
 </header>
 
+<div id="mobile-menu" class="mobile-menu" data-menu hidden>
+  <nav class="wrap mobile-nav" aria-label="Mobile">
+    <a href="/" class="mobile-link" style="--i:0">
+      <span class="caps">00</span>首页 <em>Home</em>
+    </a>
+    <a href="/posts" class="mobile-link" style="--i:1">
+      <span class="caps">01</span>文章 <em>Writing</em>
+    </a>
+    <a href="/tags" class="mobile-link" style="--i:2">
+      <span class="caps">02</span>主题 <em>Topics</em>
+    </a>
+    <a href="/search" class="mobile-link" style="--i:3">
+      <span class="caps">03</span>搜索 <em>Search</em>
+    </a>
+    <a href="/feed" class="mobile-link" style="--i:4">
+      <span class="caps">04</span>订阅 <em>RSS</em>
+    </a>
+    <ul class="mobile-social caps" style="--i:5">
+      {
+        SOCIALS.filter(social => social.active).map(social => (
+          <li>
+            <a href={social.href} rel="noopener">
+              {SOCIAL_LABELS[social.name] ?? social.name}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</div>
+
 <style>
-  @reference "../styles/base.css";
-
   #skip-to-content {
-    @apply absolute -top-full left-16 z-50 bg-skin-accent py-2 px-3 text-skin-inverted transition-all focus:top-4;
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 200;
+    padding: 0.6rem 0.9rem;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-code);
+    font-size: var(--step--1);
+    transform: translateY(-200%);
+    transition: transform 0.3s var(--ease-out);
   }
-  .nav-container {
-    @apply mx-auto flex max-w-3xl flex-col items-center justify-between sm:flex-row;
-  }
-  .top-nav-wrap {
-    @apply relative flex w-full items-start justify-between p-4 sm:items-center sm:py-8;
-  }
-  .logo {
-    @apply absolute whitespace-nowrap py-1 text-xl font-semibold sm:static sm:text-2xl;
-  }
-  .hamburger-menu {
-    @apply self-end p-2 sm:hidden;
-  }
-  .hamburger-menu svg {
-    @apply h-6 w-6 scale-125 fill-skin-base;
+  #skip-to-content:focus {
+    transform: none;
   }
 
-  nav {
-    @apply flex w-full flex-col items-center bg-skin-fill sm:ml-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0;
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 80;
+    height: var(--header-h);
+    transition:
+      transform 0.5s var(--ease-out),
+      background-color 0.3s,
+      box-shadow 0.3s;
   }
-  nav ul {
-    @apply mt-4 w-44 grid-cols-2 grid-rows-4 gap-y-2 gap-x-2 sm:mt-0 sm:ml-0 sm:w-auto sm:gap-y-0 sm:gap-x-5;
+  .site-header.is-scrolled {
+    background: color-mix(in srgb, var(--paper) 82%, transparent);
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    box-shadow: 0 1px 0 var(--line);
   }
-  nav ul.display-none {
-    @apply hidden sm:flex;
-  }
-  nav ul:not(.display-none) {
-    @apply grid;
-  }
-  nav ul li {
-    @apply col-span-2 flex items-center justify-center;
-  }
-  nav ul li a {
-    @apply w-full px-4 py-3 text-center font-medium hover:text-skin-accent sm:my-0 sm:px-2 sm:py-1;
-  }
-  nav ul li:nth-child(4) a {
-    @apply w-auto;
-  }
-  /* nav ul li:nth-child(4),
-  nav ul li:nth-child(5) {
-    @apply col-span-1;
-  } */
-  nav a.active {
-    @apply underline decoration-wavy decoration-2 underline-offset-4;
-  }
-  nav a.active svg {
-    @apply fill-skin-accent;
+  .site-header.is-hidden {
+    transform: translateY(-100%);
   }
 
-  nav button {
-    @apply p-1;
-  }
-  nav button svg {
-    @apply h-6 w-6 fill-skin-base hover:fill-skin-accent;
-  }
-  #theme-btn {
-    @apply p-3 sm:p-1;
-  }
-  #theme-btn svg {
-    @apply scale-125 hover:rotate-12 sm:scale-100;
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
   }
 
-  .icon-container {
-    @apply h-5 w-6 flex-col items-end justify-between;
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
   }
-  .icon-container div {
-    @apply h-0.5 bg-skin-base transition-all;
+  .brand .seal {
+    transition: transform 0.6s var(--ease-out);
   }
-  #first-line {
-    @apply w-full;
+  .brand:hover .seal {
+    transform: rotate(-8deg) scale(1.06);
   }
-  #second-line {
-    @apply w-3/4;
+  .brand-name {
+    font-family: var(--font-text-en);
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
   }
-  #third-line {
-    @apply w-1/2;
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 2.4vw, 2.25rem);
+  }
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--ink);
+    position: relative;
+    padding-block: 0.4rem;
+  }
+  .nav-link[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--accent);
+  }
+  .kbd {
+    padding: 0.1rem 0.35rem;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+
+  .icon-btn {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: -0.5rem;
+    border-radius: 50%;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  .icon-btn:hover {
+    background: var(--paper-2);
+  }
+  .theme-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    overflow: visible;
+  }
+  .sun-core {
+    fill: currentColor;
+    transform-origin: center;
+    transition: r 0.5s var(--ease-out);
+  }
+  .moon-bite {
+    transition:
+      cx 0.5s var(--ease-out),
+      cy 0.5s var(--ease-out);
+  }
+  .sun-rays {
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    transform-origin: center;
+    transition:
+      transform 0.6s var(--ease-out),
+      opacity 0.3s;
+  }
+  :global(html[data-theme="dark"]) .sun-core {
+    r: 9px;
+  }
+  :global(html[data-theme="dark"]) .moon-bite {
+    cx: 17px;
+    cy: 7px;
+  }
+  :global(html[data-theme="dark"]) .sun-rays {
+    transform: rotate(-30deg) scale(0.5);
+    opacity: 0;
+  }
+
+  .menu-btn {
+    display: none;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    min-width: 3.25rem;
+    text-align: right;
+  }
+  .menu-close {
+    display: none;
+  }
+  .menu-btn[aria-expanded="true"] .menu-open {
+    display: none;
+  }
+  .menu-btn[aria-expanded="true"] .menu-close {
+    display: inline;
+  }
+
+  .progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--accent);
+    transform-origin: 0 50%;
+    transform: scaleX(var(--progress, 0));
+  }
+  @supports (animation-timeline: scroll()) {
+    /* Longhands: minifiers fold a shorthand + timeline into invalid CSS */
+    .progress {
+      animation-name: progress;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root);
+    }
+    @keyframes progress {
+      from {
+        transform: scaleX(0);
+      }
+      to {
+        transform: scaleX(1);
+      }
+    }
+  }
+
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    padding-top: calc(var(--header-h) + 2rem);
+    background: var(--paper);
+    overflow-y: auto;
+  }
+  .mobile-menu[hidden] {
+    display: none;
+  }
+  .mobile-nav {
+    display: flex;
+    flex-direction: column;
+  }
+  .mobile-link {
+    font-family: var(--font-display);
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 1.1rem;
+    border-bottom: 1px solid var(--line);
+    font-size: var(--step-3);
+    line-height: 1.1;
+  }
+  .mobile-link em {
+    font-family: var(--font-text-en);
+    font-size: 0.55em;
+    color: var(--muted);
+  }
+  .mobile-link .caps {
+    min-width: 2ch;
+  }
+  .mobile-social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-top: 2.5rem;
+    color: var(--ink);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .mobile-menu:not([hidden]) .mobile-social,
+    .mobile-menu:not([hidden]) .mobile-link {
+      animation: fade-up 0.7s var(--ease-out) both;
+      animation-delay: calc(var(--i) * 60ms);
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .nav-link {
+      display: none;
+    }
+    .menu-btn {
+      display: inline-block;
+    }
+    .nav {
+      gap: 1rem;
+    }
   }
 </style>
 
 <script>
-  // Toggle menu
-  const menuBtn = document.querySelector(".hamburger-menu")
-  const menuItems = document.querySelector("#menu-items")?.classList
+  import { navigate } from "astro:transitions/client"
 
-  const iconContainer = document.querySelector(".icon-container")?.classList
-  const firstLine = document.querySelector("#first-line")?.classList
-  const secondLine = document.querySelector("#second-line ")?.classList
-  const thirdLine = document.querySelector("#third-line")?.classList
+  let lastY = 0
+  let ticking = false
 
-  menuBtn?.addEventListener("click", function () {
-    const menuExpanded = menuBtn?.getAttribute("aria-expanded")
-    if (menuExpanded === "false") {
-      menuBtn?.setAttribute("aria-expanded", "true")
-      menuBtn?.setAttribute("aria-label", "Close Menu")
-      menuItems?.remove("display-none")
+  const onScroll = () => {
+    const header = document.querySelector<HTMLElement>("[data-header]")
+    if (!header) return
+    const y = window.scrollY
+    header.classList.toggle("is-scrolled", y > 8)
+    // Tuck the header away while reading, bring it back on any upward scroll
+    const menuOpen = !document.querySelector("[data-menu]")?.hasAttribute("hidden")
+    header.classList.toggle("is-hidden", !menuOpen && y > 320 && y > lastY)
+    lastY = y
 
-      // icon animation
-      iconContainer?.remove("flex")
-      iconContainer?.add("relative")
-      firstLine?.add("rotate-45", "absolute", "bottom-1/2")
-      thirdLine?.add("display-none")
-      secondLine?.add("!w-full", "-rotate-45", "absolute", "bottom-1/2")
-    } else {
-      menuBtn?.setAttribute("aria-expanded", "false")
-      menuBtn?.setAttribute("aria-label", "Open Menu")
-      menuItems?.add("display-none")
-
-      // icon animation
-      iconContainer?.add("flex")
-      iconContainer?.remove("relative")
-      firstLine?.remove("rotate-45", "absolute", "bottom-1/2")
-      thirdLine?.remove("display-none")
-      secondLine?.remove("!w-full", "-rotate-45", "absolute", "bottom-1/2")
+    const bar = document.querySelector<HTMLElement>("[data-progress]")
+    if (bar && !CSS.supports("animation-timeline: scroll()")) {
+      const max = document.documentElement.scrollHeight - window.innerHeight
+      bar.style.setProperty("--progress", String(max > 0 ? y / max : 0))
     }
+    ticking = false
+  }
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!ticking) requestAnimationFrame(onScroll)
+      ticking = true
+    },
+    { passive: true }
+  )
+
+  const setMenu = (open: boolean) => {
+    const button = document.querySelector("[data-menu-toggle]")
+    const menu = document.querySelector<HTMLElement>("[data-menu]")
+    if (!button || !menu) return
+    button.setAttribute("aria-expanded", String(open))
+    menu.hidden = !open
+    document.documentElement.style.overflow = open ? "hidden" : ""
+  }
+
+  document.addEventListener("click", event => {
+    const target = event.target as Element
+    if (target.closest("[data-menu-toggle]")) {
+      const button = target.closest("[data-menu-toggle]")
+      setMenu(button?.getAttribute("aria-expanded") !== "true")
+    } else if (target.closest("[data-menu] a")) {
+      setMenu(false)
+    }
+  })
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") setMenu(false)
+
+    const typing = (event.target as Element).closest(
+      "input, textarea, select, [contenteditable]"
+    )
+    const shortcut =
+      (event.key === "k" && (event.metaKey || event.ctrlKey)) ||
+      (event.key === "/" && !typing)
+    if (shortcut) {
+      event.preventDefault()
+      if (location.pathname.startsWith("/search")) {
+        document.querySelector<HTMLInputElement>("#search-input")?.focus()
+      } else {
+        navigate("/search")
+      }
+    }
+  })
+
+  document.addEventListener("astro:page-load", () => {
+    lastY = window.scrollY
+    setMenu(false)
+    onScroll()
   })
 </script>

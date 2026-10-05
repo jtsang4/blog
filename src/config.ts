@@ -1,4 +1,4 @@
-import type { SocialObjects } from "./types"
+import type { SocialMedia, SocialObjects } from "./types"
 
 export const SITE = {
   website: "https://jtsang.me/",
@@ -7,15 +7,16 @@ export const SITE = {
   title: "James Tsang's Blog",
   ogImage: "og.jpeg",
   lightAndDarkMode: true,
-  postPerPage: 15,
-  recentPost: 15,
+  postPerPage: 40,
+  recentPost: 8,
 }
 
-export const LOGO_IMAGE = {
-  enable: false,
-  svg: true,
-  width: 216,
-  height: 46,
+// Display names where the key isn't what readers would call the service
+export const SOCIAL_LABELS: Partial<Record<SocialMedia, string>> = {
+  Github: "GitHub",
+  Twitter: "X / Twitter",
+  TelegramChannel: "Telegram",
+  Mail: "Email",
 }
 
 export const SOCIALS: SocialObjects = [

@@ -1,47 +1,179 @@
 ---
-import Hr from "./Hr.astro"
-import Socials from "./Socials.astro"
+import { SITE, SOCIAL_LABELS, SOCIALS } from "@config"
+import { getPosts } from "@utils/posts"
+import Seal from "./Seal.astro"
 
+const posts = await getPosts()
+const since = Math.min(...posts.map(post => post.year))
 const currentYear = new Date().getFullYear()
 
-export interface Props {
-  noMarginTop?: boolean
-}
-
-const { noMarginTop = false } = Astro.props
+const elsewhere = SOCIALS.filter(social => social.active)
 ---
 
-<footer class={`${noMarginTop ? "" : "mt-auto"}`}>
-  <Hr noPadding />
-  <div class="footer-wrapper">
-    <Socials centered />
-    <div class="copyright-wrapper">
-      <span>Copyright &#169; {currentYear}</span>
-      <span class="separator">&nbsp;|&nbsp;</span>
-      <span>All rights reserved.</span>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <p class="footer-lede">
+        感谢阅读<span class="dot">。</span><br />
+        <em lang="en">Thanks for reading.</em>
+      </p>
+      <div class="footer-cols">
+        <div>
+          <h2 class="caps">Subscribe 订阅</h2>
+          <ul>
+            <li><a class="link" href="/feed">RSS</a></li>
+            {
+              elsewhere
+                .filter(social => social.name === "TelegramChannel")
+                .map(social => (
+                  <li>
+                    <a class="link" href={social.href} target="_blank" rel="noopener">
+                      Telegram Channel
+                    </a>
+                  </li>
+                ))
+            }
+          </ul>
+        </div>
+        <div>
+          <h2 class="caps">Elsewhere 别处</h2>
+          <ul>
+            {
+              elsewhere
+                .filter(social => social.name !== "TelegramChannel")
+                .map(social => (
+                  <li>
+                    <a
+                      class="link"
+                      href={social.href}
+                      target={social.name === "Mail" ? undefined : "_blank"}
+                      rel="noopener"
+                    >
+                      {SOCIAL_LABELS[social.name] ?? social.name}
+                    </a>
+                  </li>
+                ))
+            }
+          </ul>
+        </div>
+        <div>
+          <h2 class="caps">Index 索引</h2>
+          <ul>
+            <li><a class="link" href="/posts">Writing 文章</a></li>
+            <li><a class="link" href="/tags">Topics 主题</a></li>
+            <li><a class="link" href="/search">Search 搜索</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <a href="/" class="wordmark">
+      <span>James Tsang</span>
+      <Seal class="wordmark-seal" />
+    </a>
+
+    <div class="footer-bottom caps">
+      <span>© {since}–{currentYear} {SITE.author}</span>
+      <span class="colophon">
+        Set in Newsreader, Noto Serif SC &amp; JetBrains Mono
+      </span>
+      <a href="#top" class="link">Back to top ↑</a>
     </div>
   </div>
 </footer>
 
 <style>
-  @reference "../styles/base.css";
+  .site-footer {
+    margin-top: auto;
+    padding-top: clamp(5rem, 12vw, 10rem);
+    overflow: hidden;
+  }
+  .site-footer > .wrap {
+    container-type: inline-size;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--ink);
+  }
+  .footer-lede {
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    line-height: 1.1;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .footer-lede em {
+    font-family: var(--font-text-en);
+    font-weight: 400;
+    color: var(--muted);
+  }
+  .dot {
+    color: var(--accent);
+  }
+  .footer-cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 2rem;
+  }
+  .footer-cols h2 {
+    margin-bottom: 1rem;
+  }
+  .footer-cols li + li {
+    margin-top: 0.35rem;
+  }
+  .footer-cols a {
+    font-size: var(--step-0);
+  }
 
-  footer {
-    @apply w-full;
+  .wordmark {
+    position: relative;
+    display: block;
+    margin-top: clamp(4rem, 9vw, 8rem);
+    font-family: var(--font-text-en);
+    /* "James Tsang" sets 5.07em wide in Newsreader; fill the column exactly */
+    font-size: calc(100cqi / 5.1);
+    font-weight: 400;
+    line-height: 0.78;
+    letter-spacing: -0.045em;
+    white-space: nowrap;
+    transition: color 0.4s;
   }
-  .footer-wrapper {
-    @apply flex flex-col items-center justify-between py-6 sm:flex-row-reverse sm:py-4;
+  .wordmark:hover {
+    color: var(--accent);
   }
-  .link-button {
-    @apply my-1 p-2 hover:rotate-6;
+  .wordmark :global(.wordmark-seal) {
+    --seal-size: clamp(2.5rem, 6vw, 6rem);
+    position: absolute;
+    right: -0.5%;
+    top: -22%;
+    transform: rotate(8deg);
+    transition: transform 0.8s var(--ease-out);
   }
-  .link-button svg {
-    @apply scale-125;
+  .wordmark:hover :global(.wordmark-seal) {
+    transform: rotate(-4deg) scale(1.08);
   }
-  .copyright-wrapper {
-    @apply my-2 flex flex-col items-center whitespace-nowrap sm:flex-row;
+
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+    justify-content: space-between;
+    padding-block: 1.5rem 2rem;
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--line);
   }
-  .separator {
-    @apply hidden sm:inline;
+
+  @media (min-width: 64rem) {
+    .footer-top {
+      grid-template-columns: 1.2fr 1fr;
+    }
+  }
+  @media (max-width: 40rem) {
+    .colophon {
+      order: 3;
+    }
   }
 </style>

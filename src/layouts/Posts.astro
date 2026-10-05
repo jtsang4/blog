@@ -1,79 +1,129 @@
 ---
-import type { CollectionEntry } from "astro:content"
-import Card from "@components/Card"
+import CoverPreview from "@components/CoverPreview.astro"
 import Footer from "@components/Footer.astro"
 import Header from "@components/Header.astro"
-import LinkButton from "@components/LinkButton.astro"
+import PostList from "@components/PostList.astro"
 import { SITE } from "@config"
 import Layout from "@layouts/Layout.astro"
 import Main from "@layouts/Main.astro"
-import slugify from "@utils/slugify"
+import type { Post } from "@utils/posts"
 
 export interface Props {
   pageNum: number
   totalPages: number
-  posts: CollectionEntry<"blog">[]
+  posts: Post[]
+  total: number
 }
 
-const { pageNum, totalPages, posts } = Astro.props
+const { pageNum, totalPages, posts, total } = Astro.props
 
-const prev = pageNum > 1 ? "" : "disabled"
-const next = pageNum < totalPages ? "" : "disabled"
+const years = Map.groupBy(posts, post => post.year)
+const pageHref = (n: number) => (n === 1 ? "/posts" : `/posts/${n}`)
 ---
 
 <Layout title={`Posts | ${SITE.title}`}>
   <Header activeNav="posts" />
-  <Main pageTitle="Posts" pageDesc="All the articles I've posted.">
-    <ul>
+  <Main
+    pageTitle="文章"
+    pageTitleEn="Writing"
+    pageDesc="写过的所有文章，按年份排列。All the essays and notes, newest first."
+    eyebrow="Archive — 归档"
+    meta={`${total} entries${totalPages > 1 ? ` · page ${pageNum}/${totalPages}` : ""}`}
+  >
+    <div class="archive">
       {
-        posts.map(({ data }) => (
-          <Card href={`/posts/${slugify(data)}`} frontmatter={data} />
+        [...years].map(([year, group]) => (
+          <section class="year-group" aria-labelledby={`y-${year}`}>
+            <h2 class="year" id={`y-${year}`}>
+              <span class="year-num">{year}</span>
+              <span class="caps">
+                {String(group.length).padStart(2, "0")}{" "}
+                {group.length === 1 ? "entry" : "entries"}
+              </span>
+            </h2>
+            <PostList posts={group} />
+          </section>
         ))
       }
-    </ul>
-  </Main>
+    </div>
 
-  {
-    totalPages > 1 && (
-      <nav class="pagination-wrapper" aria-label="Pagination">
-        <LinkButton
-          disabled={prev === "disabled"}
-          href={`/posts${pageNum - 1 !== 1 ? "/" + (pageNum - 1) : ""}`}
-          className={`mr-4 select-none ${prev}`}
-          ariaLabel="Previous"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class={`${prev}-svg`}>
-            <path d="M12.707 17.293 8.414 13H18v-2H8.414l4.293-4.293-1.414-1.414L4.586 12l6.707 6.707z" />
-          </svg>
-          Prev
-        </LinkButton>
-        <LinkButton
-          disabled={next === "disabled"}
-          href={`/posts/${pageNum + 1}`}
-          className={`ml-4 select-none ${next}`}
-          ariaLabel="Next"
-        >
-          Next
-          <svg xmlns="http://www.w3.org/2000/svg" class={`${next}-svg`}>
-            <path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z" />
-          </svg>
-        </LinkButton>
-      </nav>
-    )
-  }
-  <Footer noMarginTop={totalPages > 1} />
+    {
+      totalPages > 1 && (
+        <nav class="pagination caps" aria-label="Pagination">
+          {pageNum > 1 ? (
+            <a href={pageHref(pageNum - 1)} class="link">
+              ← Newer 较新
+            </a>
+          ) : (
+            <span aria-hidden="true" />
+          )}
+          <span>
+            {String(pageNum).padStart(2, "0")} / {String(totalPages).padStart(2, "0")}
+          </span>
+          {pageNum < totalPages ? (
+            <a href={pageHref(pageNum + 1)} class="link">
+              Older 较早 →
+            </a>
+          ) : (
+            <span aria-hidden="true" />
+          )}
+        </nav>
+      )
+    }
+  </Main>
+  <Footer />
+  <CoverPreview />
 </Layout>
 
 <style>
-  @reference "../styles/base.css";
+  .year-group + .year-group {
+    margin-top: clamp(3.5rem, 7vw, 6rem);
+  }
+  .year {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .year-num {
+    font-family: var(--font-text-en);
+    font-size: var(--step-4);
+    font-weight: 300;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    font-variant-numeric: lining-nums;
+  }
+  @media (min-width: 64rem) {
+    .year-group {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--gap);
+    }
+    .year {
+      grid-column: 1 / span 3;
+      position: sticky;
+      top: calc(var(--header-h) + 1.5rem);
+      align-self: start;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin: 0;
+    }
+    .year-num {
+      font-size: var(--step-5);
+    }
+    .year-group > :global(.entries) {
+      grid-column: 4 / -1;
+    }
+  }
 
-  .pagination-wrapper {
-    @apply mt-auto mb-8 flex justify-center;
-  }
-  .disabled {
-    @apply pointer-events-none select-none opacity-50 hover:text-skin-base group-hover:fill-skin-base;
-  }
-  .disabled-svg {
-    @apply group-hover:!fill-skin-base;
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--ink);
+    color: var(--ink);
   }
 </style>

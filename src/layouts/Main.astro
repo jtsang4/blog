@@ -1,31 +1,64 @@
 ---
-import Breadcrumbs from "@components/Breadcrumbs.astro"
-
 export interface Props {
   pageTitle: string
+  pageTitleEn?: string
   pageDesc?: string
+  eyebrow?: string
+  meta?: string
 }
 
-const { pageTitle, pageDesc } = Astro.props
+const { pageTitle, pageTitleEn, pageDesc, eyebrow, meta } = Astro.props
 ---
 
-<Breadcrumbs />
-<main id="main-content">
-  <h1>{pageTitle}</h1>
-  <p>{pageDesc}</p>
+<main id="main-content" class="wrap page">
+  <header class="page-head">
+    <div class="page-meta caps">
+      <span class="fade-up">{eyebrow}</span>
+      <span class="fade-up" style="--i:1">{meta}</span>
+    </div>
+    <h1 class="page-title reveal-lines">
+      <span>
+        <span>
+          {pageTitle}
+          {pageTitleEn && <em lang="en">{pageTitleEn}</em>}
+        </span>
+      </span>
+    </h1>
+    {pageDesc && <p class="page-desc fade-up" style="--i:2">{pageDesc}</p>}
+  </header>
   <slot />
 </main>
 
 <style>
-  @reference "../styles/base.css";
-
-  #main-content {
-    @apply mx-auto w-full max-w-3xl px-4 pb-12;
+  .page {
+    padding-top: clamp(1.5rem, 4vw, 3rem);
   }
-  #main-content h1 {
-    @apply text-2xl font-semibold sm:text-3xl;
+  .page-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--ink);
   }
-  #main-content p {
-    @apply mt-2 mb-6 italic;
+  .page-title {
+    margin-top: clamp(2.5rem, 7vw, 6rem);
+    font-size: var(--step-5);
+    line-height: 1.05;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .page-title em {
+    font-family: var(--font-text-en);
+    font-weight: 400;
+    color: var(--muted);
+    margin-left: 0.12em;
+  }
+  .page-desc {
+    max-width: 34rem;
+    margin-top: 1.5rem;
+    color: var(--ink-2);
+  }
+  .page-head {
+    margin-bottom: clamp(3rem, 7vw, 6rem);
   }
 </style>

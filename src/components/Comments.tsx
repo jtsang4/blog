@@ -3,6 +3,7 @@ import { init } from "artalk"
 import type { CSSProperties } from "react"
 import { useEffect } from "react"
 import "artalk/dist/Artalk.css"
+import "../styles/artalk.css"
 
 type Props = {
   className?: string

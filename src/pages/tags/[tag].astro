@@ -1,53 +1,53 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content"
-import Card from "@components/Card"
+import CoverPreview from "@components/CoverPreview.astro"
 import Footer from "@components/Footer.astro"
 import Header from "@components/Header.astro"
+import PostList from "@components/PostList.astro"
 import { SITE } from "@config"
 import Layout from "@layouts/Layout.astro"
 import Main from "@layouts/Main.astro"
 import getPostsByTag from "@utils/getPostsByTag"
-import getUniqueTags from "@utils/getUniqueTags"
-import slugify from "@utils/slugify"
+import { getPosts, getTopics } from "@utils/posts"
 
 export interface Props {
-  post: CollectionEntry<"blog">
   tag: string
 }
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog")
+  const topics = getTopics(await getPosts())
 
-  const tags = getUniqueTags(posts)
-
-  return tags.map(tag => {
-    return {
-      params: { tag },
-      props: { tag },
-    }
-  })
+  return topics.map(topic => ({
+    params: { tag: topic.slug },
+    props: { tag: topic.slug },
+  }))
 }
 
 const { tag } = Astro.props
 
-const posts = await getCollection("blog", ({ data }) => !data.draft)
-
+const posts = await getPosts()
+const topic = getTopics(posts).find(item => item.slug === tag)
+const name = topic?.name ?? tag
 const tagPosts = getPostsByTag(posts, tag)
 ---
 
-<Layout title={`Tag:${tag} | ${SITE.title}`}>
+<Layout title={`Tag:${name} | ${SITE.title}`}>
   <Header activeNav="tags" />
   <Main
-    pageTitle={`Tag:${tag}`}
-    pageDesc={`All the articles with the tag "${tag}".`}
+    pageTitle={`#${name}`}
+    pageDesc={`标记为「${name}」的文章。Entries filed under “${name}”.`}
+    eyebrow="Topic — 主题"
+    meta={`${tagPosts.length} ${tagPosts.length === 1 ? "entry" : "entries"}`}
   >
-    <ul>
-      {
-        tagPosts.map(({ data }) => (
-          <Card href={`/posts/${slugify(data)}`} frontmatter={data} />
-        ))
-      }
-    </ul>
+    <PostList posts={tagPosts} />
+    <a href="/tags" class="back caps caps-ink link">← All topics 全部主题</a>
   </Main>
   <Footer />
+  <CoverPreview />
 </Layout>
+
+<style>
+  .back {
+    display: inline-block;
+    margin-top: 3rem;
+  }
+</style>

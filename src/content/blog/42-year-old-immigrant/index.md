@@ -5,6 +5,7 @@ title: 总工程师 42 岁移民从工人做起，活出精彩人生 - 观后感
 postSlug: 42-years-old-immigrant
 featured: true
 ogImage: https://vip2.loli.io/2023/09/16/bk3uy79Gd5LHRcf.jpg
+cover: ./cover.jpeg
 tags:
   - Life
   - Cultrue

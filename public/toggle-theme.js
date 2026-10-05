@@ -1,60 +1,62 @@
-const primaryColorScheme = "" // "light" | "dark"
+// Runs blocking in <head> so the right palette is painted on first frame.
+;(() => {
+  const KEY = "theme"
+  const media = window.matchMedia("(prefers-color-scheme: dark)")
+  const colors = { light: "#f3f1ec", dark: "#12110f" }
 
-function isDarkMode() {
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-}
+  const preferred = () =>
+    localStorage.getItem(KEY) || (media.matches ? "dark" : "light")
 
-function getPreferTheme() {
-  // return theme value in local storage if it is set
-  const currentTheme = localStorage.getItem("theme")
-  if (currentTheme) return currentTheme
-
-  // return primary color scheme if it is set
-  if (primaryColorScheme) return primaryColorScheme
-
-  // return user device's prefer color scheme
-  return isDarkMode() ? "dark" : "light"
-}
-
-function setPreference() {
-  reflectPreference()
-}
-
-function reflectPreference() {
-  const themeValue = getPreferTheme()
-  document.firstElementChild.setAttribute("data-theme", themeValue)
-
-  document.querySelector("#theme-btn")?.setAttribute("aria-label", themeValue)
-
-  if (window.artalk) {
-    window.artalk.setDarkMode(localStorage.getItem("theme") === "dark")
+  const apply = theme => {
+    const root = document.documentElement
+    root.dataset.theme = theme
+    for (const meta of document.querySelectorAll('meta[name="theme-color"]')) {
+      meta.setAttribute("content", colors[theme])
+    }
+    for (const button of document.querySelectorAll("[data-theme-toggle]")) {
+      button.setAttribute("aria-pressed", String(theme === "dark"))
+    }
+    window.artalk?.setDarkMode(theme === "dark")
   }
-}
 
-// set early so no page flashes / CSS is made aware
-reflectPreference()
+  const toggle = button => {
+    const next = preferred() === "dark" ? "light" : "dark"
+    localStorage.setItem(KEY, next)
 
-function setupTheme() {
-  // set on load so screen readers can get the latest value on the button
-  reflectPreference()
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)")
+    if (!document.startViewTransition || reduce.matches) {
+      apply(next)
+      return
+    }
 
-  // now this script can find and listen for clicks on the control
-  document.querySelector("#theme-btn")?.addEventListener("click", () => {
-    const currentTheme = getPreferTheme()
-    const nextTheme = currentTheme === "light" ? "dark" : "light"
-    localStorage.setItem("theme", nextTheme)
-    setPreference()
+    // Spread the new palette outward from the toggle
+    const rect = button.getBoundingClientRect()
+    const x = rect.left + rect.width / 2
+    const y = rect.top + rect.height / 2
+    const r = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    )
+    const root = document.documentElement
+    root.style.setProperty("--vt-x", `${x}px`)
+    root.style.setProperty("--vt-y", `${y}px`)
+    root.style.setProperty("--vt-r", `${r}px`)
+    root.classList.add("theme-transition")
+    const transition = document.startViewTransition(() => apply(next))
+    transition.finished.finally(() => root.classList.remove("theme-transition"))
+  }
+
+  apply(preferred())
+  document.addEventListener("DOMContentLoaded", () => apply(preferred()))
+  document.addEventListener("click", event => {
+    const button = event.target.closest?.("[data-theme-toggle]")
+    if (button) toggle(button)
   })
-}
 
-window.addEventListener("load", setupTheme)
-document.removeEventListener("astro:before-swap", setupTheme)
-document.addEventListener("astro:after-swap", setupTheme)
+  // Astro's router swaps <html> attributes on navigation
+  document.addEventListener("astro:after-swap", () => apply(preferred()))
 
-// sync with system changes
-window
-  .matchMedia("(prefers-color-scheme: dark)")
-  .addEventListener("change", ({ matches: isDark }) => {
-    themeValue = isDark ? "dark" : "light"
-    setPreference()
+  media.addEventListener("change", () => {
+    if (!localStorage.getItem(KEY)) apply(preferred())
   })
+})()
