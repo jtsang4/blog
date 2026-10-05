@@ -33,7 +33,6 @@ This repository contains the source code of my personal blog. It is built with A
   - Astro Content Collections
   - Custom Remark plugins for table of contents (TOC), collapsible sections, and Mermaid diagrams
 - **Search**: Fuse.js fuzzy search
-- **Icons & Open Graph images**: `astro-icon`, `@resvg/resvg-js`, `satori`, etc.
 - **Code quality**: Biome, TypeScript
 
 For full dependencies and tooling configuration, see `package.json`.

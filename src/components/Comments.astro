@@ -1,0 +1,53 @@
+---
+export interface Props {
+  pageKey: string
+  pageTitle: string
+  server: string
+  class?: string
+}
+
+const { pageKey, pageTitle, server, class: className } = Astro.props
+---
+
+<div
+  id="comments"
+  class={className}
+  data-comments
+  data-page-key={pageKey}
+  data-page-title={pageTitle}
+  data-server={server}
+>
+</div>
+
+<script>
+  import type Artalk from "artalk"
+
+  let current: Artalk | undefined
+  let nearby: IntersectionObserver | undefined
+
+  // Artalk and its styles download only when the reader approaches the thread
+  const watch = () => {
+    nearby?.disconnect()
+    const el = document.querySelector<HTMLElement>("[data-comments]")
+    if (!el) return
+    nearby = new IntersectionObserver(
+      async entries => {
+        if (!entries.some(entry => entry.isIntersecting)) return
+        nearby?.disconnect()
+        const { mountComments } = await import("../scripts/comments")
+        // The reader may have navigated away while the chunk was loading
+        if (el.isConnected) current = mountComments(el)
+      },
+      { rootMargin: "600px 0px" }
+    )
+    nearby.observe(el)
+  }
+
+  document.addEventListener("astro:page-load", watch)
+  document.addEventListener("astro:before-swap", () => {
+    nearby?.disconnect()
+    current?.destroy()
+    if (window.artalk === current) window.artalk = undefined
+    current = undefined
+  })
+</script>

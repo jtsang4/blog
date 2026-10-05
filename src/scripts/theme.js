@@ -7,16 +7,16 @@
   const preferred = () =>
     localStorage.getItem(KEY) || (media.matches ? "dark" : "light")
 
-  const apply = theme => {
-    const root = document.documentElement
-    root.dataset.theme = theme
-    for (const meta of document.querySelectorAll('meta[name="theme-color"]')) {
+  // Works on the live page or on the incoming one during navigation
+  const apply = (theme, doc = document) => {
+    doc.documentElement.dataset.theme = theme
+    for (const meta of doc.querySelectorAll('meta[name="theme-color"]')) {
       meta.setAttribute("content", colors[theme])
     }
-    for (const button of document.querySelectorAll("[data-theme-toggle]")) {
+    for (const button of doc.querySelectorAll("[data-theme-toggle]")) {
       button.setAttribute("aria-pressed", String(theme === "dark"))
     }
-    window.artalk?.setDarkMode(theme === "dark")
+    if (doc === document) window.artalk?.setDarkMode(theme === "dark")
   }
 
   const toggle = button => {
@@ -53,8 +53,11 @@
     if (button) toggle(button)
   })
 
-  // Astro's router swaps <html> attributes on navigation
-  document.addEventListener("astro:after-swap", () => apply(preferred()))
+  // Astro's router copies <html> attributes from the incoming page; theme it
+  // before the swap so data-theme is never missing, not even for a moment
+  document.addEventListener("astro:before-swap", event =>
+    apply(preferred(), event.newDocument)
+  )
 
   media.addEventListener("change", () => {
     if (!localStorage.getItem(KEY)) apply(preferred())

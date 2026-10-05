@@ -1,10 +1,10 @@
 ---
-import { Image } from "astro:assets"
+import { getImage, Image } from "astro:assets"
 import { type CollectionEntry, render } from "astro:content"
-import { Comments } from "@components/Comments"
+import Comments from "@components/Comments.astro"
 import Footer from "@components/Footer.astro"
 import Header from "@components/Header.astro"
-import MermaidLoader from "@components/MermaidLoader"
+import Mermaid from "@components/Mermaid.astro"
 import Seal from "@components/Seal.astro"
 import Toc from "@components/Toc.astro"
 import { SITE } from "@config"
@@ -42,8 +42,35 @@ const titleSize = titleWidth > 18 ? "long" : titleWidth > 9 ? "mid" : "short"
 const { Content, headings } = await render(post)
 const toc = headings.filter(heading => heading.depth <= 3)
 
-const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin).href
+// Share image: explicit ogImage, else the post's own cover, else the site's
+const shareImage =
+  ogImage ??
+  (post.data.cover
+    ? (await getImage({ src: post.data.cover, width: 1200, format: "jpeg" }))
+        .src
+    : SITE.ogImage)
+const ogUrl = new URL(shareImage, Astro.url.origin).href
 const pageTitle = `${title} - ${SITE.title}`
+const canonical = new URL(Astro.url.pathname, Astro.site).href
+
+// schema.org BlogPosting, so search engines can show date, author and image
+const structuredData = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: title,
+  description,
+  url: canonical,
+  mainEntityOfPage: canonical,
+  image: ogUrl,
+  datePublished: pubDatetime.toISOString(),
+  inLanguage: entry.lang,
+  keywords: tags.join(", "),
+  author: {
+    "@type": "Person",
+    name: author ?? SITE.author,
+    url: SITE.website,
+  },
+}).replace(/</g, "\\u003c")
 
 const meta = [
   { en: "Published", zh: "发布", value: formatDate(pubDatetime) },
@@ -69,6 +96,11 @@ const meta = [
   description={description}
   ogImage={ogUrl}
 >
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={structuredData}
+  />
   <Header progress />
   <main id="main-content">
     <article class="post" lang={entry.lang}>
@@ -178,13 +210,12 @@ const meta = [
             </p>
           </header>
           <Comments
-            client:visible
-            className="comments"
+            class="comments"
             pageKey={`/posts${
               postSlug?.startsWith("/") ? postSlug : `/${postSlug}`
             }`}
             pageTitle={pageTitle}
-            commentServer={import.meta.env.COMMENT_SERVER}
+            server={import.meta.env.COMMENT_SERVER}
           />
         </section>
       )
@@ -221,7 +252,7 @@ const meta = [
     }
   </main>
   <Footer />
-  {hasMermaid && <MermaidLoader client:load />}
+  {hasMermaid && <Mermaid />}
 </Layout>
 
 <style>

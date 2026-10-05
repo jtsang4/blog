@@ -1,5 +1,5 @@
+// Renders ```mermaid blocks (see lib/remark-mermaid.ts) with the site palette.
 import mermaidScriptUrl from "mermaid/dist/mermaid.min.js?url"
-import { useEffect } from "react"
 
 type Mermaid = typeof import("mermaid").default
 type MermaidGlobal = typeof globalThis & { mermaid?: Mermaid }
@@ -85,7 +85,7 @@ const initializeMermaid = (mermaid: Mermaid) => {
   })
 }
 
-const renderDiagrams = async () => {
+export const renderDiagrams = async () => {
   const graphs = Array.from(document.getElementsByClassName("mermaid"))
   if (graphs.length === 0) {
     return
@@ -111,51 +111,4 @@ const renderDiagrams = async () => {
       graph.setAttribute("data-rendered", "")
     })
   )
-}
-
-export default function MermaidLoader() {
-  useEffect(() => {
-    const tryRenderDiagrams = () => {
-      void renderDiagrams().catch(error => {
-        console.error("Failed to render Mermaid diagrams", error)
-      })
-    }
-
-    // Mermaid is ~900 KB; fetch it only once a diagram nears the viewport
-    let nearby: IntersectionObserver | undefined
-    const watch = () => {
-      nearby?.disconnect()
-      nearby = new IntersectionObserver(
-        entries => {
-          if (!entries.some(entry => entry.isIntersecting)) return
-          nearby?.disconnect()
-          tryRenderDiagrams()
-        },
-        { rootMargin: "800px 0px" }
-      )
-      for (const graph of document.getElementsByClassName("mermaid")) {
-        nearby.observe(graph)
-      }
-    }
-
-    // Redraw with the other palette when the reader switches themes
-    const retheme = new MutationObserver(() => {
-      if (document.querySelector(".mermaid[data-rendered]")) tryRenderDiagrams()
-    })
-    retheme.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["data-theme"],
-    })
-
-    watch()
-    document.addEventListener("astro:after-swap", watch)
-
-    return () => {
-      document.removeEventListener("astro:after-swap", watch)
-      nearby?.disconnect()
-      retheme.disconnect()
-    }
-  }, [])
-
-  return null
 }

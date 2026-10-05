@@ -1,0 +1,40 @@
+---
+// Included only on posts that contain a ```mermaid block
+---
+
+<script>
+  import { renderDiagrams } from "../scripts/mermaid"
+
+  const render = () => {
+    void renderDiagrams().catch(error => {
+      console.error("Failed to render Mermaid diagrams", error)
+    })
+  }
+
+  // Mermaid is ~900 KB; fetch it only once a diagram nears the viewport
+  let nearby: IntersectionObserver | undefined
+  const watch = () => {
+    nearby?.disconnect()
+    const graphs = document.getElementsByClassName("mermaid")
+    if (graphs.length === 0) return
+    nearby = new IntersectionObserver(
+      entries => {
+        if (!entries.some(entry => entry.isIntersecting)) return
+        nearby?.disconnect()
+        render()
+      },
+      { rootMargin: "800px 0px" }
+    )
+    for (const graph of graphs) nearby.observe(graph)
+  }
+
+  // Redraw with the other palette when the reader switches themes
+  new MutationObserver(() => {
+    if (document.querySelector(".mermaid[data-rendered]")) render()
+  }).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  })
+
+  document.addEventListener("astro:page-load", watch)
+</script>

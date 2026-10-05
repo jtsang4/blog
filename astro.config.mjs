@@ -34,9 +34,6 @@ export default defineConfig({
       // Inlined fonts would land in the render-blocking stylesheet
       assetsInlineLimit: file => (file.endsWith(".woff2") ? false : undefined),
     },
-    optimizeDeps: {
-      exclude: ["@resvg/resvg-js"],
-    },
   },
   redirects: {
     "/feed": "/rss.xml",
