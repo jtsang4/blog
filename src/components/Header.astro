@@ -10,8 +10,8 @@ export interface Props {
 const { activeNav, progress = false } = Astro.props
 
 const links = [
-  { href: "/posts", key: "posts", en: "Writing", zh: "文章" },
-  { href: "/tags", key: "tags", en: "Topics", zh: "主题" },
+  { href: "/posts/", key: "posts", en: "Writing", zh: "文章" },
+  { href: "/tags/", key: "tags", en: "Topics", zh: "主题" },
 ] as const
 ---
 
@@ -39,7 +39,7 @@ const links = [
         ))
       }
       <a
-        href="/search"
+        href="/search/"
         class="nav-link caps"
         aria-current={activeNav === "search" ? "page" : undefined}
         aria-keyshortcuts="Meta+K Control+K /"
@@ -92,13 +92,13 @@ const links = [
     <a href="/" class="mobile-link" style="--i:0">
       <span class="caps">00</span>首页 <em>Home</em>
     </a>
-    <a href="/posts" class="mobile-link" style="--i:1">
+    <a href="/posts/" class="mobile-link" style="--i:1">
       <span class="caps">01</span>文章 <em>Writing</em>
     </a>
-    <a href="/tags" class="mobile-link" style="--i:2">
+    <a href="/tags/" class="mobile-link" style="--i:2">
       <span class="caps">02</span>主题 <em>Topics</em>
     </a>
-    <a href="/search" class="mobile-link" style="--i:3">
+    <a href="/search/" class="mobile-link" style="--i:3">
       <span class="caps">03</span>搜索 <em>Search</em>
     </a>
     <a href="/feed" class="mobile-link" style="--i:4">
@@ -434,7 +434,7 @@ const links = [
       if (location.pathname.startsWith("/search")) {
         document.querySelector<HTMLInputElement>("#search-input")?.focus()
       } else {
-        navigate("/search")
+        navigate("/search/")
       }
     }
   })

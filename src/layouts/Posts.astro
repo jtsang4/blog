@@ -18,7 +18,7 @@ export interface Props {
 const { pageNum, totalPages, posts, total } = Astro.props
 
 const years = Map.groupBy(posts, post => post.year)
-const pageHref = (n: number) => (n === 1 ? "/posts" : `/posts/${n}`)
+const pageHref = (n: number) => (n === 1 ? "/posts/" : `/posts/${n}/`)
 ---
 
 <Layout title={`Posts | ${SITE.title}`}>

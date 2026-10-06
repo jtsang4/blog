@@ -23,7 +23,7 @@ const topics = getTopics(posts)
       {
         topics.map((topic, index) => (
           <li class="on-scroll">
-            <a href={`/tags/${topic.slug}`} class="topic">
+            <a href={`/tags/${topic.slug}/`} class="topic">
               <span class="topic-name">{topic.name}</span>
               <sup class="topic-count caps">
                 {String(topic.count).padStart(2, "0")}

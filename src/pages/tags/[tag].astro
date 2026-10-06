@@ -39,7 +39,7 @@ const tagPosts = getPostsByTag(posts, tag)
     meta={`${tagPosts.length} ${tagPosts.length === 1 ? "entry" : "entries"}`}
   >
     <PostList posts={tagPosts} />
-    <a href="/tags" class="back caps caps-ink link">← All topics 全部主题</a>
+    <a href="/tags/" class="back caps caps-ink link">← All topics 全部主题</a>
   </Main>
   <Footer />
   <CoverPreview />

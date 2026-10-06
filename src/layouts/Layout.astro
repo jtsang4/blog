@@ -2,6 +2,7 @@
 import { ClientRouter } from "astro:transitions"
 import Callout from "@components/Callout.astro"
 import { SITE } from "@config"
+import { BUILD_ID } from "@utils/build"
 import "../styles/fonts/fonts.css"
 import "../styles/base.css"
 // Inlined rather than served from public/: a stale cached copy of a
@@ -41,6 +42,7 @@ const socialImageURL = new URL(
     <link rel="alternate icon" href="/favicon.png" />
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
+    <meta name="build-id" content={BUILD_ID} />
     <meta
       name="theme-color"
       content="#f3f1ec"
@@ -108,6 +110,9 @@ const socialImageURL = new URL(
       })(window, document, "clarity", "script", "n8xa0dyy57")
     </script>
     <ClientRouter />
+    <script>
+      import "../scripts/stale-pages"
+    </script>
   </head>
   <body id="top">
     <slot />

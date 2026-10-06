@@ -106,12 +106,12 @@ const meta = [
     <article class="post" lang={entry.lang}>
       <header class="post-head wrap">
         <nav class="post-crumbs caps" aria-label="Breadcrumb" lang="en">
-          <a href="/posts" class="link">Writing</a>
+          <a href="/posts/" class="link">Writing</a>
           {
             tags.map(tag => (
               <>
                 <span aria-hidden="true">/</span>
-                <a href={`/tags/${slugifyStr(tag)}`} class="link">
+                <a href={`/tags/${slugifyStr(tag)}/`} class="link">
                   {tag}
                 </a>
               </>
@@ -176,7 +176,7 @@ const meta = [
                 {
                   tags.map(tag => (
                     <li>
-                      <a href={`/tags/${slugifyStr(tag)}`} class="tag">
+                      <a href={`/tags/${slugifyStr(tag)}/`} class="tag">
                         <span aria-hidden="true">#</span>
                         {tag}
                       </a>

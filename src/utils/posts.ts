@@ -40,7 +40,7 @@ export const getPosts = async (): Promise<Post[]> => {
   return posts.map((post, index) => ({
     ...post,
     slug: slugify(post.data),
-    href: `/posts/${slugify(post.data)}`,
+    href: `/posts/${slugify(post.data)}/`,
     number: posts.length - index,
     year: post.data.pubDatetime.getUTCFullYear(),
     lang: postLang(post.data),
