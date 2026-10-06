@@ -26,6 +26,13 @@
     @mutable not path /_astro/*
     header @mutable Cache-Control "no-cache"
 
+    # Serve the site's own 404 page; never cache error responses
+    handle_errors 404 {
+        header Cache-Control "no-cache"
+        rewrite * /404.html
+        file_server
+    }
+
     # 可选：开启访问日志
     log {
         output discard
