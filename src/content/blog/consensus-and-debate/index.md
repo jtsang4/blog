@@ -3,7 +3,7 @@ author: James Tsang
 pubDatetime: 2024-03-16T06:12:32.737Z
 title: 关于共识与争论
 postSlug: consensus-and-debate
-featured: false
+featured: true
 ogImage: https://cdn.sa.net/2024/03/19/hciwZs9AHL7lkMb.jpg
 cover: ./consensus-and-debate.jpg
 tags:
