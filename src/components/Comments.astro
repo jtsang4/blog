@@ -11,12 +11,24 @@ const { pageKey, pageTitle, server, class: className } = Astro.props
 
 <div
   id="comments"
-  class={className}
+  class:list={[className, "comments-mount"]}
   data-comments
   data-page-key={pageKey}
   data-page-title={pageTitle}
   data-server={server}
 >
+  {/* Artalk clears the mount node, so these only show until it takes over */}
+  <p class="comments-status caps" role="status" data-comments-loading>
+    评论加载中…<span lang="en">Loading</span>
+  </p>
+  <p class="comments-status caps" role="alert" data-comments-failed hidden>
+    评论加载失败，<button type="button" class="comments-retry"
+      >刷新重试</button
+    >
+  </p>
+  <noscript>
+    <p class="comments-status caps">评论需要启用 JavaScript</p>
+  </noscript>
 </div>
 
 <script>
@@ -25,18 +37,67 @@ const { pageKey, pageTitle, server, class: className } = Astro.props
   let current: Artalk | undefined
   let nearby: IntersectionObserver | undefined
 
+  // Links in Artalk's reply emails target a single comment; Artalk only
+  // scrolls to it once the thread is mounted, so don't wait for the reader
+  const targetsComment = () =>
+    /^#atk-comment-\d+/.test(location.hash) ||
+    new URLSearchParams(location.search).has("atk_comment")
+
+  // Warm up the connection while the chunk downloads. Added on demand rather
+  // than in <head>, since browsers drop an idle preconnect within seconds
+  const preconnect = (server: string) => {
+    let origin: string
+    try {
+      origin = new URL(server).origin
+    } catch {
+      return
+    }
+    const links = document.head.querySelectorAll<HTMLLinkElement>(
+      "link[rel=preconnect]"
+    )
+    const known = [...links].some(link => new URL(link.href).origin === origin)
+    if (origin === location.origin || known) return
+    const link = document.createElement("link")
+    link.rel = "preconnect"
+    link.href = origin
+    link.crossOrigin = "anonymous"
+    document.head.append(link)
+  }
+
+  const mount = async (el: HTMLElement) => {
+    if (el.dataset.server) preconnect(el.dataset.server)
+    try {
+      const { mountComments } = await import("../scripts/comments")
+      // The reader may have navigated away while the chunk was loading
+      if (el.isConnected) current = mountComments(el)
+    } catch (error) {
+      // Most likely a chunk from an older deploy; a reload fetches the new one
+      console.error(error)
+      const loading = el.querySelector<HTMLElement>("[data-comments-loading]")
+      const failed = el.querySelector<HTMLElement>("[data-comments-failed]")
+      if (!loading || !failed) return
+      loading.hidden = true
+      failed.hidden = false
+      failed
+        .querySelector("button")
+        ?.addEventListener("click", () => location.reload(), { once: true })
+    }
+  }
+
   // Artalk and its styles download only when the reader approaches the thread
   const watch = () => {
     nearby?.disconnect()
     const el = document.querySelector<HTMLElement>("[data-comments]")
     if (!el) return
+    if (targetsComment()) {
+      mount(el)
+      return
+    }
     nearby = new IntersectionObserver(
-      async entries => {
+      entries => {
         if (!entries.some(entry => entry.isIntersecting)) return
         nearby?.disconnect()
-        const { mountComments } = await import("../scripts/comments")
-        // The reader may have navigated away while the chunk was loading
-        if (el.isConnected) current = mountComments(el)
+        mount(el)
       },
       { rootMargin: "600px 0px" }
     )
@@ -51,3 +112,32 @@ const { pageKey, pageTitle, server, class: className } = Astro.props
     current = undefined
   })
 </script>
+
+<style>
+  /* Roughly the editor plus an empty thread, so the post navigation below
+     stays put when Artalk renders */
+  .comments-mount {
+    min-height: 24rem;
+  }
+  .comments-status {
+    padding-block: 1rem;
+  }
+  .comments-status[hidden] {
+    display: none;
+  }
+  .comments-status span {
+    margin-left: 0.5rem;
+    color: var(--faint);
+  }
+  .comments-retry {
+    color: var(--ink);
+    letter-spacing: inherit;
+    text-transform: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-underline-offset: 0.2em;
+  }
+  .comments-retry:hover {
+    color: var(--accent);
+  }
+</style>
