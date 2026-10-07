@@ -1,6 +1,6 @@
 {
   "name": "blog",
-  "version": "2.8.4",
+  "version": "2.8.5",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
