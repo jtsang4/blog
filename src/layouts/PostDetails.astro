@@ -244,7 +244,17 @@ const meta = [
                 </span>
               </a>
             ) : (
-              <span class={`nav-card nav-${item.dir} nav-empty`} />
+              <a href="/posts/" class={`nav-card nav-${item.dir} nav-end`}>
+                <span class="caps">
+                  {item.dir === "prev" ? "The beginning 起点" : "Latest 最新"}
+                </span>
+                <span class="nav-title">
+                  {item.dir === "prev" ? "这是第一篇" : "已是最新一篇"}
+                </span>
+                <span class="caps">
+                  All writing 全部文章 · {posts.length} 篇
+                </span>
+              </a>
             )
           )}
         </nav>
@@ -456,8 +466,10 @@ const meta = [
   .nav-next:hover .nav-title {
     transform: translateX(0.5rem);
   }
-  .nav-empty {
-    display: none;
+  /* Where the list runs out, point back to the archive instead of leaving
+     the column blank */
+  .nav-end .nav-title {
+    color: var(--muted);
   }
   @media (min-width: 48rem) {
     .post-nav {
@@ -475,9 +487,6 @@ const meta = [
     }
     .nav-prev {
       padding-right: var(--gap);
-    }
-    .nav-empty {
-      display: block;
     }
   }
 
