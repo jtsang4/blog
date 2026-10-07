@@ -1,6 +1,6 @@
 # James Tsang's Blog
 
-> Personal blog of James Tsang – a web developer mainly working on privacy & security, and exploring large language models.
+> Personal blog of James Tsang, who builds and researches AI agents, focusing on agent infrastructure and recursive self-improvement.
 
 Online site: **https://jtsang.me/**
 
